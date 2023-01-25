@@ -3,7 +3,7 @@ use movies;
 
 CREATE TABLE movies (
   movie_id INT,
-  title VARCHAR,
+  title VARCHAR(100),
   imdbId INT,
   tmdbId INT,
   PRIMARY KEY (movie_id)
@@ -12,25 +12,49 @@ CREATE TABLE movies (
 CREATE TABLE ratings (
   movie_id INT,
   rating DECIMAL(1,1),
-  timestamp INT,
+  time_stamp INT,
   user_id INT,
   PRIMARY KEY (movie_id, user_id)
 );
 
 CREATE TABLE genres (
   movie_id INT,
-  genre VARCHAR,
+  genre VARCHAR(100),
   PRIMARY KEY (movie_id),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
 CREATE TABLE tags (
   movie_id INT,
-  tag VARCHAR,
-  timestamp INT,
+  tag VARCHAR(100),
+  time_stamp INT,
   user_id INT,
   PRIMARY KEY (movie_id, user_id)
 );
+
+LOAD DATA INFILE '/var/lib/mysql-files/movies.csv' 
+INTO TABLE movies 
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/ratings.csv' 
+INTO TABLE ratings
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/genres.csv' 
+INTO TABLE genres
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/tags.csv' 
+INTO TABLE tags
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
 
 

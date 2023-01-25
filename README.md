@@ -10,3 +10,4 @@ docker run ‘-d’ (for detached mode) mysql_db  - run the container
 docker exec -it 'ee4a85ad7bbd' (name of container) /bin/bash - run bash
 cd docker-entrypoint-initdb.d 
 mysql -pcomp0022
+source movies.sql
