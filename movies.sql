@@ -2,33 +2,33 @@ CREATE DATABASE movies;
 use movies;
 
 CREATE TABLE movies (
-  movie_id INT,
+  movie_id INT NOT NULL,
   title VARCHAR(100),
-  imdbId INT,
-  tmdbId INT,
+  imdbId INT NOT NULL,
+  tmdbId INT NOT NULL,
   PRIMARY KEY (movie_id)
 );
 
 CREATE TABLE ratings (
-  movie_id INT,
+  movie_id INT NOT NULL,
   rating DECIMAL(1,1),
-  time_stamp INT,
-  user_id INT,
+  time_stamp INT NOT NULL,
+  user_id INT NOT NULL,
   PRIMARY KEY (movie_id, user_id)
 );
 
 CREATE TABLE genres (
-  movie_id INT,
+  movie_id INT NOT NULL,
   genre VARCHAR(100),
   PRIMARY KEY (movie_id),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
 CREATE TABLE tags (
-  movie_id INT,
+  movie_id INT NOT NULL,
   tag VARCHAR(100),
-  time_stamp INT,
-  user_id INT,
+  time_stamp INT NOT NULL,
+  user_id INT NOT NULL,
   PRIMARY KEY (movie_id, user_id)
 );
 
