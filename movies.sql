@@ -4,32 +4,33 @@ use movies;
 CREATE TABLE movies (
   movie_id INT NOT NULL,
   title VARCHAR(200),
-  imdbId INT NOT NULL,
-  tmdbId INT,
+  imdbId VARCHAR(10),
+  tmdbId VARCHAR(10),
   PRIMARY KEY (movie_id)
 );
 
 CREATE TABLE ratings (
+  user_id INT NOT NULL,
   movie_id INT NOT NULL,
   rating DECIMAL(2,1),
   time_stamp BIGINT NOT NULL,
-  user_id INT NOT NULL,
-  PRIMARY KEY (movie_id, user_id)
+  PRIMARY KEY (user_id, movie_id)
 );
 
 CREATE TABLE genres (
   movie_id INT NOT NULL,
   genre VARCHAR(100),
-  PRIMARY KEY (movie_id),
+  PRIMARY KEY (movie_id, genre),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
 CREATE TABLE tags (
+  user_id INT NOT NULL,
   movie_id INT NOT NULL,
   tag VARCHAR(100),
   time_stamp BIGINT NOT NULL,
-  user_id INT NOT NULL,
-  PRIMARY KEY (movie_id, user_id)
+  PRIMARY KEY (user_id, movie_id, tag, time_stamp),
+  FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
 LOAD DATA INFILE '/var/lib/mysql-files/movies.csv' 
