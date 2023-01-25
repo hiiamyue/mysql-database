@@ -11,8 +11,8 @@ CREATE TABLE movies (
 
 CREATE TABLE ratings (
   movie_id INT NOT NULL,
-  rating DECIMAL(1,1),
-  time_stamp INT NOT NULL,
+  rating DECIMAL(2,1),
+  time_stamp BIGINT NOT NULL,
   user_id INT NOT NULL,
   PRIMARY KEY (movie_id, user_id)
 );
@@ -27,7 +27,7 @@ CREATE TABLE genres (
 CREATE TABLE tags (
   movie_id INT NOT NULL,
   tag VARCHAR(100),
-  time_stamp INT NOT NULL,
+  time_stamp BIGINT NOT NULL,
   user_id INT NOT NULL,
   PRIMARY KEY (movie_id, user_id)
 );
@@ -45,7 +45,7 @@ FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/var/lib/mysql-files/genres.csv' 
+LOAD DATA INFILE '/var/lib/mysql-files/new_genres.csv' 
 INTO TABLE genres
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
