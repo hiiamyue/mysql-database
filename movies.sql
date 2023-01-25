@@ -3,9 +3,9 @@ use movies;
 
 CREATE TABLE movies (
   movie_id INT NOT NULL,
-  title VARCHAR(100),
+  title VARCHAR(200),
   imdbId INT NOT NULL,
-  tmdbId INT NOT NULL,
+  tmdbId INT,
   PRIMARY KEY (movie_id)
 );
 
@@ -35,6 +35,7 @@ CREATE TABLE tags (
 LOAD DATA INFILE '/var/lib/mysql-files/movies.csv' 
 INTO TABLE movies 
 FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 

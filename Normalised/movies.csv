@@ -623,7 +623,7 @@ movieId,title,imdbId,tmdbId
 786,Eraser (1996),116213,9268
 788,"Nutty Professor, The (1996)",117218,9327
 790,"Unforgettable Summer, An (Un ??t?? inoubliable) (1994)",111546,81949
-791,"Last Klezmer: Leopold Kozlowski, His Life and Music, The (1994)",113610,
+791,"Last Klezmer: Leopold Kozlowski, His Life and Music, The (1994)",113610,\N
 795,Somebody to Love (1994),111237,44535
 798,Daylight (1996),116040,11228
 799,"Frighteners, The (1996)",116365,10779
@@ -842,7 +842,7 @@ movieId,title,imdbId,tmdbId
 1103,Rebel Without a Cause (1955),48545,221
 1104,"Streetcar Named Desire, A (1951)",44081,702
 1105,Children of the Corn IV: The Gathering (1996),115885,25750
-1107,Loser (1991),102336,
+1107,Loser (1991),102336,\N
 1111,Microcosmos (Microcosmos: Le peuple de l'herbe) (1996),117040,9305
 1112,Palookaville (1996),117284,37616
 1114,"Funeral, The (1996)",116378,21612
@@ -2140,7 +2140,7 @@ movieId,title,imdbId,tmdbId
 2846,"Adventures of Milo and Otis, The (Koneko monogatari) (1986)",97050,47951
 2847,Only Angels Have Wings (1939),31762,43832
 2848,"Othello (Tragedy of Othello: The Moor of Venice, The) (1952)",45251,47697
-2851,Saturn 3 (1980),81454,
+2851,Saturn 3 (1980),81454,\N
 2852,"Soldier's Story, A (1984)",88146,26522
 2856,I Saw What You Did (1965),59297,28295
 2857,Yellow Submarine (1968),63823,12105
@@ -3026,7 +3026,7 @@ movieId,title,imdbId,tmdbId
 4043,At Close Range (1986),90670,13715
 4046,Friendly Persuasion (1956),49233,43258
 4047,Gettysburg (1993),107007,10655
-4051,Horrors of Spider Island (Ein Toter Hing im Netz) (1960),56600,
+4051,Horrors of Spider Island (Ein Toter Hing im Netz) (1960),56600,\N
 4052,Antitrust (2001),218817,9989
 4053,Double Take (2001),238948,18828
 4054,Save the Last Dance (2001),206275,9816
@@ -3542,7 +3542,7 @@ movieId,title,imdbId,tmdbId
 4844,Bandits (2001),219965,3172
 4845,Corky Romano (2001),250310,17708
 4846,Iron Monkey (Siu nin Wong Fei-hung ji: Tit Ma Lau) (1993),108148,12780
-4847,Fat Girl (?€ ma soeur!) (2001),243255,570
+4847,Fat Girl (?ï¿½ ma soeur!) (2001),243255,570
 4848,Mulholland Drive (2001),166924,1018
 4849,My First Mister (2001),206963,25641
 4850,Spriggan (Supurigan) (1998),164917,16767
@@ -3583,7 +3583,7 @@ movieId,title,imdbId,tmdbId
 4909,"Incredible Shrinking Woman, The (1981)",82558,12472
 4911,Jabberwocky (1977),76221,11834
 4912,Funny Girl (1968),62994,16085
-4914,Breathless (?€ bout de souffle) (1960),53472,269
+4914,Breathless (?ï¿½ bout de souffle) (1960),53472,269
 4915,"Beastmaster, The (1982)",83630,16441
 4916,Midway (1976),74899,11422
 4917,MacArthur (1977),76342,31037
@@ -3946,7 +3946,7 @@ movieId,title,imdbId,tmdbId
 5550,Love Me Tender (1956),49452,39833
 5553,Stakeout (1987),94025,10859
 5556,FearDotCom (a.k.a. Fear.com) (a.k.a. Fear Dot Com) (2002),295254,9544
-5560,?€ nous la libert?? (Freedom for Us) (1931),22599,31514
+5560,?ï¿½ nous la libert?? (Freedom for Us) (1931),22599,31514
 5562,Snipes (2001),275688,26056
 5563,City by the Sea (2002),269095,13536
 5564,Swimfan (2002),283026,20616
@@ -4232,7 +4232,7 @@ movieId,title,imdbId,tmdbId
 6158,"Jungle Book 2, The (2003)",283426,14873
 6159,All the Real Girls (2003),299458,13132
 6162,Gerry (2002),302674,1956
-6163,He Loves Me... He Loves Me Not (?€ la folie... pas du tout) (2002),291579,12112
+6163,He Loves Me... He Loves Me Not (?ï¿½ la folie... pas du tout) (2002),291579,12112
 6166,Dennis the Menace (1993),106701,12139
 6169,"Black Stallion Returns, The (1983)",85248,24883
 6170,"Black Stallion, The (1979)",78872,17264
@@ -4829,7 +4829,7 @@ movieId,title,imdbId,tmdbId
 7205,"Wind and the Lion, The (1975)",73906,14815
 7206,Mon Oncle (My Uncle) (1958),50706,427
 7208,Dr. Jekyll and Mr. Hyde (1941),33553,3022
-7209,"M. Hulot?€?s Holiday (Mr. Hulot's Holiday) (Vacances de Monsieur Hulot, Les) (1953)",46487,778
+7209,"M. Hulot?ï¿½?s Holiday (Mr. Hulot's Holiday) (Vacances de Monsieur Hulot, Les) (1953)",46487,778
 7211,People Will Talk (1951),43915,23152
 7212,I Was a Male War Bride (1949),41498,23567
 7215,To Have and Have Not (1944),37382,22584
@@ -5531,7 +5531,7 @@ movieId,title,imdbId,tmdbId
 26567,Club Paradise (1986),90856,26555
 26578,"Sacrifice, The (Offret - Sacraficatio) (1986)",91670,24657
 26585,"Better Tomorrow, A (Ying hung boon sik) (1986)",92263,11471
-26587,"Decalogue, The (Dekalog) (1989)",92337,
+26587,"Decalogue, The (Dekalog) (1989)",92337,\N
 26590,G.I. Joe: The Movie (1987),93066,17421
 26593,Hell Comes to Frogtown (1988),93171,22572
 26599,"Law of Desire (Ley del deseo, La) (1987)",93412,4043
@@ -5853,7 +5853,7 @@ movieId,title,imdbId,tmdbId
 32589,Beauty Shop (2005),388500,14177
 32596,Sahara (2005),318649,7364
 32598,Fever Pitch (2005),332047,11431
-32600,Eros (2004),377059,
+32600,Eros (2004),377059,\N
 32620,Not on the Lips (Pas sur la bouche) (2003),356999,51945
 32632,Electra Glide in Blue (1973),70022,26332
 32649,"Special Day, A (Giornata particolare, Una) (1977)",76085,42229
@@ -6058,7 +6058,7 @@ movieId,title,imdbId,tmdbId
 40614,Derailed (2005),398017,8999
 40617,Creep (2004),381966,8555
 40629,Pride & Prejudice (2005),414387,4348
-40697,Babylon 5,105946,
+40697,Babylon 5,105946,\N
 40723,Wolf Creek (2005),416315,9885
 40732,"Descent, The (2005)",435625,9392
 40815,Harry Potter and the Goblet of Fire (2005),330373,674
@@ -6721,7 +6721,7 @@ movieId,title,imdbId,tmdbId
 58870,Zebraman (2004),388556,36223
 58876,Stop-Loss (2008),489281,8988
 58879,Shine a Light (2008),893382,7944
-58964,Inside (?€ l'int??rieur) (2007),856288,13312
+58964,Inside (?ï¿½ l'int??rieur) (2007),856288,13312
 58972,Nim's Island (2008),410377,10488
 58975,"Ruins, The (2008)",963794,11152
 58998,Forgetting Sarah Marshall (2008),800039,9870
@@ -7381,7 +7381,7 @@ movieId,title,imdbId,tmdbId
 79259,Cherrybomb (2009),1248971,40850
 79274,Batman: Under the Red Hood (2010),1569923,40662
 79293,Salt (2010),944835,27576
-79299,"No. 1 Ladies' Detective Agency, The (2008)",874957,
+79299,"No. 1 Ladies' Detective Agency, The (2008)",874957,\N
 79333,Watch Out for the Automobile (Beregis avtomobilya) (1966),60161,39768
 79357,Mr. Nobody (2009),485947,31011
 79428,Dinner for Schmucks (2010),427152,38778
@@ -9517,7 +9517,7 @@ movieId,title,imdbId,tmdbId
 171631,Maria Bamford: Old Baby,6264596,455601
 171695,Robin Williams: Live on Broadway (2002),330829,20211
 171701,The Death of Louis XIV (2016),5129510,371859
-171749,Death Note: Desu n??to (2006?€?2007),877057,419787
+171749,Death Note: Desu n??to (2006?ï¿½?2007),877057,419787
 171751,Munna bhai M.B.B.S. (2003),374887,19625
 171759,The Beguiled (2017),5592248,399019
 171763,Baby Driver (2017),3890160,339403
