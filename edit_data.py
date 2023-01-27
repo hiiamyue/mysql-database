@@ -19,7 +19,7 @@ def modified_movies(source,dest):
             writer = csv.writer(d)
             reader = csv.reader(f, delimiter=',')
             row1 = next(reader)#dont need first line
-            row1.append('date')
+            row1.append('release_date')
             writer.writerow(row1)
             for l in reader:
                 date = re.findall(r'\(.*?\)', l[1])

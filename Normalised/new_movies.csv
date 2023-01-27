@@ -1,4 +1,4 @@
-movieId,title,imdbId,tmdbId,date
+movieId,title,imdbId,tmdbId,release_date
 1,Toy Story,0114709,862,1995
 2,Jumanji,0113497,8844,1995
 3,Grumpier Old Men,0113228,15602,1995
@@ -9517,7 +9517,7 @@ movieId,title,imdbId,tmdbId,date
 171631,['Maria Bamford: Old Baby'],6264596,455601,0
 171695,Robin Williams: Live on Broadway,0330829,20211,2002
 171701,The Death of Louis XIV,5129510,371859,2016
-171749,Death Note: Desu n??to,0877057,419787,2006?�?2007
+171749,Death Note: Desu n??to,0877057,419787,2006
 171751,Munna bhai M.B.B.S.,0374887,19625,2003
 171759,The Beguiled,5592248,399019,2017
 171763,Baby Driver,3890160,339403,2017

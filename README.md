@@ -6,7 +6,7 @@ MYSQL -root password: comp0022
 Commands:
 
 docker build -t mysql_db . - build an image
-docker run -d mysql_db  - run the container (for detached mode)
+docker run -d mysql_db   - run the container (for detached mode)
 docker restart 'container_name' - restart it
 docker exec -it 'ee4a85ad7bbd' (name of container) /bin/bash - run bash
 cd docker-entrypoint-initdb.d
