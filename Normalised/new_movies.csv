@@ -1,4 +1,4 @@
-movieId,title,imdbId,tmdbId,Date
+movieId,title,imdbId,tmdbId,date
 1,Toy Story,0114709,862,1995
 2,Jumanji,0113497,8844,1995
 3,Grumpier Old Men,0113228,15602,1995
@@ -6058,7 +6058,7 @@ movieId,title,imdbId,tmdbId,Date
 40614,Derailed,0398017,8999,2005
 40617,Creep,0381966,8555,2004
 40629,Pride & Prejudice,0414387,4348,2005
-40697,Babylon 5,0105946,\N,0
+40697,['Babylon 5'],0105946,\N,0
 40723,Wolf Creek,0416315,9885,2005
 40732,"Descent, The",0435625,9392,2005
 40815,Harry Potter and the Goblet of Fire,0330373,674,2005
@@ -9030,7 +9030,7 @@ movieId,title,imdbId,tmdbId,Date
 140850,Every Secret Thing,1706598,258284,2014
 140852,964 Pinocchio,0225009,50162,1991
 140928,Joy,2446980,274479,2015
-140956,Ready Player One,1677720,333339,0
+140956,['Ready Player One'],1677720,333339,0
 141004,Victor Frankenstein,1976009,228066,2015
 141131,Guardians,4600952,354556,2016
 141400,Invincible Shaolin,0077973,48297,1978
@@ -9090,7 +9090,7 @@ movieId,title,imdbId,tmdbId,Date
 143365,The Circle,4287320,339988,2016
 143367,Silence,0490215,68730,2016
 143385,Bridge of Spies,3682448,296098,2015
-143410,Hyena Road,4034452,316042,0
+143410,['Hyena Road'],4034452,316042,0
 143458,The Great Hypnotist,3720058,273197,2014
 143472,Into the Grizzly Maze,1694021,244316,2015
 143511,Human,3327994,359364,2015
@@ -9137,7 +9137,7 @@ movieId,title,imdbId,tmdbId,Date
 147002,Eros,0343663,39850,2004
 147142,Those Happy Days,0478566,19100,2006
 147196,The Girls,0134614,20975,1961
-147250,The Adventures of Sherlock Holmes and Doctor Watson,0229922,127605,0
+147250,['The Adventures of Sherlock Holmes and Doctor Watson'],0229922,127605,0
 147282,What Men Still Talk About,1863347,83456,2011
 147286,The Adventures of Sherlock Holmes and Doctor Watson: The Treasures of Agra,0086333,127608,1983
 147300,Adventures Of Sherlock Holmes And Dr. Watson: The Twentieth Century Approaches,0091942,270393,1986
@@ -9178,7 +9178,7 @@ movieId,title,imdbId,tmdbId,Date
 149144,Parasyte: Part 1,3345472,282069,2014
 149146,Parasyte: Part 2,3345474,282070,2015
 149330,A Cosmic Christmas,0182015,125464,1977
-149334,Nocturnal Animals,4550098,340666,0
+149334,['Nocturnal Animals'],4550098,340666,0
 149350,Lumberjack Man,3201722,356486,2015
 149352,Daddy's Home,1528854,274167,2015
 149354,Sisters,1850457,266294,2015
@@ -9258,7 +9258,7 @@ movieId,title,imdbId,tmdbId,Date
 156371,Everybody Wants Some,2937696,295699,2016
 156387,Sing Street,3544112,369557,2016
 156553,Zoom,3763866,351065,2015
-156605,Paterson,5247022,370755,0
+156605,['Paterson'],5247022,370755,0
 156607,The Huntsman Winter's War,2381991,290595,2016
 156609,Neighbors 2: Sorority Rising,4438848,325133,2016
 156675,Project X,0063465,29398,1968
@@ -9366,7 +9366,7 @@ movieId,title,imdbId,tmdbId,Date
 162082,Train to Busan,5700672,396535,2016
 162344,Tom Segura: Mostly Stories,4970632,376482,2016
 162350,The Magnificent Seven,2404435,333484,2016
-162414,Moonlight,4975722,376867,0
+162414,['Moonlight'],4975722,376867,0
 162478,Masterminds,2461150,213681,2016
 162578,Kubo and the Two Strings,4302938,313297,2016
 162590,Bridget Jones's Baby,1473832,95610,2016
@@ -9447,7 +9447,7 @@ movieId,title,imdbId,tmdbId,Date
 167370,Assassin's Creed,2094766,121856,2016
 167380,A Dog's Purpose,1753383,381289,2017
 167538,Microwave Massacre,0085937,87852,1983
-167570,The OA,4635282,432192,0
+167570,['The OA'],4635282,432192,0
 167634,Fist Fight,3401882,345922,2017
 167706,Shakespeare Behind Bars,0368264,146836,2005
 167732,A Street Cat Named Bob,3606888,404378,2016
@@ -9513,8 +9513,8 @@ movieId,title,imdbId,tmdbId,Date
 171011,Planet Earth II,5491994,420714,2016
 171023,The Hero,5655222,425751,2017
 171251,"Nobody Speak: Hulk Hogan, Gawker and Trials of a Free Press",6333064,430830,2017
-171495,Cosmos,0081846,409926,0
-171631,Maria Bamford: Old Baby,6264596,455601,0
+171495,['Cosmos'],0081846,409926,0
+171631,['Maria Bamford: Old Baby'],6264596,455601,0
 171695,Robin Williams: Live on Broadway,0330829,20211,2002
 171701,The Death of Louis XIV,5129510,371859,2016
 171749,Death Note: Desu n??to,0877057,419787,2006?�?2007
@@ -9524,7 +9524,7 @@ movieId,title,imdbId,tmdbId,Date
 171765,Okja,3967856,387426,2017
 171811,Embassy,3273632,256608,2013
 171867,Rough Night,4799050,397422,2017
-171891,Generation Iron 2,6263642,447818,0
+171891,['Generation Iron 2'],6263642,447818,0
 171917,Myst??re ?? la Tour Eiffel,4471456,430423,2015
 172013,Stefan Zweig: Farewell to Europe,3397160,391663,2016
 172215,Saved by the Bell: Hawaiian Style,0105321,37022,1992
@@ -9610,7 +9610,7 @@ movieId,title,imdbId,tmdbId,Date
 176419,Mother!,5109784,381283,2017
 176423,Icarus,6333060,432976,2017
 176579,Cage Dive,4126568,420707,2017
-176601,Black Mirror,2492564,452830,0
+176601,['Black Mirror'],2492564,452830,0
 176621,Boniface's Holiday,1332537,77557,1965
 176751,American Made,3532216,337170,2017
 176805,Little Boxes,5030402,390407,2017
