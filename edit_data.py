@@ -25,17 +25,20 @@ def modified_movies(source,dest):
                 date = re.findall(r'\(.*?\)', l[1])
                 if len(date)>1:
                     d =date[-1].strip("(,)")
-                    new=l[1].replace(date[-1],'').replace(" ", "")
+                    new=l[1].replace(date[-1],'').rstrip().strip('"')
                     l[1]=new
                     writer.writerow(l+[d])
                 else:
                     if date:
                         d = date[0].strip("(,)")
-                        new =l[1].replace(date[0],'').replace(" ", "")
+                        new =l[1].replace(date[0],'').rstrip().strip('"')
                         l[1]=new
                         writer.writerow(l+[d])
                     else:
+                        new=l[1].strip('"')
+                        l[1]=new
                         writer.writerow(l+[0])
+                        # null value represented as 0
                     
     
     
@@ -43,4 +46,4 @@ def modified_movies(source,dest):
 if __name__=="__main__":
     fix_genres('Normalised/genres.csv','Normalised/new_genres.csv' )
     list =modified_movies('Normalised/movies.csv','Normalised/new_movies.csv')
-    #print(len(list))
+ 
