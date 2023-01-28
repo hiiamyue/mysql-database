@@ -4,9 +4,9 @@ use movies_db;
 CREATE TABLE movies (
   movie_id INT NOT NULL,
   title VARCHAR(200),
-  imdbId VARCHAR(10),
-  tmdbId VARCHAR(10),
   release_date INT NOT NULL,
+  imdbId VARCHAR(100),
+  tmdbId VARCHAR(10),
   PRIMARY KEY (movie_id)
 );
 
@@ -21,7 +21,8 @@ CREATE TABLE ratings (
 CREATE TABLE genres (
   movie_id INT NOT NULL,
   genre VARCHAR(100),
-  PRIMARY KEY (movie_id, genre),
+  idx INT NOT NULL,
+  PRIMARY KEY (movie_id, idx),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
@@ -30,7 +31,8 @@ CREATE TABLE tags (
   movie_id INT NOT NULL,
   tag VARCHAR(100),
   time_stamp BIGINT NOT NULL,
-  PRIMARY KEY (user_id, movie_id, tag, time_stamp),
+  idx INT NOT NULL,
+  PRIMARY KEY (user_id, movie_id,idx),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
@@ -53,11 +55,15 @@ FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/var/lib/mysql-files/tags.csv' 
+LOAD DATA INFILE '/var/lib/mysql-files/new_tags.csv' 
 INTO TABLE tags
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
+
+
+
+
 
 
 
