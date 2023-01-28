@@ -1,4 +1,4 @@
-movieId,genres,index
+movieId,genres,idx
 1,Adventure,0
 1,Animation,1
 1,Children,2

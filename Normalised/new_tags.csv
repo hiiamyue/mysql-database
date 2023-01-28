@@ -1,4 +1,4 @@
-userId,movieId,tag,timestamp,index
+userId,movieId,tag,timestamp,idx
 2,60756,funny,1445714994,0
 2,60756,Highly quotable,1445714996,1
 2,60756,will ferrell,1445714992,2
