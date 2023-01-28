@@ -1,5 +1,4 @@
-CREATE DATABASE movies_db;
-use movies_db;
+use db;
 
 CREATE TABLE movies (
   movie_id INT NOT NULL,
