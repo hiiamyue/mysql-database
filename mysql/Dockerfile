@@ -1,6 +1,6 @@
 FROM mysql:8.0.32
 
-ENV MYSQL_ROOT_PASSWORD=comp0022
+# ENV MYSQL_ROOT_PASSWORD=sushiroll
 
 COPY ./movies.sql /docker-entrypoint-initdb.d/
 

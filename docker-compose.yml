@@ -1,0 +1,29 @@
+# version: "3"
+
+services:
+  #  frontend:
+  #    build:
+  #      dockerfile: Dockerfile
+  #    volumes:
+  #      - ./src:/app/src
+  #      - /node_modules
+  #    ports:
+  #      - 3000:3000
+  #    environment:
+  #      - WATCHPACK_POLLING=true
+  #      - REACT_APP_NAME=front
+
+  pythonapp:
+    build: ./python/
+    command: sh -c "sleep 10s ; python3 ./model.py"
+    depends_on:
+      - mysql
+
+  mysql:
+    build: ./mysql/
+    restart: always
+    environment: 
+      MYSQL_DATABASE: 'db'
+      MYSQL_ROOT_PASSWORD: 'sushiroll'
+    ports:
+      - '3306:3306'
