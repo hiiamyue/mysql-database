@@ -7,3 +7,6 @@ RUN pip install flask
 WORKDIR /usr/app/src
 
 COPY api.py ./
+
+COPY  ./src/controller/controller.py ./ 
+COPY  ./src/model/model.py ./ 
