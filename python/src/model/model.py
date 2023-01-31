@@ -14,4 +14,5 @@ class Model:
         cursor = self.db.cursor()
         cursor.execute("SELECT * FROM movies")
         movies = cursor.fetchall()
+        cursor.close()
         return movies
