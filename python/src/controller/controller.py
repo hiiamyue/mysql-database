@@ -10,3 +10,14 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
+    def sort_by_date(self):
+        data= self.model.sort_by_date()
+        json_data = json.dumps(data)
+        return json_data
+    
+    def sort_by_title(self):
+        data= self.model.sort_by_title()
+        json_data = json.dumps(data)
+        return json_data
+    
+    

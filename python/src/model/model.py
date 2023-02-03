@@ -9,10 +9,22 @@ class Model:
             database="db"
         )
         self.db = mydb
+        self.cursor = self.db.cursor()
 
     def get_default_data(self):
-        cursor = self.db.cursor()
-        cursor.execute("SELECT * FROM movies")
-        movies = cursor.fetchall()
-        cursor.close()
+        self.cursor.execute("SELECT * FROM movies")
+        movies = self.cursor.fetchall()
+        self.cursor.close()
+        return movies
+
+    def sort_by_date(self):
+        self.cursor.execute("SELECT * FROM movies \n ORDER BY release_date")
+        movies = self.cursor.fetchall()
+        self.cursor.close()
+        return movies
+    
+    def sort_by_title(self):
+        self.cursor.execute("SELECT * FROM movies \n ORDER BY title")
+        movies = self.cursor.fetchall()
+        self.cursor.close()
         return movies
