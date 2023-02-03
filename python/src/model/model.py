@@ -1,15 +1,23 @@
 import mysql.connector
+import time
 
 class Model:
     def __init__(self) -> None:
-        mydb = mysql.connector.connect(
-            host="mysql",
-            user="root",
-            password="sushiroll",
-            database="db"
-        )
+        while True:
+            try:
+                mydb = mysql.connector.connect(
+                    host="mysql",
+                    user="root",
+                    password="sushiroll",
+                    database="db"
+                )
+                print("-")
+                break
+            except:
+                time.sleep(1)
+
         self.db = mydb
-        self.cursor = self.db.cursor()
+        self.cursor = self.db.cursor(dictionary=True)
 
     def get_default_data(self):
         self.cursor.execute("SELECT * FROM movies")
