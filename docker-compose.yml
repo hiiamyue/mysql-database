@@ -1,17 +1,16 @@
 # version: "3"
 
 services:
-  #  frontend:
-  #    build:
-  #      dockerfile: Dockerfile
-  #    volumes:
-  #      - ./src:/app/src
-  #      - /node_modules
-  #    ports:
-  #      - 3000:3000
-  #    environment:
-  #      - WATCHPACK_POLLING=true
-  #      - REACT_APP_NAME=front
+  frontend:
+    build: ./frontend_app/
+    volumes:
+      - ./src:/frontend_app/app/src
+      - /frontend_app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+        WATCHPACK_POLLING: true
+        REACT_APP_NAME: front
   
   pythonapp:
     build: ./python/
