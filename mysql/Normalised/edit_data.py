@@ -25,6 +25,7 @@ def add_index(source,dest):
                 writer.writerow(r+[index])
                 index +=1
 
+
 # def fix_genres(source, dest):
 #     with open(dest, 'w', newline='') as file:
 #         writer = csv.writer(file)

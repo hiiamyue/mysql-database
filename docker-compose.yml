@@ -12,12 +12,14 @@ services:
   #    environment:
   #      - WATCHPACK_POLLING=true
   #      - REACT_APP_NAME=front
-
+  
   pythonapp:
     build: ./python/
-    command: sh -c "sleep 10s ; python3 ./model.py"
+    command: sh -c "sleep 10s ; python3 ./api.py"
     depends_on:
       - mysql
+    ports:
+      - 8000:5000
 
   mysql:
     build: ./mysql/
