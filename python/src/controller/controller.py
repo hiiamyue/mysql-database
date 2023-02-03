@@ -7,7 +7,7 @@ class Controller:
 
     def get_default_data(self):
         data= self.model.get_default_data()
-        json_data = json.dumps([dict(ix) for ix in data])
+        json_data = json.dumps(data)
         return json_data
     
     def sort_by_date(self):
