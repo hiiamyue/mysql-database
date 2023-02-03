@@ -28,3 +28,20 @@ class Model:
         movies = self.cursor.fetchall()
         self.cursor.close()
         return movies
+    
+#     SELECT C.id_car, name, AVG(rating_value) AS average
+# FROM car C JOIN rating R 
+#       ON C.id_car = R.id_car
+# GROUP By C.id_car, name
+# ORDER BY average DESC
+    def sort_by_rating(self):
+        self.cursor.execute("""     SELECT
+                                \n  m.*, AVG(r.rating) AS average
+                                \n  FROM movies m JOIN ratings r
+                                \n  on r.movie_id=m.movie_id 
+                                \n  GROUP BY m.movie_id
+                                \n  ORDER BY average DESC""")
+        movies = self.cursor.fetchall()
+        self.cursor.close()
+        return movies
+    
