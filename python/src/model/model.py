@@ -37,6 +37,20 @@ class Model:
         #self.cursor.close()
         return movies
     
+    def get_genre_type(self):
+        self.cursor.execute('SELECT DISTINCT genre FROM genres')
+        distinct_genre = self.cursor.fetchall()
+        return distinct_genre
+    def get_film_by_genre(self,genre):
+        query = ("""SELECT * 
+                            \n FROM movies WHERE movie_id IN(
+                            \n SELECT movie_id From genres
+                            \n Where genre = %s)""")
+     
+        self.cursor.execute(query,genre)
+        movies = self.cursor.fetchall()
+        return movies
+    
     def close_cursor(self):
         self.cursor.close()
     

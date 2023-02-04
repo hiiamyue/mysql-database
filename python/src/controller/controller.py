@@ -20,4 +20,13 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
+    def get_genre_type(self):
+        data = self.model.get_genre_type()
+        json_data =json.dumps(data)
+        return json_data
+    
+    def get_film_by_gern(self):
+        data = self.model.get_film_by_genre()
+        json_data = json.dumps(data)
+        return json_data
     

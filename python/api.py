@@ -8,7 +8,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def default_data():
-    return controller.get_default_data()
+    #return controller.get_default_data()
+    return controller.get_film_by_gern()
 
 # @app.route('/sort_date')
 # def sort_date():
