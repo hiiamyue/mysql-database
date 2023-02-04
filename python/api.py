@@ -7,6 +7,7 @@ from flask_cors import CORS
 controller =Controller()
 
 app = Flask(__name__)
+# Add the CORS header to the json objects to avoid the error
 CORS(app)
 
 @app.route('/')
