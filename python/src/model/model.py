@@ -42,13 +42,17 @@ class Model:
         self.cursor.execute('SELECT DISTINCT genre FROM genres')
         distinct_genre = self.cursor.fetchall()
         return distinct_genre
-    def get_film_by_genre(self,genre):
-        query = ("""SELECT * 
-                            \n FROM movies WHERE movie_id IN(
-                            \n SELECT movie_id From genres
-                            \n Where genre = %s)""")
+    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max):
+        query = ("""SELECT m.* 
+                            \n FROM (movies m INNER JOIN genres g
+                            \n on m.movie_id = g.movie_id
+                            \n AND m.release_date BETWEEN %s AND %s
+                            \n AND g.genre = %s)
+                            \n INNER JOIN ratings r 
+                            \n on m.movie_id = r.movie_id
+                            \n AND r.rating BETWEEN %s AND %s""")
      
-        self.cursor.execute(query,genre)
+        self.cursor.execute(query,(date_start,date_end,genre,rating_min,rating_max))
         movies = self.cursor.fetchall()
         return movies
     
