@@ -15,22 +15,16 @@ const Movies = () => {
 
     useEffect(() => {
         // TODO: Handle CORS error??
-        const url = "localhost:8000/";
+        const url = "http://localhost:8000/";
     
-        const fetchData = async () => {
-          try {
-            const response = await fetch(url);
-            const json = await response.json();
-            const {results} = json;
-            // Only put the results in state, ie, the actual users array
-            setMovies(results);
-          } catch (error) {
-            console.log("error", error);
-          }
-        };
-    
-        fetchData();
-      }, []);
+        fetch(url, {method: "GET"})
+        .then((res) => res.json())
+        .then((data) => {
+           console.log(data);
+           setMovies(data);
+        })
+        
+    }, []);
 
     return (
         <div className='bg-[url("../public/8.png")] bg-no-repeat'>

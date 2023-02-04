@@ -1,10 +1,13 @@
 # import mysql.connector
 from flask import Flask
 from controller import Controller
+from flask_cors import CORS
+
 
 controller =Controller()
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def default_data():
@@ -24,5 +27,12 @@ def default_data():
 # def sort_rating():
 #     return controller.sort_by_rating()
 
+#@app.after_request
+#def after_request(response):
+   # response.headers.add('Access-Control-Allow-Origin', '*')
+   # response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  #  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  #  return response
+
 if __name__ == "__main__":
-    app.run(host ='0.0.0.0')
+    app.run(host ='0.0.0.0', port=5000)

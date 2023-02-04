@@ -11,9 +11,10 @@ class Model:
                     password="sushiroll",
                     database="db"
                 )
-                print("-")
+                
                 break
             except:
+                print("-")
                 time.sleep(1)
 
         self.db = mydb
