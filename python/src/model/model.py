@@ -75,4 +75,6 @@ class Model:
         movies = self.cursor.fetchall()
         #self.cursor.close()
         return movies
+
+        
     

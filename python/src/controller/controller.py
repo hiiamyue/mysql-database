@@ -1,4 +1,5 @@
 from model import Model
+from TmdbModel import TmdbModel
 import json
 
 class Controller:
@@ -30,4 +31,6 @@ class Controller:
         data = self.model.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max)
         json_data = json.dumps(data)
         return json_data
-    
+
+    def get_tmdb_data(movieID):
+        return TmdbModel.getTmdbMovieData(movieID)

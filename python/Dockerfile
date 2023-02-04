@@ -4,6 +4,7 @@ RUN pip install mysql-connector-python
 
 RUN pip install flask
 RUN pip install -U flask-cors
+RUN pip install requests
 
 WORKDIR /usr/app/src
 
