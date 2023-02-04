@@ -12,8 +12,12 @@ CORS(app)
 @app.route('/')
 def default_data():
     #return controller.get_default_data()
-    genre = ['Action']
-    return controller.get_film_by_gern(genre)
+    genre = 'Action'
+    date_start =1997
+    date_end=2000
+    rating_min =0.01
+    rating_max =0.5
+    return controller.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max)
 
 # @app.route('/sort_date')
 # def sort_date():
