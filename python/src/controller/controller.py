@@ -25,8 +25,9 @@ class Controller:
         json_data =json.dumps(data)
         return json_data
     
-    def get_film_by_gern(self):
-        data = self.model.get_film_by_genre()
+    def get_film_by_gern(self,genre):
+        ## input genre has to be in form of list or tuple
+        data = self.model.get_film_by_genre(genre)
         json_data = json.dumps(data)
         return json_data
     
