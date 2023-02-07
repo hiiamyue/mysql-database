@@ -13,10 +13,10 @@ CORS(app)
 @app.route('/')
 def default_data():
     #return controller.get_default_data()
-    genre = {'Action','Comedy'}
+    genre = None
     date_start =1997
     date_end=2000
-    rating_min =4.5
+    rating_min =0.0
     rating_max =5.0
     sort_by_date = True
     sort_by_title = True

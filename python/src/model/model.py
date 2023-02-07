@@ -20,11 +20,11 @@ class Model:
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
 
-    def get_default_data(self):
-        self.cursor.execute("SELECT * FROM movies")
-        movies = self.cursor.fetchall()
-        #self.cursor.close()
-        return movies
+    # def get_default_data(self):
+    #     self.cursor.execute("SELECT * FROM movies")
+    #     movies = self.cursor.fetchall()
+    #     #self.cursor.close()
+    #     return movies
     
     def create_average_table(self):
         query = """CREATE TABLE average_rating(
@@ -60,25 +60,39 @@ class Model:
     
     def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
         query = "SELECT DISTINCT * FROM movies"
-        # Need to fix rating 
-        if genre and date_start and date_end and rating_max and rating_min:
-                query = ("""SELECT  m.* 
-                            \n FROM movies m INNER JOIN genres g
-                            \n on m.movie_id = g.movie_id
-                            \n AND m.release_date BETWEEN %s AND %s
-                            \n AND g.genre IN (%s,%s)
-                            \n INNER JOIN average_rating r 
-                            \n on m.movie_id = r.movie_id
-                            \n AND r.rating BETWEEN %s AND %s
-                            \n""")
-                
-
-
-        query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
-
-        self.cursor.execute(query_after_sorting,[date_start,date_end,'Action','Comedy',rating_min,rating_max])
         
+        if not date_start:
+            date_start = 1800
+        if not date_end:
+            date_end = 2050
+        if not rating_min:
+            rating_min = 0
+        if not rating_max:
+            rating_max =5
+        # Need to fix rating 
+        if genre:
+            query = ("""SELECT  m.* 
+                        \n FROM movies m INNER JOIN genres g
+                        \n on m.movie_id = g.movie_id
+                        \n AND m.release_date BETWEEN %s AND %s
+                        \n AND g.genre IN (%s,%s)
+                        \n INNER JOIN average_rating r 
+                        \n on m.movie_id = r.movie_id
+                        \n AND r.rating BETWEEN %s AND %s
+                        \n""")
+            query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
+            self.cursor.execute(query_after_sorting,[date_start,date_end,'Action','Comedy',rating_min,rating_max])
+        else:
+             query = ("""SELECT  m.* 
+                        \n FROM movies m INNER JOIN average_rating r 
+                        \n on m.movie_id = r.movie_id
+                        \n AND r.rating BETWEEN %s AND %s
+                        \n AND m.release_date BETWEEN %s AND %s
+                        \n""")
 
+             query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
+             self.cursor.execute(query,[rating_min,rating_max,date_start,date_end])
+        
         movies = self.cursor.fetchall()
         return  movies
     
