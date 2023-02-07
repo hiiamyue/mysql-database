@@ -12,3 +12,4 @@ COPY api.py ./
 
 COPY  ./src/controller/controller.py ./ 
 COPY  ./src/model/model.py ./ 
+COPY  ./src/model/TmdbModel.py ./
