@@ -35,6 +35,8 @@ CREATE TABLE tags (
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
+
+
 LOAD DATA INFILE '/var/lib/mysql-files/new_movies.csv' 
 INTO TABLE movies 
 FIELDS TERMINATED BY ',' 

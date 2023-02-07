@@ -16,11 +16,11 @@ def default_data():
     genre = {'Action','Comedy'}
     date_start =1997
     date_end=2000
-    rating_min =0.01
-    rating_max =0.5
+    rating_min =4.5
+    rating_max =5.0
     sort_by_date = True
     sort_by_title = True
-    sort_by_rating = False
+    sort_by_rating = True
     return controller.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating)
 
 # @app.route('/sort_date')
