@@ -20,8 +20,7 @@ CREATE TABLE ratings (
 CREATE TABLE genres (
   movie_id INT NOT NULL,
   genre VARCHAR(100),
-  idx INT NOT NULL,
-  PRIMARY KEY (movie_id, idx),
+  PRIMARY KEY (movie_id, genre),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
@@ -30,8 +29,7 @@ CREATE TABLE tags (
   movie_id INT NOT NULL,
   tag VARCHAR(100),
   time_stamp BIGINT NOT NULL,
-  idx INT NOT NULL,
-  PRIMARY KEY (user_id, movie_id,idx),
+  PRIMARY KEY (user_id, movie_id,tag),
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
@@ -50,13 +48,13 @@ FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/var/lib/mysql-files/new_genres.csv' 
+LOAD DATA INFILE '/var/lib/mysql-files/genres.csv' 
 INTO TABLE genres
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA INFILE '/var/lib/mysql-files/new_tags.csv' 
+LOAD DATA INFILE '/var/lib/mysql-files/tags.csv' 
 INTO TABLE tags
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'

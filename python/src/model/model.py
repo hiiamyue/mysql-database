@@ -20,11 +20,13 @@ class Model:
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
 
-    # def get_default_data(self):
-    #     self.cursor.execute("SELECT * FROM movies")
-    #     movies = self.cursor.fetchall()
-    #     #self.cursor.close()
-    #     return movies
+    def get_default_data(self):
+        self.cursor.execute("SELECT * FROM tags")
+        
+        movies = self.cursor.fetchall()
+        # print(movies)
+        #self.cursor.close()
+        return movies
     
     def create_average_table(self):
         query = """CREATE TABLE average_rating(
@@ -34,6 +36,7 @@ class Model:
                 ORDER BY rating DESC
                     )"""
         self.cursor.execute(query)
+        
     
     def get_genre_type(self):
         self.cursor.execute('SELECT DISTINCT genre FROM genres')
