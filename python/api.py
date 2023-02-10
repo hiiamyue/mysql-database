@@ -19,8 +19,8 @@ def default_data():
     rating_min =0.0
     rating_max =5.0
     sort_by_date = True
-    sort_by_title = True
-    sort_by_rating = True
+    sort_by_title = False
+    sort_by_rating = False
     return controller.get_film_by_genre_date_rating(genre,date_start,date_end,\
                                                     rating_min,rating_max,sort_by_date,\
                                                         sort_by_title,sort_by_rating)

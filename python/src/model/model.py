@@ -11,7 +11,6 @@ class Model:
                     password="sushiroll",
                     database="db"
                 )
-                
                 break
             except:
                 print("-")
@@ -22,10 +21,7 @@ class Model:
 
     def get_default_data(self):
         self.cursor.execute("SELECT * FROM tags")
-        
         movies = self.cursor.fetchall()
-        # print(movies)
-        #self.cursor.close()
         return movies
     
     def create_average_table(self):
@@ -44,26 +40,17 @@ class Model:
         return distinct_genre
     
     def sorting(self,sort_by_date,sort_by_title,sort_by_rating,query):
-        if sort_by_rating and sort_by_date and sort_by_title:
-            query= query+'ORDER BY m.release_date,m.title,r.rating'
-        elif sort_by_rating and sort_by_date:
-            query= query+'ORDER BY m.release_date,r.rating'
-        elif sort_by_rating and sort_by_title:
-            query= query+'ORDER BY m.title,r.rating'
-        elif sort_by_date and sort_by_title:
-            query= query+'ORDER BY m.release_date,m.title'
-        elif sort_by_rating:
-            query= query+'ORDER BY r.rating'
+        if sort_by_rating:
+            query= query+'ORDER BY r.rating DESC'
         elif sort_by_title:
-            query= query+'ORDER BY m.title'
+            query= query+'ORDER BY m.title ASC'
         elif sort_by_date:
-            query= query+'ORDER BY m.date'
+            query= query+'ORDER BY m.release_date ASC'
 
         return query
     
     def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
-        query = "SELECT DISTINCT * FROM movies"
-        
+
         if not date_start:
             date_start = 1800
         if not date_end:
@@ -72,7 +59,7 @@ class Model:
             rating_min = 0
         if not rating_max:
             rating_max =5
-        # Need to fix rating 
+
         if genre:
             query = ("""SELECT  m.* 
                         \n FROM movies m INNER JOIN genres g
@@ -91,10 +78,10 @@ class Model:
                         \n on m.movie_id = r.movie_id
                         \n AND r.rating BETWEEN %s AND %s
                         \n AND m.release_date BETWEEN %s AND %s
-                        \n""")
+                        \n """)
 
              query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
-             self.cursor.execute(query,[rating_min,rating_max,date_start,date_end])
+             self.cursor.execute(query_after_sorting,[rating_min,rating_max,date_start,date_end])
         
         movies = self.cursor.fetchall()
         return  movies
