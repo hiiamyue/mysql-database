@@ -1,5 +1,4 @@
 from model import Model
-from TmdbModel import TmdbModel
 import json
 
 class Controller:
