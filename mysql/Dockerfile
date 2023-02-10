@@ -8,6 +8,6 @@ COPY ./Normalised/new_movies.csv /var/lib/mysql-files/
 
 COPY ./Normalised/ratings.csv /var/lib/mysql-files/
 
-COPY ./Normalised/new_genres.csv /var/lib/mysql-files/
+COPY ./Normalised/genres.csv /var/lib/mysql-files/
 
-COPY ./Normalised/new_tags.csv /var/lib/mysql-files/
+COPY ./Normalised/tags.csv /var/lib/mysql-files/

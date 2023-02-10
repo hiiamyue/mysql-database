@@ -25,9 +25,9 @@ class Controller:
         json_data =json.dumps(data)
         return json_data
     
-    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max):
+    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
         ## input genre has to be in form of list or tuple
-        data = self.model.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max)
+        data = self.model.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating)
         json_data = json.dumps(data)
         return json_data
 
