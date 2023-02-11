@@ -18,7 +18,7 @@ class Model:
 
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
-    
+
     def create_average_table(self):
         query = """CREATE TABLE average_rating(
                 SELECT movie_id,AVG(rating) as rating
@@ -74,7 +74,7 @@ class Model:
     def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
         selected_genre,selected_date,selected_rating=self.gen_query_for_view(genre,date_start,date_end,rating_min,rating_max)
        
-        query = ("""SELECT  DISTINCT m.*,r.rating
+        query = ("""SELECT  DISTINCT m.*,CONVERT(r.rating, CHAR) AS rating 
                     \n FROM movies m INNER JOIN genres g
                     \n on m.movie_id = g.movie_id
                     {0}
@@ -86,7 +86,7 @@ class Model:
         
         query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
         self.cursor.execute(query_after_sorting)
-      
+        
         movies = self.cursor.fetchall()
         return movies
     
