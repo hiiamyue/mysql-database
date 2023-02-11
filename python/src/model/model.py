@@ -18,11 +18,6 @@ class Model:
 
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
-
-    def get_default_data(self):
-        self.cursor.execute("SELECT * FROM tags")
-        movies = self.cursor.fetchall()
-        return movies
     
     def create_average_table(self):
         query = """CREATE TABLE average_rating(
@@ -49,42 +44,51 @@ class Model:
 
         return query
     
-    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
 
-        if not date_start:
-            date_start = 1800
-        if not date_end:
-            date_end = 2050
-        if not rating_min:
-            rating_min = 0
-        if not rating_max:
-            rating_max =5
-
-        if genre:
-            query = ("""SELECT  m.* 
-                        \n FROM movies m INNER JOIN genres g
-                        \n on m.movie_id = g.movie_id
-                        \n AND m.release_date BETWEEN %s AND %s
-                        \n AND g.genre IN (%s,%s)
-                        \n INNER JOIN average_rating r 
-                        \n on m.movie_id = r.movie_id
-                        \n AND r.rating BETWEEN %s AND %s
-                        \n""")
-            query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
-            self.cursor.execute(query_after_sorting,[date_start,date_end,'Action','Comedy',rating_min,rating_max])
-        else:
-             query = ("""SELECT  m.* 
-                        \n FROM movies m INNER JOIN average_rating r 
-                        \n on m.movie_id = r.movie_id
-                        \n AND r.rating BETWEEN %s AND %s
-                        \n AND m.release_date BETWEEN %s AND %s
-                        \n """)
-
-             query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
-             self.cursor.execute(query_after_sorting,[rating_min,rating_max,date_start,date_end])
+    def gen_query_for_view(self,genre,date_start,date_end,rating_min,rating_max,\
+                          select_genre ='\n',select_date ='\n',select_rating ='\n'):
         
+        if genre:
+            g = tuple(genre)
+            select_genre = 'AND g.genre IN {}'.format(g)
+        
+        if date_start and date_end:
+            select_date ='AND m.release_date BETWEEN {0} AND {1}'.format(date_start,date_end)
+
+        elif date_start:
+            select_date ='AND m.release_date > {}'.format(date_start)
+        elif date_end:
+            select_date ='AND m.release_date <{}'.format(date_end)
+        
+
+        if rating_min and rating_max:
+            select_rating ='AND r.rating BETWEEN {0} AND {1}'.format(rating_min,rating_max)
+
+        elif rating_min:
+            select_rating='AND r.rating > {}'.format(rating_min)
+        elif rating_max:
+            select_rating ='AND r.rating <{}'.format(rating_max)
+        
+        return select_genre,select_date,select_rating
+    
+    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating):
+        selected_genre,selected_date,selected_rating=self.gen_query_for_view(genre,date_start,date_end,rating_min,rating_max)
+       
+        query = ("""SELECT  DISTINCT m.*,r.rating
+                    \n FROM movies m INNER JOIN genres g
+                    \n on m.movie_id = g.movie_id
+                    {0}
+                    {1}
+                    \n INNER JOIN average_rating r 
+                    \n on m.movie_id = r.movie_id
+                    {2}
+                    \n""".format(selected_date,selected_genre,selected_rating))
+        
+        query_after_sorting = self.sorting(sort_by_date,sort_by_title,sort_by_rating,query)
+        self.cursor.execute(query_after_sorting)
+      
         movies = self.cursor.fetchall()
-        return  movies
+        return movies
     
     def close_cursor(self):
         self.cursor.close()
