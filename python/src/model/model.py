@@ -90,5 +90,14 @@ class Model:
         movies = self.cursor.fetchall()
         return movies
     
+    def get_page_data(self, page):
+        query = ("""SELECT * FROM movies
+                ORDER BY movie_id
+                LIMIT 23
+                OFFSET {}""").format((page - 1) * 23)
+        self.cursor.execute(query)
+        movies = self.cursor.fetchall()
+        return movies
+    
     def close_cursor(self):
         self.cursor.close()

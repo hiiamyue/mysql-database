@@ -12,7 +12,7 @@ CORS(app)
 
 @app.route('/')
 def default_data():
-    # return controller.get_default_data()
+    # return controller.get_page_data(1)
 
     genre = ['Action','Comedy']
     date_start =1997

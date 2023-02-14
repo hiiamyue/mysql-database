@@ -33,3 +33,8 @@ class Controller:
 
     def get_tmdb_data(movieID):
         return TmdbModel.getTmdbMovieData(movieID)
+    
+    def get_page_data(self,page):
+        data= self.model.get_page_data(page)
+        json_data = json.dumps(data)
+        return json_data

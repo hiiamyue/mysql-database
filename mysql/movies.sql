@@ -60,6 +60,12 @@ FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
+CREATE TABLE average_rating(
+  SELECT movie_id,AVG(rating) as rating
+  FROM ratings
+  GROUP BY movie_id
+  ORDER BY rating DESC
+);
 
 
 
