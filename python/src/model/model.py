@@ -33,8 +33,8 @@ class Model:
             query = query + 'ORDER BY m.title ASC'
         elif sort_by_date:
             query = query + 'ORDER BY m.release_date ASC'
-        if offset:
-            query = query+'LIMIT 23 OFFSET {}'.format(offset)
+        
+        query = query+' LIMIT 23 OFFSET {}'.format(offset)
 
         return query
     
@@ -81,6 +81,14 @@ class Model:
         query_after_sorting = self.sorting(sort_by_date, sort_by_title, sort_by_rating,offset, query)
         self.cursor.execute(query_after_sorting)
         
+        movies = self.cursor.fetchall()
+        return movies
+    
+    def search_tmbdID(self,keyword):
+        # search by movie title return tmdb id
+        query ="""SELECT DISTINCT m.tmdbId FROM movies m
+                \n WHERE m.title LIKE '%{}%' """.format(keyword)
+        self.cursor.execute(query)
         movies = self.cursor.fetchall()
         return movies
     

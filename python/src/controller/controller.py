@@ -1,25 +1,12 @@
 from model import Model
+from TmdbModel import TmdbModel
 import json
 
 class Controller:
     def __init__(self)-> None:
         self.model = Model()
+        self.tmdbModel = TmdbModel()
 
-    def get_default_data(self):
-        data= self.model.get_default_data()
-        json_data = json.dumps(data)
-        return json_data
-    
-    def sort_by_date(self):
-        data= self.model.sort_by_date()
-        json_data = json.dumps(data)
-        return json_data
-    
-    def sort_by_title(self):
-        data= self.model.sort_by_title()
-        json_data = json.dumps(data)
-        return json_data
-    
     def get_genre_type(self):
         data = self.model.get_genre_type()
         json_data =json.dumps(data)
@@ -31,10 +18,15 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
 
-    def get_tmdb_data(movieID):
-        return TmdbModel.getTmdbMovieData(movieID)
+    def get_tmdb_data(self,keyword):
+        tmdbID =self.get_tmdbID(keyword)
+        return self.tmdbModel.getTmdbMovieData(tmdbID )
     
-    def get_page_data(self,page):
-        data= self.model.get_page_data(page)
+    def get_tmdbID(self,keyword):
+        # get tmdb ID from movie title
+        data = self.model.search_tmbdID(keyword)
         json_data = json.dumps(data)
-        return json_data
+        return(json_data)
+
+    
+   

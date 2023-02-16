@@ -17,6 +17,12 @@ CREATE TABLE ratings (
   PRIMARY KEY (user_id, movie_id)
 );
 
+CREATE TABLE average_rating(
+                SELECT movie_id,AVG(rating) as rating
+                FROM ratings
+                GROUP BY movie_id
+                ORDER BY rating DESC);
+                
 CREATE TABLE genres (
   movie_id INT NOT NULL,
   genre VARCHAR(100),

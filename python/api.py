@@ -12,21 +12,20 @@ CORS(app)
 
 @app.route('/')
 def default_data():
-    # return controller.get_page_data(1)
-
-    genre = ['Action','Comedy']
-    date_start =1997
-    date_end=2000
-    rating_min =1.0
-    rating_max =5.0
-    sort_by_date = True
-    sort_by_title = False
-    sort_by_rating = False
-    page = 1
-    return controller.get_film_by_genre_date_rating(genre,date_start,date_end,\
-                                                    rating_min,rating_max,sort_by_date,\
-                                                        sort_by_title,sort_by_rating,page)
-
+    # genre = ['Action','Comedy']
+    # date_start =1997
+    # date_end=2000
+    # rating_min =1.0
+    # rating_max =5.0
+    # sort_by_date = True
+    # sort_by_title = False
+    # sort_by_rating = False
+    # page = 3
+    # return controller.get_film_by_genre_date_rating(genre,date_start,date_end,\
+    #                                                 rating_min,rating_max,sort_by_date,\
+    #                                                     sort_by_title,sort_by_rating,page)
+    movies = controller.get_tmdbID('Toy')
+    return movies
 # @app.route('/sort_date')
 # def sort_date():
 #     return controller.sort_by_date()
