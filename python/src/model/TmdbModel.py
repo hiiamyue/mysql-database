@@ -9,12 +9,11 @@ class TmdbModel():
         url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = movieID, key = self.API_KEY)
         data = requests.get(url)
         return data.json()
+    
     def getTmdbUrls(self, results):
         return
 
-
     def addImgPathToResults(self, results):
-        
         urls = []
         #TODO: if it doesnt work, error handling + json for the requests
         with FuturesSession() as session:
