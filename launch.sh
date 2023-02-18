@@ -9,4 +9,4 @@ docker volume rm $(docker volume ls -q)
 docker rmi $(docker images -q)
 
 # Run docker-compose up
-docker-compose up --build
+docker-compose up --build --force-recreate

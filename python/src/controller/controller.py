@@ -12,11 +12,24 @@ class Controller:
         json_data =json.dumps(data)
         return json_data
     
-    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating,page):
-        ## input genre has to be in form of list or tuple
-        data = self.model.get_film_by_genre_date_rating(genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating,page)
+    def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, page):
+        
+        
+        # Parse the sorting method
+        if sort_by is not None:
+            sort_by = sort_by.split("_")[0]
+            desc = sort_by.split("_") == 2
+        else: 
+            desc = None
+            
+        data = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc)
         json_data = json.dumps(data)
         return json_data
+
+    def get_movie_data(self, movie_id):
+        data = json.dumps(self.tmdbModel.getTmdbMovieData(movie_id))
+        
+        return data
 
     def get_tmdb_data(self,keyword):
         tmdbID =self.get_tmdbID(keyword)

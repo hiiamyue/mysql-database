@@ -1,5 +1,6 @@
 import mysql.connector
 import time
+import sys
 
 class Model:
     def __init__(self) -> None:
@@ -19,7 +20,51 @@ class Model:
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
 
-    
+    def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc):
+        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc)
+
+        self.cursor.execute(q)
+        movies = self.cursor.fetchall()
+
+        return movies
+
+    def __create_date_filter(self, date_from, date_to):
+        if date_from is not None and date_to is not None:
+            return 'AND release_date BETWEEN {0} AND {1}'.format(date_from,date_to)
+        return ""
+        
+    def __create_rating_filter(self, min_rating, max_rating):
+        if min_rating is not None and max_rating is not None:
+            return 'AND r.rating BETWEEN {0} AND {1}'.format(min_rating, max_rating)
+        return ""
+        
+    def __create_genre_filter(self, genres):
+        if genres is not None:
+            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in {})'.format(genres)
+        return ""
+    def __create_sorting_query(self, sort_by, desc):
+        if sort_by is not None:
+            if desc:
+                order = "DESC"
+            else:
+                order = ""
+            return 'ORDER BY {} {}'.format(sort_by, order)
+        return ""
+      #TODO solve pb with \r  
+    def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc):
+        #TODO add part for rating
+        query = ("""SELECT  DISTINCT m.*, GROUP_CONCAT(g.genre, ',') genres
+                    \n FROM movies m INNER JOIN genres g
+                    \n on m.movie_id = g.movie_id
+                    \n{0}
+                    \n{1}
+                    \n GROUP BY movie_id
+                    \n{2}
+                    \n""".format(self.__create_date_filter(date_from, date_to), self.__create_genre_filter(genres), self.__create_sorting_query(sort_by, desc)))
+        
+        print(query, file=sys.stderr)
+        return query
+
     def get_genre_type(self):
         self.cursor.execute('SELECT DISTINCT genre FROM genres')
         distinct_genre = self.cursor.fetchall()

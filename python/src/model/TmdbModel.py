@@ -1,13 +1,16 @@
 import requests
 from requests_futures.sessions import FuturesSession
+import sys
 
 class TmdbModel():
     def __init__(self) -> None:
-        self.API_KEY = 'fakeapikey'
+        self.API_KEY = '0c7ff4f558bf3a9fa1d8291215717f93'
 
     def getTmdbMovieData(self, tmdbId):
+        print(tmdbId, file=sys.stderr)
         url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = tmdbId, key = self.API_KEY)
         data = requests.get(url)
+        print(data.json(), file=sys.stderr)
         return data.json()
     
     def getTmdbUrls(self, results):

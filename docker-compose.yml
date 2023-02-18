@@ -7,7 +7,7 @@ services:
       - ./src:/frontend_app/app/src
       - /frontend_app/node_modules
     ports:
-      - 3000:3000
+      - 3000
     environment:
         WATCHPACK_POLLING: true
         REACT_APP_NAME: front
