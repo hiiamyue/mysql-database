@@ -1,7 +1,7 @@
 from model import Model
 from TmdbModel import TmdbModel
 import json
-
+import sys
 class Controller:
     def __init__(self)-> None:
         self.model = Model()
@@ -17,8 +17,9 @@ class Controller:
         
         # Parse the sorting method
         if sort_by is not None:
+            desc = len(sort_by.split("_")) == 2
             sort_by = sort_by.split("_")[0]
-            desc = sort_by.split("_") == 2
+            
         else: 
             desc = None
             

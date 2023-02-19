@@ -48,17 +48,12 @@ def get_movie_data():
     movie_id = args.get("movie_id")
     print(movie_id)
     return controller.get_movie_data(movie_id)
-# @app.route('/sort_date')
-# def sort_date():
-#     return controller.sort_by_date()
 
-# @app.route('/sort_title')
-# def sort_title():
-#     return controller.sort_by_title()
 
-# @app.route('/sort_rating')
-# def sort_rating():
-#     return controller.sort_by_rating()
+@app.route('/genres', methods=['GET'])
+def get_genres():
+    return controller.get_genres()
+
 
 #@app.after_request
 #def after_request(response):
