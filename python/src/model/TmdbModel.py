@@ -7,18 +7,35 @@ class TmdbModel():
         self.API_KEY = '0c7ff4f558bf3a9fa1d8291215717f93'
 
     def getTmdbMovieData(self, tmdbId):
-        tmdbId =[353486,8844]
-        lst =[]
+        dic ={}
+        dic2={'cast':[],'director':[]}
         # content ,date ,director,lead actors,rottentotatto
-        for x in tmdbId:
-            url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = x ,key = self.API_KEY)
-            url1= "https://api.themoviedb.org/3/movie/{id}?api_key={key}/credits".format(id = x ,key = self.API_KEY)
-            data1 = requests.get(url)
-            data2 =requests.get(url1)
-            data =(data1.json()|data2.json())
-            print(data, file=sys.stderr)
-            lst.append(data)
-        return lst
+        url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = tmdbId ,key = self.API_KEY)
+        url1= "https://api.themoviedb.org/3/movie/{id}/credits?api_key={key}".format(id = tmdbId ,key = self.API_KEY)
+        data1 = requests.get(url)
+        data2 =requests.get(url1)
+        keys = ['adult','homepage','original_language','overview','release_date','runtime']
+
+        for item in data1.json():
+            if item in keys:
+                dic[item] = data1.json()[item]
+        for p in data2.json():
+            if p =='cast':
+                for z in data2.json()[p]:
+                    if z['order']<= 5:
+                        actor = {'character':z['character'],'name':z['name']}
+                        dic2['cast'].append(actor)
+                    else:
+                        break
+            if p =='crew':
+                for j in data2.json()[p]:
+                    if j['job']=="Director":
+                        director ={'name':j['name']}
+                        dic2['director'].append(director)
+                        break
+        dic |= dic2
+        print(dic, file=sys.stderr)
+        return dic
     
     def getTmdbUrls(self, results):
         return

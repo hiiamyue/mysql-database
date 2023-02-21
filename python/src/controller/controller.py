@@ -28,16 +28,15 @@ class Controller:
 
     def get_movie_data(self, movie_id):
         data = json.dumps(self.tmdbModel.getTmdbMovieData(movie_id))
-        
         return data
 
-    def get_tmdb_data(self,keyword):
-        tmdbID =self.get_tmdbID(keyword)
-        return self.tmdbModel.getTmdbMovieData(tmdbID )
+    def get_tmdb_data(self,movieID):
+        tmdbID =self.get_tmdbID(movieID)
+        return self.tmdbModel.getTmdbMovieData(tmdbID)
     
-    def get_tmdbID(self,keyword):
+    def get_tmdbID(self,movieID):
         # get tmdb ID from movie title
-        data = self.model.search_tmbdID(keyword)
+        data = self.model.get_tmbdID_from_movieID(movieID)
         json_data = json.dumps(data)
         return(json_data)
 

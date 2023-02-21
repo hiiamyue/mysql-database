@@ -175,20 +175,19 @@ class Model:
 
         return select_genre, select_date, select_rating, offset
     
-
+    def search(self,keywords):
+        return
     
-    def search_tmbdID(self,keyword):
+    def get_tmbdID_from_movieID(self,movieID):
         # search by movie title return tmdb id
         query ="""SELECT DISTINCT m.tmdbId FROM movies m
-                \n WHERE m.title LIKE '%{}%' """.format(keyword)
+                \n WHERE m.movie_id = {}""".format(movieID)
         self.cursor.execute(query)
-        movies = self.cursor.fetchall()
-        list=[]
-        for x in movies:
-            tmdb =int(x["tmdbId"].strip('\r'))
-            list.append(tmdb)
+        id = self.cursor.fetchall()
         
-        return list
+        tmdbID =int(id[0]["tmdbId"])
+    
+        return tmdbID
     
 
 
