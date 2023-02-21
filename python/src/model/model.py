@@ -125,7 +125,7 @@ class Model:
                     \n{2}
                     \n{3}
                     \n{4}
-                    \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
+                    \n""".format(date_filter, genre_filter, rating_filter, sorting,pagination))
         
         print(query, file=sys.stderr)
         return query
@@ -175,8 +175,13 @@ class Model:
 
     #     return select_genre, select_date, select_rating, offset
     
-    def search(self,keywords):
-        return
+    def search_movie(self,keywords):
+        query =""" SELECT * FROM movies m WHERE MATCH(m.title)
+                AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
+        self.cursor.execute('ALTER TABLE `movies` ADD FULLTEXT(`title`);')
+        self.cursor.execute(query)
+        movies = self.cursor.fetchall()
+        return movies
     
     def get_tmbdID_from_movieID(self,movieID):
         # search by movie title return tmdb id

@@ -43,6 +43,8 @@ def get_movies():
 def get_movie_data():
     # args = request.args
     arg = 179401
+    # this is just here for testing search functionality, remove later
+    controller.search_movie('Jumanji') 
     return controller.get_tmdb_data(arg)
 
 
