@@ -65,9 +65,9 @@ class Model:
       #TODO solve pb with \r  
     def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc):
         #TODO add part for rating
-        query = ("""SELECT  DISTINCT m.*, r.avg_rating, g.genres
+        query = ("""SELECT DISTINCT m.*, r.avg_rating,g.genres 
                     \n FROM movies m 
-                    \n INNER JOIN ( SELECT GROUP_CONCAT(genre, ',') genres, movie_id
+                    \n INNER JOIN ( SELECT GROUP_CONCAT(genre) genres, movie_id
                     \n from genres
                     \n GROUP BY movie_id
                     \n ) g on m.movie_id = g.movie_id
@@ -83,7 +83,7 @@ class Model:
         
         print(query, file=sys.stderr)
         return query
-
+    
     def get_genre_type(self):
         self.cursor.execute('SELECT DISTINCT genre FROM genres')
         distinct_genre = self.cursor.fetchall()

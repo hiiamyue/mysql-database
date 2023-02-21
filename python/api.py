@@ -36,7 +36,6 @@ def get_movies():
     sort_by = args.get("sortby")
 
     page = 3
-
     return controller.get_movies(genres, date_from, date_to,\
                                                      min_rating, max_rating, sort_by, page)
     

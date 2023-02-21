@@ -16,12 +16,6 @@ CREATE TABLE ratings (
   time_stamp BIGINT NOT NULL,
   PRIMARY KEY (user_id, movie_id)
 );
-
-CREATE TABLE average_rating(
-                SELECT movie_id,AVG(rating) as rating
-                FROM ratings
-                GROUP BY movie_id
-                ORDER BY rating DESC);
                 
 CREATE TABLE genres (
   movie_id INT NOT NULL,
@@ -42,11 +36,11 @@ CREATE TABLE tags (
 
 
 LOAD DATA INFILE '/var/lib/mysql-files/new_movies.csv' 
-INTO TABLE movies 
-FIELDS TERMINATED BY ',' 
-OPTIONALLY ENCLOSED BY '"'
-LINES TERMINATED BY '\n'
-IGNORE 1 ROWS;
+  INTO TABLE movies 
+  FIELDS TERMINATED BY ',' 
+  OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\r\n'
+  IGNORE 1 ROWS;
 
 LOAD DATA INFILE '/var/lib/mysql-files/ratings.csv' 
 INTO TABLE ratings
@@ -57,7 +51,7 @@ IGNORE 1 ROWS;
 LOAD DATA INFILE '/var/lib/mysql-files/genres.csv' 
 INTO TABLE genres
 FIELDS TERMINATED BY ',' 
-LINES TERMINATED BY '\n'
+LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS;
 
 LOAD DATA INFILE '/var/lib/mysql-files/tags.csv' 
@@ -65,16 +59,6 @@ INTO TABLE tags
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
-
-CREATE TABLE average_rating(
-  SELECT movie_id,AVG(rating) as rating
-  FROM ratings
-  GROUP BY movie_id
-  ORDER BY rating DESC
-);
-
-
-
 
 
 
