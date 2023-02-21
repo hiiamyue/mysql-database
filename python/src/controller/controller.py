@@ -23,7 +23,7 @@ class Controller:
         else: 
             desc = None
             
-        data = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc)
+        data = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
         json_data = json.dumps(data)
         return json_data
 

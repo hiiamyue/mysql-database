@@ -25,8 +25,6 @@ def get_movies():
 
     date_from = args.get("from")
     date_to = args.get("to")
-    print(date_from, file=sys.stderr)
-    print(date_to, file=sys.stderr)
 
     min_rating = args.get("min_rating")
     max_rating = args.get("max_rating")
@@ -34,8 +32,7 @@ def get_movies():
     genres = args.get("genres")
 
     sort_by = args.get("sortby")
-
-    page = 3
+    page = args.get("page")
 
     return controller.get_movies(genres, date_from, date_to,\
                                                      min_rating, max_rating, sort_by, page)

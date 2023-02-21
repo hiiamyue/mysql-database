@@ -19,15 +19,53 @@ class Model:
 
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
+        self.__PAGE_SIZE = 28
+#TODO: Implement pagination
+ 
 
-    def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc):
-        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc)
+
+    def get_last_query_found_rows(self):
+        query = "SELECT FOUND_ROWS()"
+        self.cursor.execute(query)
+        movies = self.cursor.fetchall()
+        return movies
+
+    def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc,page):
+
+
+
+        """_summary_
+
+        Args:
+            genres (_type_): _description_
+            date_from (_type_): _description_
+            date_to (_type_): _description_
+            min_rating (_type_): _description_
+            max_rating (_type_): _description_
+            sort_by (_type_): _description_
+            desc (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
 
         self.cursor.execute(q)
         movies = self.cursor.fetchall()
 
         return movies
 
+
+    def __add_pagination(self, page_num):
+        if page_num != None:
+            ofset = 0
+        else:
+            ofset = (page_num - 1) * self.__PAGE_SIZE 
+
+        return "LIMIT {0}, {1};".format(ofset, self.__PAGE_SIZE)
+        
+    
     def __create_date_filter(self, date_from, date_to):
         if date_from is not None and date_to is not None:
             return 'AND release_date BETWEEN {0} AND {1}'.format(date_from,date_to)
@@ -61,11 +99,17 @@ class Model:
 
             return 'ORDER BY {} {}'.format(sort_by, order)
         return ""
-    
-      #TODO solve pb with \r  
-    def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc):
+  
+    def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page):
         #TODO add part for rating
-        query = ("""SELECT  DISTINCT m.*, r.avg_rating, g.genres
+
+        date_filter = self.__create_date_filter(date_from, date_to)
+        genre_filter = self.__create_genre_filter(genres)
+        rating_filter = self.__create_rating_filter(min_rating, max_rating)
+        sorting = self.__create_sorting_query(sort_by, desc)
+        pagination = self.__add_pagination(page)
+
+        query = ("""SELECT DISTINCT SQL_CALC_FOUND_ROWS *
                     \n FROM movies m 
                     \n INNER JOIN ( SELECT GROUP_CONCAT(genre, ',') genres, movie_id
                     \n from genres
@@ -79,7 +123,8 @@ class Model:
                     \n{1}
                     \n{2}
                     \n{3}
-                    \n""".format(self.__create_date_filter(date_from, date_to), self.__create_genre_filter(genres), self.__create_rating_filter(min_rating, max_rating), self.__create_sorting_query(sort_by, desc)))
+                    \n{4}
+                    \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
         
         print(query, file=sys.stderr)
         return query
@@ -129,24 +174,7 @@ class Model:
 
         return select_genre, select_date, select_rating, offset
     
-    def get_film_by_genre_date_rating(self,genre,date_start,date_end,rating_min,rating_max,sort_by_date,sort_by_title,sort_by_rating,page):
-        selected_genre,selected_date,selected_rating,offset =self.gen_query_for_view(genre,date_start,date_end,rating_min,rating_max,page)
-        
-        query = ("""SELECT  DISTINCT m.*,CONVERT(r.rating, CHAR) AS rating 
-                    \n FROM movies m INNER JOIN genres g
-                    \n on m.movie_id = g.movie_id
-                    {0}
-                    {1}
-                    \n INNER JOIN average_rating r 
-                    \n on m.movie_id = r.movie_id
-                    {2}
-                    \n""".format(selected_date, selected_genre, selected_rating))
-        
-        query_after_sorting = self.sorting(sort_by_date, sort_by_title, sort_by_rating,offset, query)
-        self.cursor.execute(query_after_sorting)
-        
-        movies = self.cursor.fetchall()
-        return movies
+
     
     def search_tmbdID(self,keyword):
         # search by movie title return tmdb id
