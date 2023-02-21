@@ -1,6 +1,7 @@
 import mysql.connector
 import time
 import sys
+import re
 
 class Model:
     def __init__(self) -> None:
@@ -154,16 +155,15 @@ class Model:
                 \n WHERE m.title LIKE '%{}%' """.format(keyword)
         self.cursor.execute(query)
         movies = self.cursor.fetchall()
-        return movies
+        list=[]
+        for x in movies:
+            tmdb =int(x["tmdbId"].strip('\r'))
+            list.append(tmdb)
+        
+        return list
     
-    def create_average_table(self):
-        query = """CREATE TABLE average_rating(
-                SELECT movie_id,AVG(rating) as rating
-                FROM ratings
-                GROUP BY movie_id
-                ORDER BY rating DESC
-                    )"""
-        self.cursor.execute(query)
+
+
     
     def close_cursor(self):
         self.cursor.close()

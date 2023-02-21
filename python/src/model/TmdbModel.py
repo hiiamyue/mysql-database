@@ -7,11 +7,18 @@ class TmdbModel():
         self.API_KEY = '0c7ff4f558bf3a9fa1d8291215717f93'
 
     def getTmdbMovieData(self, tmdbId):
-        print(tmdbId, file=sys.stderr)
-        url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = tmdbId, key = self.API_KEY)
-        data = requests.get(url)
-        print(data.json(), file=sys.stderr)
-        return data.json()
+        tmdbId =[353486,8844]
+        lst =[]
+        # content ,date ,director,lead actors,rottentotatto
+        for x in tmdbId:
+            url = "https://api.themoviedb.org/3/movie/{id}?api_key={key}".format(id = x ,key = self.API_KEY)
+            url1= "https://api.themoviedb.org/3/movie/{id}?api_key={key}/credits".format(id = x ,key = self.API_KEY)
+            data1 = requests.get(url)
+            data2 =requests.get(url1)
+            data =(data1.json()|data2.json())
+            print(data, file=sys.stderr)
+            lst.append(data)
+        return lst
     
     def getTmdbUrls(self, results):
         return
