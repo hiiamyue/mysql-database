@@ -1,6 +1,7 @@
 import mysql.connector
 import time
 import sys
+import re
 
 class Model:
     def __init__(self) -> None:
@@ -111,7 +112,7 @@ class Model:
 
         query = ("""SELECT DISTINCT SQL_CALC_FOUND_ROWS *
                     \n FROM movies m 
-                    \n INNER JOIN ( SELECT GROUP_CONCAT(genre, ',') genres, movie_id
+                    \n INNER JOIN ( SELECT GROUP_CONCAT(genre) genres, movie_id
                     \n from genres
                     \n GROUP BY movie_id
                     \n ) g on m.movie_id = g.movie_id
@@ -128,7 +129,7 @@ class Model:
         
         print(query, file=sys.stderr)
         return query
-
+    
     def get_genre_type(self):
         self.cursor.execute('SELECT DISTINCT genre FROM genres')
         distinct_genre = self.cursor.fetchall()
@@ -182,16 +183,15 @@ class Model:
                 \n WHERE m.title LIKE '%{}%' """.format(keyword)
         self.cursor.execute(query)
         movies = self.cursor.fetchall()
-        return movies
+        list=[]
+        for x in movies:
+            tmdb =int(x["tmdbId"].strip('\r'))
+            list.append(tmdb)
+        
+        return list
     
-    def create_average_table(self):
-        query = """CREATE TABLE average_rating(
-                SELECT movie_id,AVG(rating) as rating
-                FROM ratings
-                GROUP BY movie_id
-                ORDER BY rating DESC
-                    )"""
-        self.cursor.execute(query)
+
+
     
     def close_cursor(self):
         self.cursor.close()

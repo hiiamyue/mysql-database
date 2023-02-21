@@ -14,7 +14,6 @@ class Controller:
     
     def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, page):
         
-        
         # Parse the sorting method
         if sort_by is not None:
             desc = len(sort_by.split("_")) == 2
