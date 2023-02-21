@@ -136,44 +136,44 @@ class Model:
         return distinct_genre
     
 
-    def sorting(self, sort_by_date, sort_by_title, sort_by_rating,offset, query):
-        if sort_by_rating:
-            query = query + 'ORDER BY r.rating DESC'
-        elif sort_by_title:
-            query = query + 'ORDER BY m.title ASC'
-        elif sort_by_date:
-            query = query + 'ORDER BY m.release_date ASC'
+    # def sorting(self, sort_by_date, sort_by_title, sort_by_rating,offset, query):
+    #     if sort_by_rating:
+    #         query = query + 'ORDER BY r.rating DESC'
+    #     elif sort_by_title:
+    #         query = query + 'ORDER BY m.title ASC'
+    #     elif sort_by_date:
+    #         query = query + 'ORDER BY m.release_date ASC'
         
-        query = query+' LIMIT 23 OFFSET {}'.format(offset)
+    #     query = query+' LIMIT 23 OFFSET {}'.format(offset)
 
-        return query
+    #     return query
     
 
-    def gen_query_for_view(self, genre, date_start, date_end, rating_min, rating_max, page,\
-                          select_genre ='\n',select_date ='\n',select_rating ='\n'):
+    # def gen_query_for_view(self, genre, date_start, date_end, rating_min, rating_max, page,\
+    #                       select_genre ='\n',select_date ='\n',select_rating ='\n'):
         
-        if genre:
-            g = tuple(genre)
-            select_genre = 'AND g.genre IN {}'.format(g)
+    #     if genre:
+    #         g = tuple(genre)
+    #         select_genre = 'AND g.genre IN {}'.format(g)
         
-        if date_start and date_end:
-            select_date ='AND m.release_date BETWEEN {0} AND {1}'.format(date_start,date_end)
-        elif date_start:
-            select_date ='AND m.release_date > {}'.format(date_start)
-        elif date_end:
-            select_date ='AND m.release_date <{}'.format(date_end)
+    #     if date_start and date_end:
+    #         select_date ='AND m.release_date BETWEEN {0} AND {1}'.format(date_start,date_end)
+    #     elif date_start:
+    #         select_date ='AND m.release_date > {}'.format(date_start)
+    #     elif date_end:
+    #         select_date ='AND m.release_date <{}'.format(date_end)
 
-        if rating_min and rating_max:
-            select_rating ='AND r.rating BETWEEN {0} AND {1}'.format(rating_min,rating_max)
-        elif rating_min:
-            select_rating='AND r.rating > {}'.format(rating_min)
-        elif rating_max:
-            select_rating ='AND r.rating <{}'.format(rating_max)
+    #     if rating_min and rating_max:
+    #         select_rating ='AND r.rating BETWEEN {0} AND {1}'.format(rating_min,rating_max)
+    #     elif rating_min:
+    #         select_rating='AND r.rating > {}'.format(rating_min)
+    #     elif rating_max:
+    #         select_rating ='AND r.rating <{}'.format(rating_max)
 
-        if page:
-            offset = (page - 1) * 23
+    #     if page:
+    #         offset = (page - 1) * 23
 
-        return select_genre, select_date, select_rating, offset
+    #     return select_genre, select_date, select_rating, offset
     
     def search(self,keywords):
         return
@@ -184,7 +184,7 @@ class Model:
                 \n WHERE m.movie_id = {}""".format(movieID)
         self.cursor.execute(query)
         id = self.cursor.fetchall()
-        
+
         tmdbID =int(id[0]["tmdbId"])
     
         return tmdbID

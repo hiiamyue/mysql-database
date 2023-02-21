@@ -26,9 +26,9 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
 
-    def get_movie_data(self, movie_id):
-        data = json.dumps(self.tmdbModel.getTmdbMovieData(movie_id))
-        return data
+    # def get_movie_data(self, movie_id):
+    #     data = json.dumps(self.tmdbModel.getTmdbMovieData(movie_id))
+    #     return data
 
     def get_tmdb_data(self,movieID):
         tmdbID =self.get_tmdbID(movieID)
