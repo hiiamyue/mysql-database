@@ -138,7 +138,6 @@ class Model:
     def search_movie(self,keywords):
         query =""" SELECT * FROM movies m WHERE MATCH(m.title)
                 AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
-        self.cursor.execute('ALTER TABLE `movies` ADD FULLTEXT(`title`);')
         self.cursor.execute(query)
         movies = self.cursor.fetchall()
         return movies

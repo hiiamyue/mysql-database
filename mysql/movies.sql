@@ -2,11 +2,12 @@ use db;
 
 CREATE TABLE movies (
   movie_id INT NOT NULL,
-  title FULLTEXT,
+  title VARCHAR(200),
   release_date INT NOT NULL,
   imdbId VARCHAR(100),
   tmdbId VARCHAR(10),
-  PRIMARY KEY (movie_id)
+  PRIMARY KEY (movie_id),
+  FULLTEXT (title)
 );
 
 CREATE TABLE ratings (
