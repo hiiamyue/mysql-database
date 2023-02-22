@@ -41,13 +41,18 @@ def get_movies():
 
 @app.route('/movie', methods=['GET'])
 def get_movie_data():
-    # args = request.args
-    arg = 179401
-    # this is just here for testing search functionality, remove later
-    controller.search_movie('Jumanji') 
-    return controller.get_tmdb_data(arg)
 
+    args = request.args
+    movie_id = args.get(movie_id)
+    
+    return controller.get_tmdb_data("movie_id")
 
+@app.route('/search', methods=['GET'])
+def search():
+    args = request.args
+    query = args.get("query")
+    return controller.search_movie(query)
+ 
 @app.route('/genres', methods=['GET'])
 def get_genres():
     return controller.get_genres()

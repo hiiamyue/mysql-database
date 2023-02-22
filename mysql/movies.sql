@@ -2,7 +2,7 @@ use db;
 
 CREATE TABLE movies (
   movie_id INT NOT NULL,
-  title VARCHAR(200),
+  title FULLTEXT,
   release_date INT NOT NULL,
   imdbId VARCHAR(100),
   tmdbId VARCHAR(10),

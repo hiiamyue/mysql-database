@@ -21,9 +21,7 @@ class Model:
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
         self.__PAGE_SIZE = 28
-#TODO: Implement pagination
  
-
 
     def get_last_query_found_rows(self):
         query = "SELECT FOUND_ROWS()"
@@ -59,12 +57,12 @@ class Model:
 
 
     def __add_pagination(self, page_num):
-        if page_num != None:
+        if page_num == None:
             ofset = 0
         else:
             ofset = (page_num - 1) * self.__PAGE_SIZE 
 
-        return "LIMIT {0}, {1};".format(ofset, self.__PAGE_SIZE)
+        return "LIMIT {0}, {1};".format(str(ofset), self.__PAGE_SIZE)
         
     
     def __create_date_filter(self, date_from, date_to):
@@ -136,45 +134,7 @@ class Model:
         return distinct_genre
     
 
-    # def sorting(self, sort_by_date, sort_by_title, sort_by_rating,offset, query):
-    #     if sort_by_rating:
-    #         query = query + 'ORDER BY r.rating DESC'
-    #     elif sort_by_title:
-    #         query = query + 'ORDER BY m.title ASC'
-    #     elif sort_by_date:
-    #         query = query + 'ORDER BY m.release_date ASC'
-        
-    #     query = query+' LIMIT 23 OFFSET {}'.format(offset)
 
-    #     return query
-    
-
-    # def gen_query_for_view(self, genre, date_start, date_end, rating_min, rating_max, page,\
-    #                       select_genre ='\n',select_date ='\n',select_rating ='\n'):
-        
-    #     if genre:
-    #         g = tuple(genre)
-    #         select_genre = 'AND g.genre IN {}'.format(g)
-        
-    #     if date_start and date_end:
-    #         select_date ='AND m.release_date BETWEEN {0} AND {1}'.format(date_start,date_end)
-    #     elif date_start:
-    #         select_date ='AND m.release_date > {}'.format(date_start)
-    #     elif date_end:
-    #         select_date ='AND m.release_date <{}'.format(date_end)
-
-    #     if rating_min and rating_max:
-    #         select_rating ='AND r.rating BETWEEN {0} AND {1}'.format(rating_min,rating_max)
-    #     elif rating_min:
-    #         select_rating='AND r.rating > {}'.format(rating_min)
-    #     elif rating_max:
-    #         select_rating ='AND r.rating <{}'.format(rating_max)
-
-    #     if page:
-    #         offset = (page - 1) * 23
-
-    #     return select_genre, select_date, select_rating, offset
-    
     def search_movie(self,keywords):
         query =""" SELECT * FROM movies m WHERE MATCH(m.title)
                 AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
