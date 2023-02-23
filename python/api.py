@@ -58,6 +58,13 @@ def search():
 def get_genres():
     return controller.get_genres()
 
+@app.route('/reaction', methods=['GET'])
+def get_reaction():
+    args = request.args
+    movieId = args.get("movie_id")
+    group  = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_reaction(movieId,group)
+
 
 #@app.after_request
 #def after_request(response):

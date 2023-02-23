@@ -46,5 +46,8 @@ class Controller:
         json_data = json.dumps(data)
         return(json_data)
 
-    
+    def get_reaction(self,movieID, lo_hi_raters):
+        data = self.model.get_group_rating(movieID, lo_hi_raters)
+        json_data = json.dumps(data)
+        return json_data
    
