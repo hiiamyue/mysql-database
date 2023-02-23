@@ -60,7 +60,7 @@ class Model:
         if page_num == None:
             ofset = 0
         else:
-            ofset = (page_num - 1) * self.__PAGE_SIZE 
+            ofset = (int(page_num) - 1) * self.__PAGE_SIZE 
 
         return "LIMIT {0}, {1};".format(str(ofset), self.__PAGE_SIZE)
         
@@ -123,7 +123,7 @@ class Model:
                     \n{2}
                     \n{3}
                     \n{4}
-                    \n""".format(date_filter, genre_filter, rating_filter, sorting,pagination))
+                    \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
         
         print(query, file=sys.stderr)
         return query
