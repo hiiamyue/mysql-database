@@ -43,9 +43,9 @@ def get_movies():
 def get_movie_data():
 
     args = request.args
-    movie_id = args.get(movie_id)
+    movie_id = args.get("movie_id")
     
-    return controller.get_tmdb_data("movie_id")
+    return controller.get_tmdb_data(movie_id)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -64,6 +64,18 @@ def get_reaction():
     movieId = args.get("movie_id")
     group  = args.get("group") # Type "high" for High Raters, "low" for Low Raters
     return controller.get_reaction(movieId,group)
+
+@app.route('/tag_rating', methods=['GET'])
+def get_tag_rating():
+    args = request.args
+    tag = args.get("tag") # average rating for movies with this tag
+    return controller.get_tags_rating(tag)
+
+# @app.route('/tag_r', methods=['GET'])
+# def get_tag_rating():
+#     args = request.args
+#     tag = args.get("tag") # average rating for movies with this tag
+#     return controller.get_tags_rating(tag)
 
 
 #@app.after_request

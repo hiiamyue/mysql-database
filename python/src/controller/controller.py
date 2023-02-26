@@ -50,4 +50,9 @@ class Controller:
         data = self.model.get_group_rating(movieID, lo_hi_raters)
         json_data = json.dumps(data)
         return json_data
+    
+    def get_tags_rating(self,tag):
+        data = self.model.tags_rating(tag)
+        json_data = json.dumps(data)
+        return json_data
    

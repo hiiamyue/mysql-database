@@ -153,6 +153,7 @@ class Model:
     
         return tmdbID
     
+    # Requirement 3:
     def get_catg_filter(self,lo_hi_raters):
         if lo_hi_raters=="high": # if true get the high_raters' avg score for the movie 
             category = "high_raters_avg"
@@ -182,9 +183,27 @@ class Model:
         self.cursor.execute(query)
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating
+    
+    # Requirement 4:
 
-
-
+    # Explore relationship between tag data and rating
+    # Display average ratings for movies with different tags 
+    # If tag is not in db, return empty list
+    def tags_rating(self,tag):
+        # pagination=self.__add_pagination(page)
+        query = """SELECT t.tag, CONVERT(AVG(avg_rating),float) AS overall_average_rating
+                   \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
+                   \nFROM ratings r
+                   \nJOIN tags t ON r.movie_id = t.movie_id
+                   \nWHERE t.tag = \'{0}\'   
+                   \nGROUP BY r.movie_id) AS subq
+                   \nJOIN tags t ON subq.movie_id = t.movie_id
+                   \nWHERE t.tag = \'{0}\' 
+                   \nGROUP BY t.tag""".format(tag,tag)    
+#COUNT(DISTINCT r.movie_id) AS movies_w_tag,
+        self.cursor.execute(query)
+        tag_avg_rating = self.cursor.fetchall()
+        return tag_avg_rating
     
     def close_cursor(self):
         self.cursor.close()
