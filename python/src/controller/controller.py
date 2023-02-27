@@ -63,4 +63,18 @@ class Controller:
         data = self.model.get_group_rating(movieID, lo_hi_raters)
         json_data = json.dumps(data)
         return json_data
+    
+    def get_tags_rating(self,tag):
+        data = self.model.tags_rating(tag)
+        json_data = json.dumps(data)
+        return json_data
+    
+    def get_genre_tags(self,genre):
+        data = self.model.genre_tags(genre)
+        json_data = json.dumps(data)
+        return json_data
    
+    def user_tag_analysis(self,page,genre_filter):
+        data = self.model.user_tag_analysis(page,genre_filter)
+        json_data = json.dumps(data)
+        return json_data

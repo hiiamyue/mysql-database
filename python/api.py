@@ -43,9 +43,9 @@ def get_movies():
 def get_movie_data():
 
     args = request.args
-    movie_id = args.get(movie_id)
+    movie_id = args.get("movie_id")
     
-    return controller.get_tmdb_data("movie_id")
+    return controller.get_tmdb_data(movie_id)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -65,6 +65,24 @@ def get_reaction():
     group  = args.get("group") # Type "high" for High Raters, "low" for Low Raters
     return controller.get_reaction(movieId,group)
 
+@app.route('/tag_rating', methods=['GET'])
+def get_tag_rating():
+    args = request.args
+    tag = args.get("tag") # average rating for movies with this tag
+    return controller.get_tags_rating(tag)
+
+@app.route('/genre_tags', methods=['GET'])
+def get_genre_tags():
+    args = request.args
+    genre = args.get("genre") # all the tags associated with this genre
+    return controller.get_genre_tags(genre)
+
+@app.route('/user_tags', methods=['GET'])
+def user_tag_analysis():
+    args = request.args
+    page = args.get("page")
+    genre_filter = args.get("genre_filter") # additional filter for genres, None by default,type anything to set
+    return controller.user_tag_analysis(page,genre_filter)
 
 @app.after_request
 def after_request(response):
