@@ -1,3 +1,4 @@
+import { queryByRole } from "@testing-library/react";
 
 
 
@@ -19,7 +20,14 @@ export function getDateFilter(queryParams) {
       return [1800, 2023];
     }
   }
+export function getPage(queryParams){
+  if (!(queryParams.get('page') == null)){
+    return queryParams.get('page');
+  } else {
+    return 1;
+  }
 
+}
 export function getRatingFilter(queryParams) {
     /**
      * Get the rating filter from the query parameters.

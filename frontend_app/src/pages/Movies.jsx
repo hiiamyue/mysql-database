@@ -4,25 +4,33 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SortByListbox from '../components/SortByListbox'
 import Filters from "../components/Filters";
-import Pagination from '@mui/material/Pagination';
+import {Pagination} from "flowbite-react"
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
+import { getPage } from '../utils/QueryUtils';
 
 // TODO: change to dark mode
 const Movies = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
+    let maxPage = 100;
+    function onPageChange(page){
+        searchParams.set("page", page)
+        setSearchParams(searchParams)
+    }
 
     useEffect(() => {
         
-        const url = "http://localhost:8000/";
+        const url = "http://localhost:8000/movies";
         try {
         fetch(url, {method: "GET"})
         .then((res) => res.json())
         .then((data) => {
+           setFetched(false)
            console.log(data);
-           setMovies(data);
+           maxPage = data["pagination"]['max_page']
+           setMovies(data["results"]);
            setFetched(true)
         })
         }
@@ -31,7 +39,7 @@ const Movies = () => {
             setFetched(false)
         }
         
-    }, []);
+    }, [searchParams]);
 
     return (
         <div className='bg-[url("../public/8.png")]'>
@@ -50,24 +58,29 @@ const Movies = () => {
                      
                 </div>
                 <h1>{searchParams.get('query')} </h1>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-4 xl:px-20">
-                    
-                    {
-                        hasFetched ?
-                        <div> 
-                            {movies.map((movie) => (
+                  
+                {
+                    hasFetched ?
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-4 xl:px-20">
+                        {movies.map((movie) => (
                                 <MovieCard title={movie.title}release_date={movie.release_date}/>
-                            ))} 
-                        </div>
-                        :
-                        Array.apply(null, { length: 28 }).map((e, i) => (
-                            <LoadingMovieCard/>
-                          ))
-                    }
+                        ))} 
+                    </div>
+                    :
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-4 xl:px-20 z-0">
+                    {Array.apply(null, { length: 28 }).map((e, i) => (
+                        <LoadingMovieCard/>
+                        ))}
+                    </div>
+                }
                     
-                </div>
-                <div className="text-white grid place-items-center h-screen">
-                    <Pagination count={10} size="large"/>
+                <div className="flex items-cente justify-center pb-4 pt-8">
+                    <Pagination
+                        currentPage={parseInt(getPage(searchParams))}
+                        totalPages={maxPage}
+                        showIcons={true}
+                        onPageChange={onPageChange}
+                    />
                 </div>
 
                 <Footer/>
