@@ -17,7 +17,7 @@ const LoadingMovieCard = () => {
   return (
     
     <div className="text-slate-100">
-      <div className="text-lg font-bold text-center rounded-2xl m-4  h-full">
+      <div className="text-lg font-bold text-center rounded-2xl m-4  h-full z-0">
         <Stack spacing={1} >
         {/* For variant="text", adjust the height via font-size */}
 
