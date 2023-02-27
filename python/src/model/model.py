@@ -21,7 +21,9 @@ class Model:
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
         self.__PAGE_SIZE = 28
- 
+    
+    def get_page_size(self):
+        return self.__PAGE_SIZE
 
     def get_last_query_found_rows(self):
         query = "SELECT FOUND_ROWS()"
@@ -57,12 +59,12 @@ class Model:
 
 
     def __add_pagination(self, page_num):
-        if page_num == None:
-            ofset = 0
-        else:
-            ofset = (int(page_num) - 1) * self.__PAGE_SIZE 
+        
+        
+        
+        offset = (int(page_num) - 1) * self.__PAGE_SIZE 
 
-        return "LIMIT {0}, {1};".format(str(ofset), self.__PAGE_SIZE)
+        return "LIMIT {0}, {1};".format(str(offset), self.__PAGE_SIZE)
         
     
     def __create_date_filter(self, date_from, date_to):

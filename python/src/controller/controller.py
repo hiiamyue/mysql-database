@@ -2,6 +2,8 @@ from model import Model
 from TmdbModel import TmdbModel
 import json
 import sys
+from math import ceil
+
 class Controller:
     def __init__(self)-> None:
         self.model = Model()
@@ -21,9 +23,20 @@ class Controller:
             
         else: 
             desc = None
+
+        if page == None:
+            page = 1
             
-        data = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
-        json_data = json.dumps(data)
+        # Compute the payload:
+        payload = {}   
+
+        results = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
+        payload["results"] = results
+
+        total_rows = self.model.get_last_query_found_rows()
+        payload["pagination"] = {"page_number": page, 'total_results': total_rows[0]['FOUND_ROWS()'], "max_page": ceil(total_rows[0]['FOUND_ROWS()']/self.model.get_page_size())}
+
+        json_data = json.dumps(payload)
         return json_data
 
     # def get_movie_data(self, movie_id):
