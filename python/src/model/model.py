@@ -190,7 +190,6 @@ class Model:
     # Display average ratings for movies with different tags 
     # If tag is not in db, return empty list
     def tags_rating(self,tag):
-        # pagination=self.__add_pagination(page)
         query = """SELECT t.tag, CONVERT(AVG(avg_rating),float) AS overall_average_rating
                    \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
                    \nFROM ratings r
@@ -200,10 +199,46 @@ class Model:
                    \nJOIN tags t ON subq.movie_id = t.movie_id
                    \nWHERE t.tag = \'{0}\' 
                    \nGROUP BY t.tag""".format(tag,tag)    
-#COUNT(DISTINCT r.movie_id) AS movies_w_tag,
+
         self.cursor.execute(query)
         tag_avg_rating = self.cursor.fetchall()
         return tag_avg_rating
+    
+    # Explore relationship between tag data and genres
+    # Display all the tags associated with a genre
+    # Maybe worth to add pagination here?
+    def genre_tags(self,genre):
+        query="""SELECT t.tag
+                \nFROM tags t
+                \nJOIN genres g ON g.movie_id = t.movie_id
+                \nWHERE g.genre = \'{}\'""".format(genre)
+
+        self.cursor.execute(query)
+        genre_tags = self.cursor.fetchall()
+        return genre_tags
+    
+    # Do individual viewers apply the same tags to different films?
+    def user_tag_analysis(self,page,genre_filter=None):
+        filter=""
+        pagination = self.__add_pagination(page)
+        # Optional additional filter
+        # Do individual viewers apply the same tags to different films in the same genre?
+        if genre_filter:
+            filter = """\nJOIN genres g ON t.movie_id = g.movie_id
+                        \n JOIN genres g1 ON t1.movie_id = g1.movie_id AND g.genre = g1.genre"""
+        query="""SELECT DISTINCT t.user_id, t.movie_id, t.tag, t1.movie_id, t1.tag
+                    \nFROM tags t
+                    \nJOIN tags t1 ON 
+                    \nt.user_id = t1.user_id AND t.tag = t1.tag AND t.movie_id != t1.movie_id
+                    \n{0}
+                    \n{1}""".format(filter,pagination)
+
+      
+            
+        self.cursor.execute(query)
+        genre_tags = self.cursor.fetchall()
+        return genre_tags
+    
     
     def close_cursor(self):
         self.cursor.close()

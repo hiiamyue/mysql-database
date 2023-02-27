@@ -71,12 +71,18 @@ def get_tag_rating():
     tag = args.get("tag") # average rating for movies with this tag
     return controller.get_tags_rating(tag)
 
-# @app.route('/tag_r', methods=['GET'])
-# def get_tag_rating():
-#     args = request.args
-#     tag = args.get("tag") # average rating for movies with this tag
-#     return controller.get_tags_rating(tag)
+@app.route('/genre_tags', methods=['GET'])
+def get_genre_tags():
+    args = request.args
+    genre = args.get("genre") # all the tags associated with this genre
+    return controller.get_genre_tags(genre)
 
+@app.route('/user_tags', methods=['GET'])
+def user_tag_analysis():
+    args = request.args
+    page = args.get("page")
+    genre_filter = args.get("genre_filter") # additional filter for genres, None by default,type anything to set
+    return controller.user_tag_analysis(page,genre_filter)
 
 #@app.after_request
 #def after_request(response):
