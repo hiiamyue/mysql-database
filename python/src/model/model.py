@@ -159,10 +159,10 @@ class Model:
     def get_catg_filter(self,lo_hi_raters):
         if lo_hi_raters=="high": # if true get the high_raters' avg score for the movie 
             category = "high_raters_avg"
-            filter = "HAVING u.avg_rating>4"
+            filter = ">4"
         elif lo_hi_raters=="low":   # get the low_raters' avg score for the movie 
             category = "low_raters_avg"
-            filter = "HAVING u.avg_rating<3.5"
+            filter = "<3.5"
 
         return filter,category
     
@@ -178,10 +178,33 @@ class Model:
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
                     \nWHERE m.movie_id = {0}
                     \nGROUP BY u.user_id
-                    \n{1})
+                    \nHAVING u.avg_rating{1})
                     \nSELECT CONVERT(AVG(u_avg_for_movie),float) AS {2}
                     \nFROM user_ratings""".format(movieId,filter,category)     
 
+        self.cursor.execute(query)
+        u_avg_rating = self.cursor.fetchall()
+        return u_avg_rating
+    
+    def get_group_rating_genre(self, genre, movieId, lo_hi_raters):
+        filter, category = self.get_catg_filter(lo_hi_raters)
+        
+        query = """\nWITH user_ratings AS (
+                    \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
+                    \nFROM (
+                    \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
+                    \nFROM ratings
+                    \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
+                    \nWHERE genres.genre = "{0}"
+                    \nGROUP BY user_id) u
+                    \nINNER JOIN ratings r ON r.user_id = u.user_id
+                    \nINNER JOIN movies m ON r.movie_id = m.movie_id
+                    \nWHERE m.movie_id = {1}
+                    \nGROUP BY u.user_id
+                    \nHAVING u.avg_for_genre{2})
+                    \nSELECT CONVERT(AVG(u_avg_for_movie), float) AS {3}
+                    \nFROM user_ratings""".format(genre, movieId, filter, category)         
+        
         self.cursor.execute(query)
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating

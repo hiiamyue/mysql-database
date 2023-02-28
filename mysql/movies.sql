@@ -37,11 +37,11 @@ CREATE TABLE tags (
 
 
 LOAD DATA INFILE '/var/lib/mysql-files/new_movies.csv' 
-  INTO TABLE movies 
-  FIELDS TERMINATED BY ',' 
-  OPTIONALLY ENCLOSED BY '"'
-  LINES TERMINATED BY '\r\n'
-  IGNORE 1 ROWS;
+INTO TABLE movies 
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
 
 LOAD DATA INFILE '/var/lib/mysql-files/ratings.csv' 
 INTO TABLE ratings
