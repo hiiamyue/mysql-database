@@ -233,10 +233,11 @@ class Model:
     # Display all the tags associated with a genre
     # Maybe worth to add pagination here?
     def genre_tags(self,genre):
-        query="""SELECT t.tag
+        query="""SELECT t.tag, COUNT(t.tag) AS n_tags
                 \nFROM tags t
                 \nJOIN genres g ON g.movie_id = t.movie_id
-                \nWHERE g.genre = \'{}\'""".format(genre)
+                \nWHERE g.genre = \'{}\'
+                \nGROUP BY t.tag""".format(genre)
 
         self.cursor.execute(query)
         genre_tags = self.cursor.fetchall()
