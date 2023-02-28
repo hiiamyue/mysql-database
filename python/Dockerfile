@@ -5,6 +5,7 @@ RUN pip install flask
 RUN pip install -U flask-cors
 RUN pip install requests
 RUN pip install requests-futures
+RUN pip install numpy
 
 WORKDIR /usr/app/src
 
