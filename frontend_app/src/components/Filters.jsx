@@ -7,7 +7,7 @@ import * as React from 'react';
 import {Link} from "react-router-dom";
 import { useSearchParams } from 'react-router-dom';
 import buildFiltersURL from '../utils/StringUtils';
-import { getRatingFilter, getGenreFilter, getDateFilter } from '../utils/QueryUtils';
+import { getRatingFilter, getGenreFilter, getDateFilter, genGenresFilter } from '../utils/QueryUtils';
 
 const people = [
   { id: 1, name: 'Wade Cooper' },
@@ -47,6 +47,10 @@ export default function Filters() {
     searchParams.set("max_rating", valueRating[1])
     searchParams.set("from", valueDate[0])
     searchParams.set("to", valueDate[1])
+    let g = valueGenre.map((genre) => genre.name)
+    
+
+    searchParams.set("genres", g)
     setSearchParams(searchParams)
   }
 

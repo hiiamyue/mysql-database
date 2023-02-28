@@ -1,4 +1,4 @@
-import { queryByRole } from "@testing-library/react";
+
 
 
 
@@ -61,13 +61,46 @@ export function getGenreFilter(queryParams, genres) {
     // Check if the genre parameter is specified in the query parameters
     if (!(queryParams.get("genres") === null)) {
       // Split the genre parameter into an array of integers
-      let selectedGenreIds = (queryParams.get("genres")).slice(1, -1).split(",").map(function(item) {
-        return parseInt(item, 10);
-      });
-      // Map the selected genre IDs to their corresponding genre names
-      return selectedGenreIds.map(id => genres[id - 1]);
+      let selectedGenres = queryParams.get("genres").split(",")
+    
+      let genreObjects = genres.filter((g) => selectedGenres.includes(g.name))
+      return genreObjects
+      
     } else {
       // If the genre parameter is not specified, return an empty array
       return [];
     }
   }
+
+export function genGenresFilter(genres, genresList){
+
+  if (genres.keys().length === 0){
+    return "any"
+  }
+
+  let genresString = `(`
+  genres.map((genre) => {
+    genresString = genresString + `${genre.name},`;
+  });
+  return genresString.slice(0,-1) + ")"
+}
+
+export function pageParamsToAPIParams(params){
+  
+  let apiParams = ""
+
+  if( params.keys().length !== 0){
+    apiParams = "?"
+  }
+
+
+  for (const [key, value] of params.entries()) {
+    if(key === "genres"){
+      apiParams = apiParams + key + "=(" + value + ")&"
+    } else {
+      apiParams = apiParams + key + "=" + value.toString() + "&"
+    }
+    
+  }
+  return apiParams.slice(0,-1)
+}

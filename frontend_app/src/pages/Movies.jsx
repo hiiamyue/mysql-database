@@ -7,7 +7,7 @@ import Filters from "../components/Filters";
 import {Pagination} from "flowbite-react"
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
-import { getPage } from '../utils/QueryUtils';
+import { getPage, pageParamsToAPIParams } from '../utils/QueryUtils';
 
 // TODO: change to dark mode
 const Movies = () => {
@@ -22,10 +22,12 @@ const Movies = () => {
     }
 
     useEffect(() => {
-        
-        const url = "http://localhost:8000/movies";
+
+        const url = `http://localhost:8000/movies${pageParamsToAPIParams(searchParams)}`;
         try {
+            
         console.log(url)
+        
         fetch(url)
         .then((res) => res.json())
         .then((data) => {

@@ -36,14 +36,15 @@ export default function buildFiltersURL(minRating, maxRating, fromDate, toDate, 
       } else {
         url = `${url}&`;
       }
-      url = `${url}genres=[`;
+      url = `${url}genres=(`;
   
       selectedGenres.map((genre) => {
         url = `${url}${genre.id},`;
       });
   
-      url = `${url.slice(0, -1)}]`;
+      url = `${url.slice(0, -1)})`;
     }
   
     return url;
   }
+
