@@ -15,6 +15,7 @@ const Movies = () => {
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
     let maxPage = 100;
+    
     function onPageChange(page){
         searchParams.set("page", page)
         setSearchParams(searchParams)
@@ -24,12 +25,13 @@ const Movies = () => {
         
         const url = "http://localhost:8000/movies";
         try {
-        fetch(url, {method: "GET"})
+        console.log(url)
+        fetch(url)
         .then((res) => res.json())
         .then((data) => {
-           setFetched(false)
-           console.log(data);
-           maxPage = data["pagination"]['max_page']
+            console.log("--render--")
+           // setFetched(false)
+           // maxPage = data["pagination"]['max_page']
            setMovies(data["results"]);
            setFetched(true)
         })
@@ -63,7 +65,7 @@ const Movies = () => {
                     hasFetched ?
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-4 xl:px-20">
                         {movies.map((movie) => (
-                                <MovieCard title={movie.title}release_date={movie.release_date}/>
+                                <MovieCard title={movie.title} release_date={movie.release_date} rating={movie.avg_rating}/>
                         ))} 
                     </div>
                     :

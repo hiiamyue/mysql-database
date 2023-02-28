@@ -22,9 +22,14 @@ export default function SortByListbox() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    if (!(selected.sortby == 'default')){
+      searchParams.set("sortby", selected.sortby)
+      setSearchParams(searchParams)
+    } else {
+      searchParams.delete("sortby")
+      setSearchParams(searchParams)
+    }
     
-    searchParams.set("sortby", selected.sortby)
-    setSearchParams(searchParams)
   }, [selected, setSearchParams, searchParams]);
 
   return (

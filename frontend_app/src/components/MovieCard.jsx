@@ -1,16 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * MovieCard component that displays a movie card with its title, release date and cover image.
- *
- * @component
- * @param {object} props - Component props
- * @param {string} props.title - The title of the movie
- * @param {string} props.release_date - The release date of the movie
- * @returns {JSX.Element} - The MovieCard component
- */
-const MovieCard = ({ title, release_date }) => {
+
+const MovieCard = ({ title, release_date, rating }) => {
+  
   return (
     <div className="text-slate-100">
       <div className="text-lg font-bold text-center rounded-2xl m-4">
@@ -21,9 +14,9 @@ const MovieCard = ({ title, release_date }) => {
         />
         <p>{title}</p>
         <div className="flex justify-center space-x-4">
-          <p className="font-light text-base m-0">{release_date}</p>
-          <p className="font-light text-sm m-0 text-sky-200 mt-[0.25em]">
-            4.93
+          <p className="font-light text-base m-0">{release_date.toString()}</p>
+          <p className="font-light text-sm m-0 text-sky-200 mt-[0.15em]">
+            {rating.toFixed(2).toString()}
           </p>
         </div>
       </div>

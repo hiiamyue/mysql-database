@@ -6,9 +6,9 @@ import {Link} from "react-router-dom";
 const Hero = () => {
     return (
         <div className='text-white ' >
-            <div className='max-w-[800px] mt-[96px] w-full h-screen mx-auto text-center flex flex-col '>
+            <div className='max-w-[800px] mt-[96px] w-full h-screen sm:mx-auto px-8 text-center flex flex-col '>
                 <p className='animate-bounce font-sans text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-pink-200 to-fuchsia-400'>ANALYSE CINEMA INDUSTRY TRENDS</p>
-                <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Movie data analysis. Made simple.</h1>
+                <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6'>Movie data analysis. Made simple.</h1>
                 <div className='flex justify-center items-center'>
                     <p className='md:text-4xl sm:text-3xl text-xl font-bold py-4'> Analyse ratings for
                     </p>

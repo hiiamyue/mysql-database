@@ -11,11 +11,11 @@ const Search = () => {
                 <Navbar />
                 <div>
                     <div className=" max-w-[1240px] mx-auto grid md:grid-cols-2 pb-80 pt-10">
-                        <div className="text-white p-10">
-                            <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6'>OOPS! PAGE NOT FOUND.</h1>
-                            <p className=' ml-6  md:text-2xl sm:text-xl text-slate-600'>You must have picked the wrong door because I haven't been able to lay my eyes on the page you were looking for.</p>
+                        <div className="text-white ml-8 py-10">
+                            <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6'>OOPS! PAGE NOT FOUND.</h1>
+                            <p className='md:text-2xl sm:text-xl text-slate-600'>You must have picked the wrong door because I haven't been able to lay my eyes on the page you were looking for.</p>
                             <Link to="/">
-                                <button className=' ml-6 font-semibold transition ease-in-out delay-150 bg-fuchsia-300  hover:bg-sky-200 duration-300  opacity-80 my-6 mx-auto py-3 mt-8 w-[200px] rounded-md  text-black'>Go home.</button>
+                                <button className='font-semibold transition ease-in-out delay-150 bg-fuchsia-300  hover:bg-sky-200 duration-300  opacity-80 my-6 mx-auto py-3 mt-8 w-[200px] rounded-md  text-black'>Go home.</button>
                             </Link>
                         </div>
                         <img

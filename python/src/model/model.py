@@ -54,7 +54,7 @@ class Model:
 
         self.cursor.execute(q)
         movies = self.cursor.fetchall()
-
+        
         return movies
 
 
