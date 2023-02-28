@@ -83,3 +83,9 @@ class Controller:
         data = self.model.user_tag_analysis(page,genre_filter)
         json_data = json.dumps(data)
         return json_data
+    def predict(self,movieID):
+        data =self.model.gen_prediction(movieID)
+        # print(data, file=sys.stderr)
+        json_data = json.dumps(data)
+        return json_data
+
