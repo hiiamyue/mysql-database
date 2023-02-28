@@ -33,11 +33,15 @@ def get_movies():
 
     sort_by = args.get("sortby")
     page = args.get("page")
-
     return controller.get_movies(genres, date_from, date_to,\
                                                      min_rating, max_rating, sort_by, page)
     
-
+@app.route('/test', methods=['GET'])
+def test():
+    lis =[]
+    for x in range (1,50):
+        lis.append(controller.predict(x))
+    return lis
 
 @app.route('/movie', methods=['GET'])
 def get_movie_data():

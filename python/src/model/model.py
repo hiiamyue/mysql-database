@@ -2,6 +2,7 @@ import mysql.connector
 import time
 import sys
 import re
+import numpy
 
 class Model:
     def __init__(self) -> None:
@@ -265,6 +266,57 @@ class Model:
         genre_tags = self.cursor.fetchall()
         return genre_tags
     
+    ## Requirement 5:
+    # generate number of preview audience and Actual average rating
+    def gen_num_preview_audience(self,movieID):
+        query =''' SELECT COUNT(DISTINCT(r.user_id)) As num_rater, CONVERT(AVG(rating),float) AS overall_average_rating
+                \n FROM ratings r
+                \n WHERE r.movie_id ={}
+                
+        '''.format(movieID)
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+
+        num_Total_rater = data[0]['num_rater']
+        overall_average_rating =data[0]['overall_average_rating']
+        # print(num_Total_rater,num_predict_rater, file=sys.stderr)
+
+        return num_Total_rater,overall_average_rating
     
+    # randomly pick number of preview ratings and remove outliers that is not within 1 standard deviation
+    def gen_prediction(self,movieID):
+
+        num_Total_rater,True_average_rating = self.gen_num_preview_audience(movieID)
+        if  num_Total_rater< 30:
+            return 'Not enough data to predict'
+        
+        num_audience = num_Total_rater//4
+
+        query ='''SELECT CONVERT(r.rating, float) AS rating
+            \n FROM ratings r
+            \nWHERE r.movie_id ={0}
+            \n ORDER BY RAND()
+            \n LIMIT {1}
+        '''.format(movieID,num_audience)
+
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        ratings=[x['rating'] for x in data]
+        prediction = numpy.average(self.adjuest_outlier(ratings))
+        dic ={'Prediction':prediction,'Actual Average Rating':True_average_rating}
+        return  dic
+    # 
+    def adjuest_outlier(self,list):
+        std = numpy.std(list)
+        if std ==0:
+            return list
+        avg = numpy.average(list)
+        lower,upper= avg-std,avg+std
+        # print(std,avg,lower,upper, file=sys.stderr)
+        adjusted_rating =[y for y in list if (y >lower and y<upper)or y==lower or y ==upper] 
+        # print(list,adjusted_rating,file=sys.stderr)
+        return adjusted_rating
+
+
     def close_cursor(self):
         self.cursor.close()
