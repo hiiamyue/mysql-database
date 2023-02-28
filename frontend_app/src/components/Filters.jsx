@@ -42,6 +42,14 @@ export default function Filters() {
   const [valueDate, setValueDate] = React.useState(dateFilter) 
   const [valueGenre, setValueGenre] = React.useState(genres);
 
+  function submitFilters(){
+    searchParams.set("min_rating", valueRating[0])
+    searchParams.set("max_rating", valueRating[1])
+    searchParams.set("from", valueDate[0])
+    searchParams.set("to", valueDate[1])
+    setSearchParams(searchParams)
+  }
+
   const handleChangeGenre = (genres) => {
     setValueGenre(genres);
   
@@ -160,9 +168,9 @@ export default function Filters() {
                       >
                         <div className='ml-2 xl:ml-4'>
                           
-                          <Link to={buildFiltersURL(valueRating[0], valueRating[1], valueDate[0], valueDate[1], valueGenre)}>
-                            <button className='xl:px-14  px-12 md:px-14  sm:px-14 font-semibold transition ease-in-out delay-150 bg-gradient-to-r from-pink-200 to-fuchsia-300  hover:bg-gradient-to-r hover:to-blue-300 hover:from-sky-200 duration-300  opacity-80 my-6 mx-auto py-3 mt-8 w-full rounded-md text-black drop-shadow-2xl'>Submit</button>
-                          </Link>
+                          
+                        <button onClick={submitFilters} className='xl:px-14  px-12 md:px-14  sm:px-14 font-semibold transition ease-in-out delay-150 bg-gradient-to-r from-pink-200 to-fuchsia-300  hover:bg-gradient-to-r hover:to-blue-300 hover:from-sky-200 duration-300  opacity-80 my-6 mx-auto py-3 mt-8 w-full rounded-md text-black drop-shadow-2xl'>Submit</button>
+                          
                         </div>
                       </div>
                   </div>
