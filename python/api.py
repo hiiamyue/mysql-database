@@ -83,13 +83,13 @@ def user_tag_analysis():
     page = args.get("page")
     genre_filter = args.get("genre_filter") # additional filter for genres, None by default,type anything to set
     return controller.user_tag_analysis(page,genre_filter)
-
+"""
 @app.after_request
 def after_request(response):
    response.headers.add('Access-Control-Allow-Origin', '*')
    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
    return response
-
+"""
 if __name__ == "__main__":
     app.run(host ='0.0.0.0', port=5000)
