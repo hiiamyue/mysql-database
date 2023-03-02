@@ -18,7 +18,7 @@ const Hero = () => {
                      />
                 </div>
                 <p className='md:text-2xl sm:text-xl text-gray-600'>Lorem Ipsum et dolor calem. Sin esperam dulat mangare comida.</p>
-                <Link to="/search">
+                <Link to="/movies">
                     <button className='font-semibold transition ease-in-out delay-150 bg-gradient-to-r from-pink-200 to-fuchsia-300  hover:bg-gradient-to-r hover:to-blue-300 hover:from-sky-200 duration-300  opacity-80 my-6 mx-auto py-3 mt-8 w-[200px] rounded-md text-black drop-shadow-2xl'>Get Started</button>
                 </Link>
             </div>
