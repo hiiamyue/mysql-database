@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {Badge, Card} from "flowbite-react"
 
-const CastCard = () => {
+const CastCard = ({ name, role }) => {
   
   return (
     <div className="w-[13em]">
@@ -11,10 +11,10 @@ const CastCard = () => {
             imgSrc="character.jpg"
         >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Chris Colombus
+            {name}
             </h5>
             <p className="font-normal text-gray-700 dark:text-gray-400 mt-[-1em]">
-            Director
+            {role}
             </p>
         </Card>
                     
