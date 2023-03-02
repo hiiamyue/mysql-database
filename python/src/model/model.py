@@ -89,7 +89,7 @@ class Model:
             
             if sort_by == "rating":
                 sort_by = "r.avg_rating"
-            if sort_by == "releasedate":
+            if sort_by == "date":
                 sort_by = "release_date"
             if sort_by =="title":
                 sort_by = "title"

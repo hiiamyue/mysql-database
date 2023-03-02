@@ -47,10 +47,13 @@ export default function Filters() {
     searchParams.set("max_rating", valueRating[1])
     searchParams.set("from", valueDate[0])
     searchParams.set("to", valueDate[1])
-    let g = valueGenre.map((genre) => genre.name)
-    
-
-    searchParams.set("genres", g)
+    if(!(valueGenre.length === 0)){
+      let g = valueGenre.map((genre) => genre.name)
+      searchParams.set("genres", g)
+    } else {
+      searchParams.delete('genres')
+    }
+   
     setSearchParams(searchParams)
   }
 

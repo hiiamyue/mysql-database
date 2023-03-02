@@ -22,8 +22,9 @@ export default function SortByListbox() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    if (!(selected.sortby == 'default')){
+    if (!(selected.sortby === 'default')){
       searchParams.set("sortby", selected.sortby)
+      searchParams.delete("page")
       setSearchParams(searchParams)
     } else {
       searchParams.delete("sortby")
