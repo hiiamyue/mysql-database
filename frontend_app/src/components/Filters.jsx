@@ -123,7 +123,7 @@ export default function Filters() {
 
                     <div
                         
-                        className=" text-black -m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        className=" text-black flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                     >
                       <div className="ml-2 xl:ml-4">
                           <p className="text-sm font-medium text-gray-900">
@@ -132,23 +132,26 @@ export default function Filters() {
                           <p className="text-sm text-gray-500">
                             Movie relase date
                           </p>
-                          <Slider
-                            getAriaLabel={() => 'Release date'}
-                            value={valueDate}
-                  
-                            onChange={handleChangeDate}
-                            valueLabelDisplay="auto"
-                            min={1800}
-                            max={2023}
-                            
-                            color="secondary"
-                          />
+                          <div className='content-center ml-2'>
+                            <Slider
+                              getAriaLabel={() => 'Release date'}
+                              value={valueDate}
+                    
+                              onChange={handleChangeDate}
+                              valueLabelDisplay="auto"
+                              min={1800}
+                              max={2023}
+                              
+                              color="secondary"
+                            />
+                          </div>
+                          
                       </div>
                     </div>
                     
                     <div
                         
-                        className=" text-black -m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        className=" text-black flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                     >
                       <div className="ml-2 xl:ml-4">
                         <p className="text-sm font-medium text-gray-900">
@@ -157,6 +160,7 @@ export default function Filters() {
                         <p className="text-sm text-gray-500">
                           Rating min & max
                         </p>
+                        <div className='content-center ml-2'>
                         <Slider
                           getAriaLabel={() => 'Rating'}
                           value={valueRating}
@@ -167,6 +171,8 @@ export default function Filters() {
                           max={5}
                           color="secondary"
                         />
+                        </div>
+                        
                       </div>
                       
                     </div>

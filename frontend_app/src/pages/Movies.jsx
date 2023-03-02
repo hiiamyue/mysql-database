@@ -14,7 +14,7 @@ const Movies = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
-    let maxPage = 100;
+    const [maxPage, setMaxPage] = useState(10);
     
     function onPageChange(page){
         searchParams.set("page", page)
@@ -22,7 +22,7 @@ const Movies = () => {
     }
 
     useEffect(() => {
-
+        setFetched(false)
         const url = `http://localhost:8000/movies${pageParamsToAPIParams(searchParams)}`;
         try {
             
@@ -32,10 +32,9 @@ const Movies = () => {
         .then((res) => res.json())
         .then((data) => {
             console.log("--render--")
-           // setFetched(false)
-           // maxPage = data["pagination"]['max_page']
-           setMovies(data["results"]);
-           setFetched(true)
+            setMaxPage(data["pagination"])
+            setMovies(data["results"]);
+            setFetched(true)
         })
         }
         catch(e) {
