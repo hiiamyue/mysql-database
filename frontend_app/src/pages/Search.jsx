@@ -2,9 +2,6 @@ import { useEffect, useState} from 'react'
 import {useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import SortByListbox from '../components/SortByListbox'
-import Filters from "../components/Filters";
-import {Pagination} from "flowbite-react"
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
 import { getPage, pageParamsToAPIParams } from '../utils/QueryUtils';
@@ -51,36 +48,26 @@ const Search = () => {
                 <Navbar />
                 
                 <div className='max-w-[1240px] mx-auto text-white mt-4'>
-                    <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Search.</h1>
-                    <p className=' ml-6  md:text-2xl sm:text-xl text-slate-600'>Find thousands of movies with relevant ratings and analytics.</p>
+                    <h1 className='md:text-6xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Search results for {searchParams.get('query')} </h1>
+                    <p className=' ml-6  md:text-2xl sm:text-xl text-slate-600'>Found {movies.length} movies.</p>
 
                 </div >
-        
-                <h1>{searchParams.get('query')} </h1>
-                <div className='max-w-[1240px] mx-auto'>
+                <div className='max-w-[1240px] mx-auto mb-40'>
                     {
                         hasFetched ?
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-0">
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-20 px-0">
                             {movies.map((movie) => (
                                     <MovieCard title={movie.title} release_date={movie.release_date} rating={movie.avg_rating}/>
                             ))} 
                         </div>
                         :
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-40 px-4 xl:px-0 z-0">
-                        {Array.apply(null, { length: 28 }).map((e, i) => (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-4 xl:px-0 z-0">
+                        {Array.apply(null, { length: 15 }).map((e, i) => (
                             <LoadingMovieCard/>
                             ))}
                         </div>
                     }
                 </div>    
-                <div className="flex items-cente justify-center pb-4 pt-8">
-                    <Pagination
-                        currentPage={parseInt(getPage(searchParams))}
-                        totalPages={maxPage}
-                        showIcons={true}
-                        onPageChange={onPageChange}
-                    />
-                </div>
 
                 <Footer/>
             </div>
