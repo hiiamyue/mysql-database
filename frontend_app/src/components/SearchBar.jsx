@@ -6,6 +6,19 @@ import { AiOutlineSearch } from "react-icons/ai";
  * @returns {JSX} search bar element
  */
 const SearchBar = () => {
+
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const updateInput = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const searchMovies = (event) => {
+    if (event.key === 'Enter') {
+      window.location.replace(`/search?query=${searchQuery}`);
+    }
+  };
+
   return (
     <div className="w-80 h-9 bg-slate-100 mt-2 rounded-3xl flex items-center drop-shadow-2xl focus:scale-110 hover:scale-110 duration-300">
       {/* Icon for search */}
@@ -15,6 +28,8 @@ const SearchBar = () => {
       {/* Input field for search */}
       <input
         type="text"
+        onKeyDown={searchMovies}
+        onChange={updateInput}
         placeholder="Find a movie..."
         className="bg-slate-100 md:pl-2 h-full font-medium border-none focus:ring-0 text-slate-600"
       />
