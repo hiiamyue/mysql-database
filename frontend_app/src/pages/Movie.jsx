@@ -1,12 +1,13 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import * as React from 'react';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 
+import Stack from '@mui/material/Stack';
+import {Badge, Card} from "flowbite-react"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Rating from '@mui/material/Rating';
+import CastCard from '../components/CastCard';
 
 const darkTheme = createTheme({
     palette: {
@@ -26,9 +27,9 @@ const Movie = () => {
 
             <div className='max-w-[1240px] mx-auto mb-96'>
                 {/* Movie content inside*/}
-                <div class="grid grid-cols-4 gap-4 mt-10">
-                    <div className='pt-4'>
-                        <div className="text-lg font-bold text-center rounded-2xl m-4">
+                <div class="grid grid-cols-4 gap-4 mt-10 xl:mx-0 mx-8">
+                    <div className='xl:pt-4'>
+                        <div className="text-lg font-bold text-center rounded-2xl my-4">
                             <img
                             src="samplecover.png"
                             className="rounded-2xl w-full h-100 object-cover hover:opacity-60 shadow-lg"
@@ -38,14 +39,14 @@ const Movie = () => {
                     </div>
                     
                     <div class="col-span-3  md:py-6 sm:px-6 ">
-                        <div className='max-w-[1240px] mx-auto  mt-4'>
+                        <div className='max-w-[1240px] mx-auto  mt-2'>
                             <h1 className='md:text-5xl sm:text-4xl text-3xl font-bold text-white'>Harry Potter and the Sorcerer's Stone</h1>
                             <div className='flex  mt-[0.8em]'>
-                                <div className='mt-1 text-xl text-fuchsia-300 font-semibold'>2001  </div>
-                                <Stack direction="row" spacing={1} className="ml-6">
-                                    <Chip label="Adventure" variant="outlined" />
-                                    <Chip label="Family" variant="outlined" />
-                                    <Chip label="Fantasy" variant="outlined" />
+                                <div className='text-xl text-fuchsia-200 font-semibold'>2001  </div>
+                                <Stack direction="row" spacing={1} className="ml-6 mt-1">
+                                    <Badge color="pink">Child</Badge>
+                                    <Badge color="pink">Family</Badge>
+                                    <Badge color="pink">Fantasy</Badge>
                                 </Stack>
                             </div>
                             <Rating className=" mt-12" name="half-rating" defaultValue={2.5} precision={0.5} sx={{ width: '200%'}} size='large' readOnly />
@@ -56,7 +57,14 @@ const Movie = () => {
                     </div>
                     
                 </div>
-
+                <h3 className='md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Cast</h3>
+                <div className=' grid grid-cols-5 gap-4 pt-4'>
+                    <CastCard/>
+                    <CastCard/>
+                    <CastCard/>
+                    <CastCard/>
+                    <CastCard/>
+                </div>
             </div>
             
             
