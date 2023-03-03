@@ -32,7 +32,7 @@ const Movies = () => {
         .then((res) => res.json())
         .then((data) => {
             console.log("--render--")
-            setMaxPage(data["pagination"])
+            setMaxPage(data["pagination"]["max_page"])
             setMovies(data["results"]);
             setFetched(true)
         })
@@ -50,8 +50,8 @@ const Movies = () => {
                 <Navbar />
                 
                 <div className='max-w-[1240px] mx-auto text-white mt-4'>
-                    <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Movies.</h1>
-                    <p className=' ml-6  md:text-2xl sm:text-xl text-slate-600'>Find thousands of movies with relevant ratings and analytics.</p>
+                    <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6 px-6 xl:px-0 '>Movies.</h1>
+                    <p className=' px-6  xl:px-0 md:text-2xl sm:text-xl text-slate-600'>Find thousands of movies with relevant ratings and analytics.</p>
 
                 </div >
         
