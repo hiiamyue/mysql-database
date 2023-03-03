@@ -6,6 +6,7 @@ import sys
 class TmdbModel():
     def __init__(self) -> None:
         self.API_KEY = '0c7ff4f558bf3a9fa1d8291215717f93'
+        self.OMDB_API_KEY = "591bee91"
 
     def getTmdbMovieData(self, tmdbId):
         dic ={}
@@ -54,3 +55,16 @@ class TmdbModel():
 
         print(results[0])
         return results
+    
+    def get_rotten_tomatoes_rating(self, imdbId):
+        imdbId = imdbId[1:-1]
+        url = f"http://www.omdbapi.com/?apikey={self.OMDB_API_KEY}&i=tt{imdbId}"
+        data = requests.get(url).json()
+        ratings = data["Ratings"]
+        
+        for source in ratings:
+            if source["Source"] == "Rotten Tomatoes":
+                return source["Value"]
+            
+        return "N/A"
+    

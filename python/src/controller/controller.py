@@ -53,9 +53,19 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         return self.tmdbModel.getTmdbMovieData(tmdbID)
     
+    def get_rotten_tomatoes_rating(self, movieID):
+        imdbID = self.get_imdbID(movieID)
+        return self.tmdbModel.get_rotten_tomatoes_rating(imdbID)
+    
     def get_tmdbID(self,movieID):
         # get tmdb ID from movie title
-        data = self.model.get_tmbdID_from_movieID(movieID)
+        data = self.model.get_tmdbID_from_movieID(movieID)
+        json_data = json.dumps(data)
+        return(json_data)
+    
+    def get_imdbID(self, movieID):
+        # get tmdb ID from movie title
+        data = self.model.get_imdbID_from_movieID(movieID)
         json_data = json.dumps(data)
         return(json_data)
 

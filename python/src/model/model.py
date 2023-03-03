@@ -145,7 +145,7 @@ class Model:
         movies = self.cursor.fetchall()
         return movies
     
-    def get_tmbdID_from_movieID(self,movieID):
+    def get_tmdbID_from_movieID(self, movieID):
         # search by movie title return tmdb id
         query ="""SELECT DISTINCT m.tmdbId FROM movies m
                 \n WHERE m.movie_id = {}""".format(movieID)
@@ -155,6 +155,15 @@ class Model:
         tmdbID =int(id[0]["tmdbId"])
     
         return tmdbID
+    
+    def get_imdbID_from_movieID(self, movieID):
+        query ="""SELECT DISTINCT m.imdbId FROM movies m
+                \n WHERE m.movie_id = {}""".format(movieID)
+        self.cursor.execute(query)
+        id = self.cursor.fetchall()
+        imdbID = id[0]["imdbId"]
+    
+        return imdbID
     
     # Requirement 3:
     def get_catg_filter(self,lo_hi_raters):
