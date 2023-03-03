@@ -60,7 +60,7 @@ def search():
  
 @app.route('/genres', methods=['GET'])
 def get_genres():
-    return controller.get_genres()
+    return controller.get_genre_type()
 
 @app.route('/reaction', methods=['GET'])
 def get_reaction():
