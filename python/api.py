@@ -36,19 +36,13 @@ def get_movies():
     return controller.get_movies(genres, date_from, date_to,\
                                                      min_rating, max_rating, sort_by, page)
     
-@app.route('/test', methods=['GET'])
-def test():
-    """lis =[]
-    for x in range (1,50):
-        lis.append(controller.predict(x))
-    return lis
-    string = ""
-    for i in range(1, 30):
-        string += controller.get_rotten_tomatoes_rating(str(i))
-        string += "\n"
+# @app.route('/test', methods=['GET'])
+# def test():
+#     lis =[]
+#     for x in range (1,50):
+#         lis.append(controller.predict(x))
+#     return lis
 
-    return string"""
-    return controller.get_reaction_genre("2", "low")
 
 @app.route('/movie', methods=['GET'])
 def get_movie_data():

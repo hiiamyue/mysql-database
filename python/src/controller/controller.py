@@ -51,7 +51,10 @@ class Controller:
 
     def get_tmdb_data(self,movieID):
         tmdbID =self.get_tmdbID(movieID)
-        return self.tmdbModel.getTmdbMovieData(tmdbID)
+        tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
+        preview_rating = self.predict(movieID)
+        data =preview_rating | tmdbData
+        return json.dumps(data)
     
     def get_rotten_tomatoes_rating(self, movieID):
         imdbID = self.get_imdbID(movieID)
@@ -95,7 +98,5 @@ class Controller:
         return json_data
     def predict(self,movieID):
         data =self.model.gen_prediction(movieID)
-        # print(data, file=sys.stderr)
-        json_data = json.dumps(data)
-        return json_data
+        return data
 
