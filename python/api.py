@@ -41,13 +41,14 @@ def test():
     """lis =[]
     for x in range (1,50):
         lis.append(controller.predict(x))
-    return lis"""
+    return lis
     string = ""
     for i in range(1, 30):
         string += controller.get_rotten_tomatoes_rating(str(i))
         string += "\n"
 
-    return string
+    return string"""
+    return controller.get_reaction_genre("2", "low")
 
 @app.route('/movie', methods=['GET'])
 def get_movie_data():

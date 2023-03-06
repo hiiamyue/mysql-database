@@ -196,25 +196,43 @@ class Model:
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating
     
-    def get_group_rating_genre(self, genre, movieId, lo_hi_raters):
+    def get_group_rating_genre(self, movieId, lo_hi_raters):
         filter, category = self.get_catg_filter(lo_hi_raters)
         
+        # query = """\nWITH user_ratings AS (
+        #             \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
+        #             \nFROM (
+        #             \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
+        #             \nFROM ratings
+        #             \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
+        #             \nWHERE genres.genre = {0}
+        #             \nGROUP BY user_id) u
+        #             \nINNER JOIN ratings r ON r.user_id = u.user_id
+        #             \nINNER JOIN movies m ON r.movie_id = m.movie_id
+        #             \nWHERE m.movie_id = {1}
+        #             \nGROUP BY u.user_id
+        #             \nHAVING u.avg_for_genre{2})
+        #             \nSELECT u_avg_for_movie AS {3}
+        #             \nFROM user_ratings""".format(genre, movieId, filter, category)
+        
         query = """\nWITH user_ratings AS (
-                    \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
+                    \nSELECT u.user_id, u.u_avg_for_genre, genre, rating AS u_avg_for_movie
                     \nFROM (
-                    \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
-                    \nFROM ratings
-                    \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
-                    \nWHERE genres.genre = "{0}"
-                    \nGROUP BY user_id) u
+                    \nSELECT user_id, CONVERT(AVG(rating), float) AS u_avg_for_genre, genre
+                    \nFROM ratings, genres
+                    \nWHERE ratings.movie_id = genres.movie_id
+                    \nGROUP BY user_id, genre) u
                     \nINNER JOIN ratings r ON r.user_id = u.user_id
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
-                    \nWHERE m.movie_id = {1}
-                    \nGROUP BY u.user_id
-                    \nHAVING u.avg_for_genre{2})
-                    \nSELECT CONVERT(AVG(u_avg_for_movie), float) AS {3}
-                    \nFROM user_ratings""".format(genre, movieId, filter, category)         
-        
+                    \nWHERE m.movie_id = {0}
+                    \nHAVING u.u_avg_for_genre{1})
+                    \nSELECT genre, CONVERT(AVG(u_avg_for_movie), float) AS {2}
+                    \nFROM user_ratings
+                    \nGROUP BY genre
+                    \nORDER BY genre""".format(movieId, filter, category)
+
+        # query = """SELECT DISTINCT genre FROM genres"""
+         
         self.cursor.execute(query)
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating

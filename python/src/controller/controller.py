@@ -74,8 +74,8 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
-    def get_reaction_genre(self, genre, movieId, lo_hi_raters):
-        data = self.model.get_group_rating_genre(genre, movieId, lo_hi_raters)
+    def get_reaction_genre(self, movieId, lo_hi_raters):
+        data = self.model.get_group_rating_genre(movieId, lo_hi_raters)
         json_data = json.dumps(data)
         return json_data
     
