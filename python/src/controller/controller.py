@@ -93,6 +93,26 @@ class Controller:
         data = self.model.user_tag_analysis(page,genre_filter)
         json_data = json.dumps(data)
         return json_data
+    
+    def genre_list(self):
+        genres_data = self.model.get_genre_list()
+        genres =[]
+        for entry in genres_data:
+            if entry["genre"]!="(no genres listed)":
+                genres.append(entry["genre"])
+        return genres
+    def tags_list(self,n_tags):
+        tags_data = self.model.get_tag_list(n_tags)
+        tags = []
+        for entry in tags_data:
+                tags.append(entry["tag"])
+        return tags
+    def perc_w_tag(self,genre,tag):
+        data = self.model.perc_w_tag(genre,tag)
+        json_data = json.dumps(data)
+        return json_data
+
+      
     def predict(self,movieID):
         data =self.model.gen_prediction(movieID)
         # print(data, file=sys.stderr)

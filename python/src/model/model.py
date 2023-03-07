@@ -271,6 +271,37 @@ class Model:
         genre_tags = self.cursor.fetchall()
         return genre_tags
     
+    # Do individual viewers apply the same tags to different films in the same genre?
+
+    # get the genre list
+    def get_genre_list(self):
+        query="""SELECT DISTINCT g.genre FROM genres g"""
+        
+        self.cursor.execute(query)
+        genre_list = self.cursor.fetchall()
+        return genre_list
+    
+    # get the tag list
+    def get_tag_list(self, n_tags):
+        query="""SELECT DISTINCT t.tag FROM tags t LIMIT {}""".format(n_tags)
+        
+        self.cursor.execute(query)
+        tag_list = self.cursor.fetchall()
+        return tag_list
+    
+    #Get % of movies within the same genre that share this tag.
+    def perc_w_tag(self,genre,tag):
+        query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
+                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = \'{0}\') * 100,float) AS perc_w_tag
+                \nFROM genres g
+                \nINNER JOIN tags t ON g.movie_id = t.movie_id
+                \nWHERE g.genre = \'{0}\' AND t.tag = \'{1}\' """.format(genre,tag)
+               
+        
+        self.cursor.execute(query)
+        perc_with_tag = self.cursor.fetchall()
+        return perc_with_tag
+        
     # Do individual viewers apply the same tags to different films?
     def user_tag_analysis(self,page,genre_filter=None):
         filter=""
