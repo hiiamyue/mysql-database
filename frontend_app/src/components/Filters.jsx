@@ -9,25 +9,40 @@ import { useSearchParams } from 'react-router-dom';
 import buildFiltersURL from '../utils/StringUtils';
 import { getRatingFilter, getGenreFilter, getDateFilter, genGenresFilter } from '../utils/QueryUtils';
 
-const people = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' },
-]
-
 
 export default function Filters() {
 
   
   const [searchParams, setSearchParams] = useSearchParams();
+  const [allGenres, setGenres] = React.useState([])
+  const [hasFetchedGenres, setFetchedGenres] = React.useState(false)
   let ratingFilter = getRatingFilter(searchParams)
   let dateFilter = getDateFilter(searchParams)
-  let genres = getGenreFilter(searchParams, people)
+  let genres = getGenreFilter(searchParams, allGenres)
   
   React.useEffect(() => {
+    if (!hasFetchedGenres){
+      const url = `http://localhost:8000/genres`;
+      try {
+          
+      console.log(url)
+      setFetchedGenres(false)
+      
+      fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+          console.log(data)
+          setGenres(data)
+          setFetchedGenres(true)
+      })
+      }
+      catch(e) {
+          console.error(e)
+      
+      }
+    }
+    
+
     // Handle errors where wrong filters are entered
     // TODO: Do the same for all???
     if (typeof genres[-1] == 'undefined' & genres.length === 1){
@@ -36,7 +51,9 @@ export default function Filters() {
     
 
     }
-  }, [searchParams, setSearchParams, genres]);
+
+
+  }, []);
 
   const [valueRating, setValueRating] = React.useState(ratingFilter)
   const [valueDate, setValueDate] = React.useState(dateFilter) 
@@ -48,7 +65,7 @@ export default function Filters() {
     searchParams.set("from", valueDate[0])
     searchParams.set("to", valueDate[1])
     if(!(valueGenre.length === 0)){
-      let g = valueGenre.map((genre) => genre.name)
+      let g = valueGenre.map((genre) => genre.genre)
       searchParams.set("genres", g)
     } else {
       searchParams.delete('genres')
@@ -114,8 +131,13 @@ export default function Filters() {
                           <p className="text-sm text-gray-500">
                             Filter genres.
                           </p>
+                          {
+                            hasFetchedGenres ?
+                            <AutocompleteGenres handleChangeGenre={handleChangeGenre} initialValue={valueGenre} values={allGenres} />
+                            :
+                            <div> Loading Genres </div>
+                          }
                           
-                          <AutocompleteGenres handleChangeGenre={handleChangeGenre} initialValue={valueGenre} values={people} />
                           
                           
                       </div>

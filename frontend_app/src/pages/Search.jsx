@@ -50,7 +50,7 @@ const Search = () => {
                         hasFetched ?
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-0">
                             {movies.map((movie) => (
-                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12}/>
+                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12} img_path={movie.imgPath}/>
                             ))} 
                         </div>
                         :

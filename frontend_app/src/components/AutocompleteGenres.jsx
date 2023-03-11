@@ -17,7 +17,7 @@ export default function AutocompleteGenres({handleChangeGenre, initialValue, val
     query === ''
     ? values
     : values.filter((person) =>
-        values.name
+        values.genre
             .toLowerCase()
             .replace(/\s+/g, '')
             .includes(query.toLowerCase().replace(/\s+/g, ''))
@@ -31,7 +31,7 @@ export default function AutocompleteGenres({handleChangeGenre, initialValue, val
             <Combobox.Input
             className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
             displayValue={(selected) =>
-                selected.map((person) => person.name).join(', ')
+                selected.map((person) => person.genre).join(', ')
               }
             onChange={(event) => setQuery(event.target.value)}
             />
@@ -73,7 +73,7 @@ export default function AutocompleteGenres({handleChangeGenre, initialValue, val
                             selected ? 'font-medium' : 'font-normal'
                         }`}
                         >
-                        {person.name}
+                        {person.genre}
                         </span>
                         {selected ? (
                         <span

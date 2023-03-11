@@ -63,7 +63,7 @@ export function getGenreFilter(queryParams, genres) {
       // Split the genre parameter into an array of integers
       let selectedGenres = queryParams.get("genres").split(",")
     
-      let genreObjects = genres.filter((g) => selectedGenres.includes(g.name))
+      let genreObjects = genres.filter((g) => selectedGenres.includes(g.genre))
       return genreObjects
       
     } else {
@@ -80,7 +80,7 @@ export function genGenresFilter(genres, genresList){
 
   let genresString = `(`
   genres.map((genre) => {
-    genresString = genresString + `${genre.name},`;
+    genresString = genresString + `${genre.genre},`;
   });
   return genresString.slice(0,-1) + ")"
 }
