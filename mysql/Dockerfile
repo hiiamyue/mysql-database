@@ -11,3 +11,8 @@ COPY ./Normalised/ratings.csv /var/lib/mysql-files/
 COPY ./Normalised/genres.csv /var/lib/mysql-files/
 
 COPY ./Normalised/tags.csv /var/lib/mysql-files/
+
+COPY ./Normalised/personality-data.csv /var/lib/mysql-files/
+
+COPY ./Normalised/personality-ratings.csv /var/lib/mysql-files/
+

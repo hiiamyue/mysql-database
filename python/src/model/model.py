@@ -215,25 +215,43 @@ class Model:
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating
     
-    def get_group_rating_genre(self, genre, movieId, lo_hi_raters):
+    def get_group_rating_genre(self, movieId, lo_hi_raters):
         filter, category = self.get_catg_filter(lo_hi_raters)
         
+        # query = """\nWITH user_ratings AS (
+        #             \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
+        #             \nFROM (
+        #             \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
+        #             \nFROM ratings
+        #             \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
+        #             \nWHERE genres.genre = {0}
+        #             \nGROUP BY user_id) u
+        #             \nINNER JOIN ratings r ON r.user_id = u.user_id
+        #             \nINNER JOIN movies m ON r.movie_id = m.movie_id
+        #             \nWHERE m.movie_id = {1}
+        #             \nGROUP BY u.user_id
+        #             \nHAVING u.avg_for_genre{2})
+        #             \nSELECT u_avg_for_movie AS {3}
+        #             \nFROM user_ratings""".format(genre, movieId, filter, category)
+        
         query = """\nWITH user_ratings AS (
-                    \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
+                    \nSELECT u.user_id, u.u_avg_for_genre, genre, rating AS u_avg_for_movie
                     \nFROM (
-                    \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
-                    \nFROM ratings
-                    \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
-                    \nWHERE genres.genre = "{0}"
-                    \nGROUP BY user_id) u
+                    \nSELECT user_id, CONVERT(AVG(rating), float) AS u_avg_for_genre, genre
+                    \nFROM ratings, genres
+                    \nWHERE ratings.movie_id = genres.movie_id
+                    \nGROUP BY user_id, genre) u
                     \nINNER JOIN ratings r ON r.user_id = u.user_id
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
-                    \nWHERE m.movie_id = {1}
-                    \nGROUP BY u.user_id
-                    \nHAVING u.avg_for_genre{2})
-                    \nSELECT CONVERT(AVG(u_avg_for_movie), float) AS {3}
-                    \nFROM user_ratings""".format(genre, movieId, filter, category)         
-        
+                    \nWHERE m.movie_id = {0}
+                    \nHAVING u.u_avg_for_genre{1})
+                    \nSELECT genre, CONVERT(AVG(u_avg_for_movie), float) AS {2}
+                    \nFROM user_ratings
+                    \nGROUP BY genre
+                    \nORDER BY genre""".format(movieId, filter, category)
+
+        # query = """SELECT DISTINCT genre FROM genres"""
+         
         self.cursor.execute(query)
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating
@@ -272,6 +290,37 @@ class Model:
         genre_tags = self.cursor.fetchall()
         return genre_tags
     
+    # Do individual viewers apply the same tags to different films in the same genre?
+
+    # get the genre list
+    def get_genre_list(self):
+        query="""SELECT DISTINCT g.genre FROM genres g"""
+        
+        self.cursor.execute(query)
+        genre_list = self.cursor.fetchall()
+        return genre_list
+    
+    # get the tag list
+    def get_tag_list(self, n_tags):
+        query="""SELECT DISTINCT t.tag FROM tags t LIMIT {}""".format(n_tags)
+        
+        self.cursor.execute(query)
+        tag_list = self.cursor.fetchall()
+        return tag_list
+    
+    #Get % of movies within the same genre that share this tag.
+    def perc_w_tag(self,genre,tag):
+        query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
+                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = \'{0}\') * 100,float) AS perc_w_tag
+                \nFROM genres g
+                \nINNER JOIN tags t ON g.movie_id = t.movie_id
+                \nWHERE g.genre = \'{0}\' AND t.tag = \'{1}\' """.format(genre,tag)
+               
+        
+        self.cursor.execute(query)
+        perc_with_tag = self.cursor.fetchall()
+        return perc_with_tag
+        
     # Do individual viewers apply the same tags to different films?
     def user_tag_analysis(self,page,genre_filter=None):
         filter=""
@@ -296,7 +345,7 @@ class Model:
     
     ## Requirement 5:
     # generate number of preview audience and Actual average rating
-    def gen_num_preview_audience(self,movieID):
+    def gen_num_audience(self,movieID):
         query =''' SELECT COUNT(DISTINCT(r.user_id)) As num_rater, CONVERT(AVG(rating),float) AS overall_average_rating
                 \n FROM ratings r
                 \n WHERE r.movie_id ={}
@@ -307,16 +356,17 @@ class Model:
 
         num_Total_rater = data[0]['num_rater']
         overall_average_rating =data[0]['overall_average_rating']
-        # print(num_Total_rater,num_predict_rater, file=sys.stderr)
+        print(num_Total_rater, file=sys.stderr)
 
         return num_Total_rater,overall_average_rating
     
     # randomly pick number of preview ratings and remove outliers that is not within 1 standard deviation
     def gen_prediction(self,movieID):
-
-        num_Total_rater,True_average_rating = self.gen_num_preview_audience(movieID)
+        num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
-            return 'Not enough data to predict'
+            prediction = ''
+            dic ={'Predicted Rating':prediction,'Actual Average Rating':True_average_rating}
+            return  dic
         
         num_audience = num_Total_rater//4
 
@@ -330,20 +380,33 @@ class Model:
         self.cursor.execute(query)
         data = self.cursor.fetchall()
         ratings=[x['rating'] for x in data]
-        prediction = numpy.average(self.adjuest_outlier(ratings))
-        dic ={'Prediction':prediction,'Actual Average Rating':True_average_rating}
+        prediction,threshold = self.adjuest_outlier(ratings)
+        dic ={'Predicted Rating':numpy.average(prediction),'Actual Average Rating':True_average_rating,'threshold':threshold}
         return  dic
     # 
     def adjuest_outlier(self,list):
         std = numpy.std(list)
         if std ==0:
             return list
-        avg = numpy.average(list)
-        lower,upper= avg-std,avg+std
-        # print(std,avg,lower,upper, file=sys.stderr)
-        adjusted_rating =[y for y in list if (y >lower and y<upper)or y==lower or y ==upper] 
-        # print(list,adjusted_rating,file=sys.stderr)
-        return adjusted_rating
+        mean = numpy.average(list)
+        threshold =2
+        adjusted_rating=[]
+        for i in list:
+            z =(i-mean)/std
+            if z< threshold:
+                adjusted_rating.append(i)
+            else:
+                 print(i,file=sys.stderr)
+       
+        return adjusted_rating,threshold
+    
+    # Q6
+    def personal(self):
+        query =""" SELECT * FROM  personalityRating
+            """
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        return data
 
 
     def close_cursor(self):

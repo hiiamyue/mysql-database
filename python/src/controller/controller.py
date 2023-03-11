@@ -50,7 +50,10 @@ class Controller:
 
     def get_tmdb_data(self,movieID):
         tmdbID =self.get_tmdbID(movieID)
-        return self.tmdbModel.getTmdbMovieData(tmdbID)
+        tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
+        preview_rating = self.predict(movieID)
+        data =preview_rating | tmdbData
+        return json.dumps(data)
     
     def get_rotten_tomatoes_rating(self, movieID):
         imdbID = self.get_imdbID(movieID)
@@ -73,8 +76,8 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
-    def get_reaction_genre(self, genre, movieId, lo_hi_raters):
-        data = self.model.get_group_rating_genre(genre, movieId, lo_hi_raters)
+    def get_reaction_genre(self, movieId, lo_hi_raters):
+        data = self.model.get_group_rating_genre(movieId, lo_hi_raters)
         json_data = json.dumps(data)
         return json_data
     
@@ -92,9 +95,31 @@ class Controller:
         data = self.model.user_tag_analysis(page,genre_filter)
         json_data = json.dumps(data)
         return json_data
-    def predict(self,movieID):
-        data =self.model.gen_prediction(movieID)
-        # print(data, file=sys.stderr)
+    
+    def genre_list(self):
+        genres_data = self.model.get_genre_list()
+        genres =[]
+        for entry in genres_data:
+            if entry["genre"]!="(no genres listed)":
+                genres.append(entry["genre"])
+        return genres
+    def tags_list(self,n_tags):
+        tags_data = self.model.get_tag_list(n_tags)
+        tags = []
+        for entry in tags_data:
+                tags.append(entry["tag"])
+        return tags
+    def perc_w_tag(self,genre,tag):
+        data = self.model.perc_w_tag(genre,tag)
         json_data = json.dumps(data)
         return json_data
+
+      
+    def predict(self,movieID):
+        data =self.model.gen_prediction(movieID)
+        return data
+    
+    def QuestionSix(self):
+        data = self.model.personal()
+        return data
 
