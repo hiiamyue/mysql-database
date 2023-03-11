@@ -391,7 +391,7 @@ class Model:
     
     # Q6
     def personal(self):
-        query =""" SELECT * FROM  personality
+        query =""" SELECT * FROM  personalityRating
             """
         self.cursor.execute(query)
         data = self.cursor.fetchall()

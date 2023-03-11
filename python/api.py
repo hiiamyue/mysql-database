@@ -57,7 +57,7 @@ def search():
     args = request.args
     query = args.get("query")
     print(query, file=sys.stderr)
-    return controller.search_movie(query)
+    return controller.search_movie('Jumanji')
  
 @app.route('/genres', methods=['GET'])
 def get_genres():
