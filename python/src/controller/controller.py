@@ -119,4 +119,8 @@ class Controller:
     def predict(self,movieID):
         data =self.model.gen_prediction(movieID)
         return data
+    
+    def QuestionSix(self):
+        data = self.model.personal()
+        return data
 

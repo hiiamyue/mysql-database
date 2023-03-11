@@ -34,7 +34,37 @@ CREATE TABLE tags (
   FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
 
+CREATE TABLE personality(
+  user_id VARCHAR(100),
+  openness FLOAT,
+  agreeableness FLOAT, 
+  emotional_stability FLOAT,
+  conscientiousness FLOAT, 
+  extraversion FLOAT,
+  PRIMARY KEY (user_id)
+)
+CREATE TABLE personalityRating(
+  userid VARCHAR(100),
+  movie_id INT NOT NULL, 
+  rating FLOAT, 
+  PRIMARY KEY (user_id, movie_id,rating),
+  FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+ 
+)
 
+LOAD DATA INFILE '/var/lib/mysql-files/personality-ratings.csv' 
+INTO TABLE personalityRating 
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/personality-data.csv' 
+INTO TABLE personality
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
 
 LOAD DATA INFILE '/var/lib/mysql-files/new_movies.csv' 
 INTO TABLE movies 

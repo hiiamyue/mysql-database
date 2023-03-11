@@ -388,6 +388,14 @@ class Model:
                  print(i,file=sys.stderr)
        
         return adjusted_rating,threshold
+    
+    # Q6
+    def personal(self):
+        query =""" SELECT * FROM  personality
+            """
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        return data
 
 
     def close_cursor(self):

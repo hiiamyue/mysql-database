@@ -104,6 +104,11 @@ def perc_w_tag():
     tag = args.get("tag")
     return controller.perc_w_tag(genre,tag)
 
+@app.route('/q6',methods=['GET'])
+def personality():
+    
+    return controller.QuestionSix()
+
 """
 @app.after_request
 def after_request(response):
