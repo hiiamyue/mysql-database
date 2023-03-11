@@ -1,6 +1,7 @@
 import requests
 from requests_futures.sessions import FuturesSession
 import sys
+import json
 
 #TODO: Add rotten tomato rating, catch error , maybe edit variable names
 class TmdbModel():
@@ -50,10 +51,12 @@ class TmdbModel():
             
 
             for i in range(len(results)):
-                results[i]["imgPath"] = "https://image.tmdb.org/t/p/w500{path}?api_key={key}".format(path= futures[i]["poster_path"], key = self.API_KEY)
-            
+                try:
+                    results[i]["imgPath"] = "https://image.tmdb.org/t/p/w500{path}?api_key={key}".format(path= json.loads(futures[i].result().content)["poster_path"], key = self.API_KEY)
+                except KeyError:
+                     results[i]["imgPath"] = "null"
 
-        print(results[0])
+        
         return results
     
     def get_rotten_tomatoes_rating(self, imdbId):
