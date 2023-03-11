@@ -139,8 +139,16 @@ class Model:
 
 
     def search_movie(self,keywords):
-        query =""" SELECT * FROM movies m WHERE MATCH(m.title)
-                AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
+        # TODO:
+        query =""" SELECT DISTINCT * FROM movies m 
+                 \n INNER JOIN ( SELECT CONVERT(AVG(rating), float) AS avg_rating, movie_id
+                \n FROM ratings 
+                \n group by movie_id
+                )r on m.movie_id = r.movie_id
+                \n WHERE MATCH(m.title)
+                \n AGAINST('{}' IN NATURAL LANGUAGE MODE)
+                
+                """.format(keywords)
         self.cursor.execute(query)
         movies = self.cursor.fetchall()
         return movies
