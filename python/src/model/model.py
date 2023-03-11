@@ -9,11 +9,14 @@ class Model:
         while True:
             try:
                 mydb = mysql.connector.connect(
+                    pool_name = "mypool",
+                    pool_size = 10,
                     host="mysql",
                     user="root",
                     password="sushiroll",
                     database="db"
                 )
+                
                 break
             except:
                 print("-")
@@ -21,16 +24,33 @@ class Model:
 
         self.db = mydb
         self.cursor = self.db.cursor(dictionary=True)
+        #self.cursor.execute('set global max_allowed_packet=67108864')
+    
         self.__PAGE_SIZE = 28
     
     def get_page_size(self):
         return self.__PAGE_SIZE
+    
+    def __exec_query(self, query):
+        cnx = mysql.connector.connect(pool_name = "mypool")
+        curs = cnx.cursor(dictionary=True)
 
+        curs.execute(query)
+        response = curs.fetchall()
+
+        curs.close()
+        cnx.close()
+        return response
+    
     def get_last_query_found_rows(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         query = "SELECT FOUND_ROWS()"
-        self.cursor.execute(query)
-        movies = self.cursor.fetchall()
-        return movies
+        return self.__exec_query(query)
+        
 
     def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc,page):
 
@@ -50,13 +70,9 @@ class Model:
         Returns:
             _type_: _description_
         """
-
-        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
-
-        self.cursor.execute(q)
-        movies = self.cursor.fetchall()
         
-        return movies
+        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
+        return self.__exec_query(q)
 
 
     def __add_pagination(self, page_num):
@@ -128,22 +144,25 @@ class Model:
                     \n{4}
                     \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
         
-        print(query, file=sys.stderr)
         return query
     
     def get_genre_type(self):
-        self.cursor.execute('SELECT DISTINCT genre FROM genres')
-        distinct_genre = self.cursor.fetchall()
-        return distinct_genre
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        query = "SELECT DISTINCT genre, DENSE_RANK() OVER(ORDER BY genre) as id FROM genres WHERE genre != '(no genres listed)' ORDER BY genre"
+        return self.__exec_query(query)
     
 
 
     def search_movie(self,keywords):
+        
         query =""" SELECT * FROM movies m WHERE MATCH(m.title)
                 AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
-        self.cursor.execute(query)
-        movies = self.cursor.fetchall()
-        return movies
+        
+        return self.__exec_query(query)
     
     def get_tmdbID_from_movieID(self, movieID):
         # search by movie title return tmdb id
