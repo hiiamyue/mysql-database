@@ -159,8 +159,15 @@ class Model:
 
     def search_movie(self,keywords):
         
-        query =""" SELECT * FROM movies m WHERE MATCH(m.title)
-                AGAINST('{}' IN NATURAL LANGUAGE MODE)""".format(keywords)
+        query =""" SELECT DISTINCT * FROM movies m 
+                \n INNER JOIN (
+                \n SELECT CONVERT(AVG(rating), float) AS avg_rating, movie_id
+                \n FROM ratings 
+                \n GROUP BY movie_id) r 
+                \n ON m.movie_id = r.movie_id
+                \n WHERE MATCH(m.title)
+                \n AGAINST('{}' IN NATURAL LANGUAGE MODE)
+                """.format(keywords)
         
         return self.__exec_query(query)
     
@@ -215,24 +222,9 @@ class Model:
         u_avg_rating = self.cursor.fetchall()
         return u_avg_rating
     
+
     def get_group_rating_genre(self, movieId, lo_hi_raters):
         filter, category = self.get_catg_filter(lo_hi_raters)
-        
-        # query = """\nWITH user_ratings AS (
-        #             \nSELECT u.user_id, u.avg_for_genre, rating AS u_avg_for_movie
-        #             \nFROM (
-        #             \nSELECT user_id, CONVERT(AVG(rating), float) AS avg_for_genre
-        #             \nFROM ratings
-        #             \nINNER JOIN genres ON ratings.movie_id = genres.movie_id
-        #             \nWHERE genres.genre = {0}
-        #             \nGROUP BY user_id) u
-        #             \nINNER JOIN ratings r ON r.user_id = u.user_id
-        #             \nINNER JOIN movies m ON r.movie_id = m.movie_id
-        #             \nWHERE m.movie_id = {1}
-        #             \nGROUP BY u.user_id
-        #             \nHAVING u.avg_for_genre{2})
-        #             \nSELECT u_avg_for_movie AS {3}
-        #             \nFROM user_ratings""".format(genre, movieId, filter, category)
         
         query = """\nWITH user_ratings AS (
                     \nSELECT u.user_id, u.u_avg_for_genre, genre, rating AS u_avg_for_movie
@@ -249,8 +241,6 @@ class Model:
                     \nFROM user_ratings
                     \nGROUP BY genre
                     \nORDER BY genre""".format(movieId, filter, category)
-
-        # query = """SELECT DISTINCT genre FROM genres"""
          
         self.cursor.execute(query)
         u_avg_rating = self.cursor.fetchall()
