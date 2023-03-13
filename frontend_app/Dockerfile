@@ -12,7 +12,7 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --force
 RUN npm install flowbite flowbite-react -force
-RUN npm install gh-pages --save-dev
+RUN npm install gh-pages --save-dev -force
 EXPOSE 3000
 # add app
 COPY . ./
