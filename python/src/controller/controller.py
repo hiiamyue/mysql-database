@@ -52,8 +52,9 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
         preview_rating = self.predict(movieID)
-        data =preview_rating | tmdbData
-        return json.dumps(data)
+        preview_rating.append(tmdbData)
+
+        return json.dumps(preview_rating)
     
     def get_rotten_tomatoes_rating(self, movieID):
         imdbID = self.get_imdbID(movieID)
@@ -129,6 +130,7 @@ class Controller:
     
     def genre_personality_avg(self,f,genre):
         #   f =['high','low']
+        # for each genre, the average personality score
         data = self.model.gen_personality_genre_data(self,f,genre)
         return json.dumps(data)
 

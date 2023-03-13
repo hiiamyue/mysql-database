@@ -341,8 +341,7 @@ class Model:
                 \n WHERE r.movie_id ={}
                 
         '''.format(movieID)
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        data = self.__exec_query(query)
 
         num_Total_rater = data[0]['num_rater']
         overall_average_rating =data[0]['overall_average_rating']
@@ -357,45 +356,38 @@ class Model:
             prediction = ''
             dic ={'Predicted Rating':prediction,'Actual Average Rating':True_average_rating}
             return  dic
-        
         num_audience = num_Total_rater//4
-
-        query ='''SELECT CONVERT(r.rating, float) AS rating
+        query ='''
+            SELECT AVG(r.rating) as predicted_rating
+            FROM
+            (SELECT CONVERT(r.rating, float) AS rating
             \n FROM ratings r
-            \nWHERE r.movie_id ={0}
+            \n WHERE r.movie_id ={0}
             \n ORDER BY RAND()
-            \n LIMIT {1}
+            \n LIMIT {1})r
+            WHERE r.rating BETWEEN (
+                    SELECT AVG(a.rating) - 2*STDDEV(a.rating)
+                    FROM ratings a
+                    WHERE movie_id = {0}
+                    ORDER BY RAND()
+                    LIMIT {1})
+                 AND (
+                    SELECT AVG(a.rating) + 2*STDDEV(a.rating)
+                    FROM ratings a
+                    WHERE movie_id = {0}
+                    ORDER BY RAND()
+                    LIMIT {1})
+                
         '''.format(movieID,num_audience)
-
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
-        ratings=[x['rating'] for x in data]
-        prediction,threshold = self.adjuest_outlier(ratings)
-        dic ={'Predicted Rating':numpy.average(prediction),'Actual Average Rating':True_average_rating,'threshold':threshold}
-        return  dic
-    # 
-    def adjuest_outlier(self,list):
-        std = numpy.std(list)
-        if std ==0:
-            return list
-        mean = numpy.average(list)
-        threshold =2
-        adjusted_rating=[]
-        for i in list:
-            z =(i-mean)/std
-            if z< threshold:
-                adjusted_rating.append(i)
-            else:
-                 print(i,file=sys.stderr)
-       
-        return adjusted_rating,threshold
-    
+        data =self.__exec_query(query)
+        data.append({'True_average_rating}':True_average_rating})
+        print(data,file=sys.stderr)
+        return  data
 
     # Q6.2
     def gen_personality_genre_data(self,f,genre):
         # FOR each genre type, Get average personality traits who rated this genre highly
         filter = ''
-
         if (f == 'high'):
             filter = 'HAVING AVG_rating > 4'
         if(f=='low'):
