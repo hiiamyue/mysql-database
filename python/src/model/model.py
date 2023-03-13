@@ -399,6 +399,30 @@ class Model:
         print(data,file=sys.stderr)
         return  data
 
+    #Q6.1
+    def get_avg_rating_for_all_personality(self, movieId, lo_hi_raters):
+        all_personality_avg_rating = []
+        for personality in ['openness', 'agreeableness', 'emotional_stability', 'conscientiousness', 'extraversion']:
+            all_personality_avg_rating.append(self.get_avg_rating_for_personality(movieId, personality, lo_hi_raters)[0])
+        return all_personality_avg_rating
+
+    def get_avg_rating_for_personality(self, movieId, personality, lo_hi_raters):
+        filter = ""
+        if (lo_hi_raters == "high"):
+            filter = ">=4"
+        if(lo_hi_raters == "low"):
+            filter = "<=2"
+        query = f"""\nSELECT AVG(pr.rating) as avg_rating_for_{personality}
+                    \nFROM personality p, personalityRating pr
+                    \nWHERE p.userid = pr.userid
+                    \nAND pr.movie_id = {movieId}
+                    \nAND p.{personality} {filter}
+                """
+        
+        self.cursor.execute(query)
+        personality_avg_rating = self.cursor.fetchall()
+        return personality_avg_rating
+
     # Q6.2
     def gen_personality_genre_data(self,f,genre):
         # FOR each genre type, Get average personality traits who rated this genre highly

@@ -70,7 +70,7 @@ export default function Filters() {
     } else {
       searchParams.delete('genres')
     }
-   
+    searchParams.delete('page')
     setSearchParams(searchParams)
   }
 

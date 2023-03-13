@@ -121,6 +121,12 @@ class Controller:
     def predict(self,movieID,thresh):
         data =self.model.gen_prediction(movieID,thresh)
         return data
+    
+    # 6.1
+    def get_avg_rating_for_all_personality(self, movieId, lo_hi_raters):
+        data = self.model.get_avg_rating_for_all_personality(movieId, lo_hi_raters)
+        return json.dumps(data)
+    
     # 6.2.1
     def Fav_genre_per_personality(self,f):
         # each personality type's favorate film
@@ -135,4 +141,4 @@ class Controller:
         # TODO : rated more than 30 films
         data = self.model.gen_personality_genre_data(f,genre)
         return json.dumps(data)
-
+    
