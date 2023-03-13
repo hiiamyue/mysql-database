@@ -12,7 +12,8 @@ const Search = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
-    
+    let mybutton = document.getElementById("myBtn");
+
     useEffect(() => {
 
         const url = `http://localhost:8000/search?query=${searchParams.get("query")}`;
@@ -36,6 +37,21 @@ const Search = () => {
         
     }, [searchParams]);
 
+    function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    } 
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          mybutton.style.display = "block";
+        } else {
+          mybutton.style.display = "none";
+        }
+    }
+
+    window.onscroll = function() {scrollFunction()};
+
     return (
         <div className='bg-[url("../public/8.png")]'>
             <div className='bg-[#000300] bg-opacity-80 text-white'>
@@ -51,7 +67,7 @@ const Search = () => {
                         hasFetched ?
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-0">
                             {movies.map((movie) => (
-                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12} img_path={movie.imgPath}/>
+                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12} img_path={movie.imgPath !== "null" ? movie.imgPath : "samplemovie.jpg"}/>
                             ))} 
                         </div>
                         :
@@ -61,11 +77,15 @@ const Search = () => {
                             ))}
                         </div>
                     }
-                    <Fab color="secondary" aria-label="edit">
+                    
+                </div>    
+                
+                <div className='fixed bottom-8 right-8 z-50 block' id="mybtn">
+                    <Fab color="secondary" aria-label="edit" onClick={topFunction} size='large'>
                         <NavigationIcon />
                     </Fab>
-                </div>    
-
+                </div>
+                
                 <Footer/>
             </div>
         </div>

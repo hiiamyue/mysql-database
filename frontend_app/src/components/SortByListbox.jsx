@@ -31,7 +31,7 @@ export default function SortByListbox() {
       setSearchParams(searchParams)
     }
     
-  }, [selected, setSearchParams, searchParams]);
+  }, [selected]);
 
   return (
     <div className="w-72 h-20 pt-0">

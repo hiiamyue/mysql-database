@@ -55,7 +55,7 @@ const Movie = () => {
                         <div className='xl:pt-4'>
                             <div className="text-lg font-bold text-center rounded-2xl my-4">
                                 <img
-                                src="samplecover.png"
+                                src={movieData[4]['img_path'] !== "null" ? movieData[4]['img_path']  : "samplemovie.jpg"}
                                 className="rounded-2xl w-full h-100 object-cover hover:opacity-60 shadow-lg"
                                 alt="Movie cover"
                                 />
@@ -76,7 +76,7 @@ const Movie = () => {
                                 </div>
                                 <Rating className=" mt-12" name="half-rating" defaultValue={2.5} precision={0.5} sx={{ width: '200%'}} size='large' readOnly />
                                 <p className='mt-12 text-2xl font-semibold'>Synopsis </p>
-                                <p className=' mt-2 md:text-xl sm:text-xl text-slate-600'>An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself, his family and the terrible evil that haunts the magical world.</p>
+                                <p className=' mt-2 md:text-xl sm:text-xl text-slate-600'>{movieData[4]['overview']}</p>
                                 <p className='mt-12 text-xl font-semibold'>Chris Colombus</p>
                                 <p className='md:text-xl sm:text-xl text-slate-300'>Director</p>
                             </div >
