@@ -348,21 +348,26 @@ class Model:
                 
         '''.format(movieID)
         data = self.__exec_query(query)
-
-        num_Total_rater = data[0]['num_rater']
-        overall_average_rating =data[0]['overall_average_rating']
+        try:
+            num_Total_rater = data[0]['num_rater']
+            overall_average_rating =data[0]['overall_average_rating']
+        except KeyError:
+            num_Total_rater = ''
+            overall_average_rating =''
         print(num_Total_rater, file=sys.stderr)
 
         return num_Total_rater,overall_average_rating
     
     # randomly pick number of preview ratings and remove outliers that is not within 1 standard deviation
-    def gen_prediction(self,movieID):
+    def gen_prediction(self,movieID,threshold):
         num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
             prediction = ''
             dic ={'Predicted Rating':prediction,'Actual Average Rating':True_average_rating}
             return  dic
         num_audience = num_Total_rater//4
+        if threshold =='':
+            threshold =2
         query ='''
             SELECT AVG(r.rating) as predicted_rating
             FROM
@@ -371,22 +376,24 @@ class Model:
             \n WHERE r.movie_id ={0}
             \n ORDER BY RAND()
             \n LIMIT {1})r
-            WHERE r.rating BETWEEN (
-                    SELECT AVG(a.rating) - 2*STDDEV(a.rating)
+            WHERE r.rating BETWEEN  (
+                    SELECT AVG(a.rating) - {2}*STDDEV(a.rating) 
                     FROM ratings a
-                    WHERE movie_id = {0}
+                    WHERE movie_id = {0} 
                     ORDER BY RAND()
-                    LIMIT {1})
+                    LIMIT {1}) 
                  AND (
-                    SELECT AVG(a.rating) + 2*STDDEV(a.rating)
+                    SELECT AVG(a.rating) + {2}*STDDEV(a.rating)
                     FROM ratings a
                     WHERE movie_id = {0}
                     ORDER BY RAND()
-                    LIMIT {1})
+                    LIMIT {1}) 
                 
-        '''.format(movieID,num_audience)
+        '''.format(movieID,num_audience,threshold)
         data =self.__exec_query(query)
-        data.append({'True_average_rating}':True_average_rating})
+        data.append({'True_average_rating':True_average_rating})
+        data.append({'Number_of_preview_rater over total':f'{num_audience} over {num_Total_rater}'})
+        data.append({'threshold':threshold })
         print(data,file=sys.stderr)
         return  data
 
@@ -401,15 +408,17 @@ class Model:
 
         query ='''SELECT t.genre,AVG(t.openness) AS openness ,AVG(t.agreeableness) AS agreeableness ,AVG(t.emotional_stability) AS emotional_stability,AVG(t.conscientiousness) AS conscientiousness,AVG(t.extraversion) AS extraversion
                 \n FROM(
-                    SELECT DISTINCT p.userid,pt.openness,pt.agreeableness, pt.emotional_stability, pt.conscientiousness, pt.extraversion,g.genre,AVG(p.rating) AS AVG_rating
+                    SELECT DISTINCT p.userid,pt.openness,pt.agreeableness, pt.emotional_stability, pt.conscientiousness, pt.extraversion,g.genre,AVG(p.rating) AS AVG_rating, COUNT(p.rating) AS count
                 \n FROM personalityRating p 
                 \n INNER JOIN genres g on g.movie_id = p.movie_id
                 \n INNER JOIN personality pt on pt.userid = p.userid
-                \n WHERE g.genre = '{0}'
+                \n WHERE g.genre = '{0}' 
                 \n group by p.userid 
-                \n {1})t
+                \n {1} AND count > 30)t
                 group by t.genre
                 '''.format(genre,filter)
+        query2 ='''SELECT AVG(t.openness) AS openness ,AVG(t.agreeableness) AS agreeableness ,AVG(t.emotional_stability) AS emotional_stability,AVG(t.conscientiousness) AS conscientiousness,AVG(t.extraversion) AS extraversion
+                \n FROM personality t'''
         data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film

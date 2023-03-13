@@ -50,7 +50,8 @@ class Controller:
     def get_tmdb_data(self,movieID):
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
-        preview_rating = self.predict(movieID)
+        print(tmdbData,file=sys.stderr)
+        preview_rating = self.predict(movieID,2)
         preview_rating.append(tmdbData)
 
         return json.dumps(preview_rating)
@@ -117,19 +118,21 @@ class Controller:
         return json_data
 
       
-    def predict(self,movieID):
-        data =self.model.gen_prediction(movieID)
+    def predict(self,movieID,thresh):
+        data =self.model.gen_prediction(movieID,thresh)
         return data
     # 6.2.1
     def Fav_genre_per_personality(self,f):
         # each personality type's favorate film
         #  f =['high','low']
+        # TODO idk how to optimise yet
         data =self.model.gen_fav_for_all_personality(f)
         return json.dumps(data)
     
     def genre_personality_avg(self,f,genre):
         #   f =['high','low']
         # for each genre, the average personality score
-        data = self.model.gen_personality_genre_data(self,f,genre)
+        # TODO : rated more than 30 films
+        data = self.model.gen_personality_genre_data(f,genre)
         return json.dumps(data)
 

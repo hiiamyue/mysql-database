@@ -17,8 +17,8 @@ class TmdbModel():
         url1= "https://api.themoviedb.org/3/movie/{id}/credits?api_key={key}".format(id = tmdbId ,key = self.API_KEY)
         data1 = requests.get(url)
         data2 =requests.get(url1)
-        keys = ['adult','homepage','original_language','overview','release_date','runtime']
-
+        keys = ['title','adult','homepage','original_language','overview','release_date','runtime','poster_path']
+       
         for item in data1.json():
             if item in keys:
                 dic[item] = data1.json()[item]
@@ -55,8 +55,6 @@ class TmdbModel():
                     results[i]["imgPath"] = "https://image.tmdb.org/t/p/w500{path}?api_key={key}".format(path= json.loads(futures[i].result().content)["poster_path"], key = self.API_KEY)
                 except KeyError:
                      results[i]["imgPath"] = "null"
-
-        
         return results
     
     def get_rotten_tomatoes_rating(self, imdbId):

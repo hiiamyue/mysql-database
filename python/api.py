@@ -50,7 +50,7 @@ def get_movie_data():
     args = request.args
     movie_id = args.get("movie_id")
     
-    return controller.get_tmdb_data(movie_id)
+    return controller.get_tmdb_data(1)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -107,7 +107,7 @@ def perc_w_tag():
 @app.route('/q6',methods=['GET'])
 def personality():
     
-    return controller.Fav_genre_per_personality('high')
+    return controller.genre_personality_avg("high","Children")
 
 
 @app.after_request
