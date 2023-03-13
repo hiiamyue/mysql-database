@@ -50,7 +50,7 @@ def get_movie_data():
     args = request.args
     movie_id = args.get("movie_id")
     
-    return controller.get_tmdb_data('2')
+    return controller.get_tmdb_data(movie_id)
 
 @app.route('/search', methods=['GET'])
 def search():
