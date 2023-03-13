@@ -51,8 +51,9 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
         preview_rating = self.predict(movieID)
-        data =preview_rating | tmdbData
-        return json.dumps(data)
+        preview_rating.append(tmdbData)
+
+        return json.dumps(preview_rating)
     
     def get_rotten_tomatoes_rating(self, movieID):
         imdbID = self.get_imdbID(movieID)
@@ -102,12 +103,14 @@ class Controller:
             if entry["genre"]!="(no genres listed)":
                 genres.append(entry["genre"])
         return genres
+    
     def tags_list(self,n_tags):
         tags_data = self.model.get_tag_list(n_tags)
         tags = []
         for entry in tags_data:
                 tags.append(entry["tag"])
         return tags
+    
     def perc_w_tag(self,genre,tag):
         data = self.model.perc_w_tag(genre,tag)
         json_data = json.dumps(data)
@@ -117,8 +120,16 @@ class Controller:
     def predict(self,movieID):
         data =self.model.gen_prediction(movieID)
         return data
+    # 6.2.1
+    def Fav_genre_per_personality(self,f):
+        # each personality type's favorate film
+        #  f =['high','low']
+        data =self.model.gen_fav_for_all_personality(f)
+        return json.dumps(data)
     
-    def QuestionSix(self):
-        data = self.model.personal()
-        return data
+    def genre_personality_avg(self,f,genre):
+        #   f =['high','low']
+        # for each genre, the average personality score
+        data = self.model.gen_personality_genre_data(self,f,genre)
+        return json.dumps(data)
 

@@ -57,7 +57,7 @@ def search():
     args = request.args
     query = args.get("query")
     print(query, file=sys.stderr)
-    return controller.search_movie('Jumanji')
+    return controller.search_movie(query)
  
 @app.route('/genres', methods=['GET'])
 def get_genres():
@@ -107,7 +107,7 @@ def perc_w_tag():
 @app.route('/q6',methods=['GET'])
 def personality():
     
-    return controller.QuestionSix()
+    return controller.Fav_genre_per_personality('high')
 
 
 @app.after_request
