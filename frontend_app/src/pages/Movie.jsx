@@ -25,7 +25,7 @@ const Movie = () => {
     
     React.useEffect(() => {
         const movieid = searchParams.get("movieid")
-        const url = `http://localhost:8000/movie?movieid=${movieid}}`;
+        const url = `http://localhost:8000/movie?movie_id=${movieid}}`;
         
             
         console.log(url)

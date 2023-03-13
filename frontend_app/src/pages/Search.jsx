@@ -5,7 +5,8 @@ import Footer from '../components/Footer';
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
 import Skeleton from '@mui/material/Skeleton';
-
+import NavigationIcon from '@mui/icons-material/Navigation';
+import Fab from '@mui/material/Fab';
 
 const Search = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -60,6 +61,9 @@ const Search = () => {
                             ))}
                         </div>
                     }
+                    <Fab color="secondary" aria-label="edit">
+                        <NavigationIcon />
+                    </Fab>
                 </div>    
 
                 <Footer/>
