@@ -122,7 +122,7 @@ class Controller:
         data =self.model.gen_prediction(movieID)
         return data
     # 6.2.1
-    def QuestionSix(self,f):
+    def Fav_genre_per_personality(self,f):
         # each personality type's favorate film
         #  f =['high','low']
         data =self.model.gen_fav_for_all_personality(f)

@@ -107,7 +107,7 @@ def perc_w_tag():
 @app.route('/q6',methods=['GET'])
 def personality():
     
-    return controller.QuestionSix()
+    return controller.Fav_genre_per_personality('high')
 
 
 @app.after_request
