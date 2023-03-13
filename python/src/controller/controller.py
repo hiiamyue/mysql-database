@@ -31,10 +31,9 @@ class Controller:
         payload = {}   
 
         results = self.model.get_movies(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
-        payload["results"] = self.tmdbModel.addImgPathToResults(results)
-
-        total_rows = self.model.get_last_query_found_rows()
-        payload["pagination"] = {"page_number": page, 'total_results': total_rows[0]['FOUND_ROWS()'], "max_page": ceil(total_rows[0]['FOUND_ROWS()']/self.model.get_page_size())}
+        payload["results"] = self.tmdbModel.addImgPathToResults(results[0])
+        total_rows = results[1][0]['FOUND_ROWS()']
+        payload["pagination"] = {"page_number": page, 'total_results': total_rows, "max_page": ceil(total_rows/self.model.get_page_size())}
 
         json_data = json.dumps(payload)
         return json_data

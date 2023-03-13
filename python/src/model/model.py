@@ -42,15 +42,20 @@ class Model:
         cnx.close()
         return response
     
-    def get_last_query_found_rows(self):
-        """_summary_
+    def __double_exec_query(self, q1, q2):
+        cnx = mysql.connector.connect(pool_name = "mypool")
+        curs = cnx.cursor(dictionary=True)
 
-        Returns:
-            _type_: _description_
-        """
-        query = "SELECT FOUND_ROWS()"
-        return self.__exec_query(query)
-        
+        curs.execute(q1)
+        response = [curs.fetchall()]
+        curs.execute(q2)
+        response.append(curs.fetchall())
+        print(response, file=sys.stderr)
+        curs.close()
+        cnx.close()
+        return response
+
+    
 
     def get_movies(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc,page):
 
@@ -72,7 +77,8 @@ class Model:
         """
         
         q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
-        return self.__exec_query(q)
+        query_found_rows = "SELECT FOUND_ROWS()"
+        return self.__double_exec_query(q, query_found_rows)
 
 
     def __add_pagination(self, page_num):
@@ -143,7 +149,7 @@ class Model:
                     \n{3}
                     \n{4}
                     \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
-        
+        print(query, file=sys.stderr)
         return query
     
     def get_genre_type(self):

@@ -35,6 +35,7 @@ const Movies = () => {
             setMaxPage(data["pagination"]["max_page"])
             setMovies(data["results"]);
             setFetched(true)
+            console.log(data["pagination"])
         })
         }
         catch(e) {

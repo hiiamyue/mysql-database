@@ -61,7 +61,7 @@ export function getGenreFilter(queryParams, genres) {
     // Check if the genre parameter is specified in the query parameters
     if (!(queryParams.get("genres") === null)) {
       // Split the genre parameter into an array of integers
-      let selectedGenres = queryParams.get("genres").split(",")
+      let selectedGenres = queryParams.get("genres").replace(/'/g, '').split(",")
     
       let genreObjects = genres.filter((g) => selectedGenres.includes(g.genre))
       return genreObjects
@@ -80,7 +80,7 @@ export function genGenresFilter(genres, genresList){
 
   let genresString = `(`
   genres.map((genre) => {
-    genresString = genresString + `${genre.genre},`;
+    genresString = genresString + `'${genre.genre}',`;
   });
   return genresString.slice(0,-1) + ")"
 }
@@ -96,7 +96,8 @@ export function pageParamsToAPIParams(params){
 
   for (const [key, value] of params.entries()) {
     if(key === "genres"){
-      apiParams = apiParams + key + "=(" + value + ")&"
+      const quotedValue = '\'' + value.split(',').join('\',\'') + '\''
+      apiParams = apiParams + key + "=(" + quotedValue + ")&"
     } else {
       apiParams = apiParams + key + "=" + value.toString() + "&"
     }
