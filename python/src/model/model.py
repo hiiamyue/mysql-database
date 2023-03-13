@@ -3,8 +3,10 @@ import time
 import sys
 import re
 import numpy
+import os
 
 class Model:
+    
     def __init__(self) -> None:
         while True:
             try:
@@ -13,7 +15,7 @@ class Model:
                     pool_size = 10,
                     host="mysql",
                     user="root",
-                    password="sushiroll",
+                    password=os.environ.get('DB_PASS',''),
                     database="db",
                     sql_mode = ''
                 )
