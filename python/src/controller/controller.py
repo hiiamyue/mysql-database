@@ -120,8 +120,15 @@ class Controller:
     def predict(self,movieID):
         data =self.model.gen_prediction(movieID)
         return data
+    # 6.2.1
+    def QuestionSix(self,f):
+        # each personality type's favorate film
+        #  f =['high','low']
+        data =self.model.gen_fav_for_all_personality(f)
+        return json.dumps(data)
     
-    def QuestionSix(self):
-        data = self.model.personal()
-        return data
+    def genre_personality_avg(self,f,genre):
+        #   f =['high','low']
+        data = self.model.gen_personality_genre_data(self,f,genre)
+        return json.dumps(data)
 
