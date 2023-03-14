@@ -51,7 +51,7 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
         print(tmdbData,file=sys.stderr)
-        preview_rating = self.predict(movieID,2)
+        preview_rating = [self.predict(movieID,2)]
         preview_rating.append(tmdbData)
 
         return json.dumps(preview_rating)
@@ -120,6 +120,7 @@ class Controller:
       
     def predict(self,movieID,thresh):
         data =self.model.gen_prediction(movieID,thresh)
+        print(data, file=sys.stderr)
         return data
     
     # 6.1
