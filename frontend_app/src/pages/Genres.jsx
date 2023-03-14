@@ -5,10 +5,10 @@ import Footer from '../components/Footer';
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
 import Skeleton from '@mui/material/Skeleton';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import NavigationIcon from '@mui/icons-material/Navigation';
 import Fab from '@mui/material/Fab';
 
-const Search = () => {
+const Genres = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
@@ -48,7 +48,7 @@ const Search = () => {
 
     function scrollFunction() {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-          mybutton.style.display = "block";
+          mybutton.style.display = "inline-block";
         } else {
           mybutton.style.display = "none";
         }
@@ -62,7 +62,7 @@ const Search = () => {
                 <Navbar />
                 
                 <div className='max-w-[1240px] mx-auto text-white mt-4'>
-                    <h1 className='md:text-6xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Search results for {searchParams.get('query')} </h1>
+                    <h1 className='md:text-6xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Genres results for {searchParams.get('query')} </h1>
                     <div>
                         <span className=' ml-6  md:text-2xl sm:text-xl text-slate-600 inline'>Found 
                         <span className='inline-flex p-2'>{hasFetched ? movies.length : <Skeleton variant="rectangular"  animation="wave" width={50} height={16} />} </span>
@@ -89,7 +89,7 @@ const Search = () => {
                 
                 <button className='fixed bottom-8 right-8 z-50 hidden' id="myBtn">
                     <Fab color="secondary" aria-label="edit" onClick={topFunction} size='large'>
-                        <KeyboardArrowUpIcon />
+                        <NavigationIcon />
                     </Fab>
                 </button>
                 
@@ -99,4 +99,4 @@ const Search = () => {
     )
 }
 
-export default Search
+export default Genres

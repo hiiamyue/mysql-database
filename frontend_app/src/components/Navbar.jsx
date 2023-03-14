@@ -18,7 +18,7 @@ const Navbar = () => {
             <ul className ='hidden md:flex'>
                 {pathname === '/' ? <li className='p-4 text-fuchsia-300'>Home</li> : <Link to='/'><li className='p-4 hover:text-pink-200'>Home</li></Link>}
                 {pathname === '/movies' ? <li className='p-4 text-fuchsia-300'>Movies</li> : <Link to='/movies'><li className='p-4 hover:text-pink-200'>Movies</li></Link>}
-                <li className='p-4'>Genres</li>
+                {pathname === '/genres' ? <li className='p-4 text-fuchsia-300'>Genres</li> : <Link to='/genres'><li className='p-4 hover:text-pink-200'>Genres</li></Link>}
             </ul>
             <div onClick={handleNav} className='block md:hidden'>
                 {!nav ? <AiOutlineClose size={20}/> : <AiOutlineMenu size={20}/>}
@@ -28,7 +28,7 @@ const Navbar = () => {
                 <ul className='uppercase p-4 divide-y divide-slate-600'>
                     {pathname === '/' ? <li className='p-4 text-fuchsia-300'>Home</li> : <Link to='/'><li className='p-4 hover:text-pink-200'>Home</li></Link>}
                     {pathname === '/movies' ? <li className='p-4 text-fuchsia-300'>Movies</li> : <Link to='/movies'><li className='p-4 hover:text-pink-200'>Movies</li></Link>}
-                    <li className='p-4'>Genres</li>
+                    {pathname === '/genres' ? <li className='p-4 text-fuchsia-300'>Genres</li> : <Link to='/genres'><li className='p-4 hover:text-pink-200'>Genres</li></Link>}
                 </ul>
             </div>
         </div>
