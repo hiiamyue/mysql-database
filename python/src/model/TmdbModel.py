@@ -2,12 +2,13 @@ import requests
 from requests_futures.sessions import FuturesSession
 import sys
 import json
+import os
 
 #TODO: Add rotten tomato rating, catch error , maybe edit variable names
 class TmdbModel():
     def __init__(self) -> None:
-        self.API_KEY = '0c7ff4f558bf3a9fa1d8291215717f93'
-        self.OMDB_API_KEY = "591bee91"
+        self.API_KEY = os.environ.get('API_KEY','')
+        self.OMDB_API_KEY = os.environ.get('OMDB_API_KEY','')
 
     def getTmdbMovieData(self, tmdbId):
         dic ={}
