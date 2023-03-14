@@ -19,12 +19,14 @@ services:
       - mysql
     ports:
       - 8000:5000
+    environment:
+      DB_PASS: ${DB_PASS}
 
   mysql:
     build: ./mysql/
     restart: always
     environment: 
       MYSQL_DATABASE: 'db'
-      MYSQL_ROOT_PASSWORD: 'sushiroll'
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
     ports:
       - '3306:3306'
