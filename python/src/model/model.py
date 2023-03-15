@@ -198,6 +198,11 @@ class Model:
         imdbID = id[0]["imdbId"]
     
         return imdbID
+    def get_movie_genre(self,movieID):
+        query ='''SELECT DISTINCT g.genre FROM genres g
+            \n WHERE g.movie_id = {}'''.format(movieID)
+        data = self.__exec_query(query)
+        return data
     
     # Requirement 3:
     def get_catg_filter(self,lo_hi_raters):
@@ -443,8 +448,7 @@ class Model:
                 \n {1} AND count > 30)t
                 group by t.genre
                 '''.format(genre,filter)
-        query2 ='''SELECT AVG(t.openness) AS openness ,AVG(t.agreeableness) AS agreeableness ,AVG(t.emotional_stability) AS emotional_stability,AVG(t.conscientiousness) AS conscientiousness,AVG(t.extraversion) AS extraversion
-                \n FROM personality t'''
+       
         data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
