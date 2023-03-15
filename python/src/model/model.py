@@ -376,7 +376,7 @@ class Model:
         if threshold =='':
             threshold =2
         query ='''
-            SELECT AVG(r.rating) as predicted_rating
+            SELECT AVG(r.rating) as predicted_rating,STDDEV(r.rating) as STD
             FROM
             (SELECT CONVERT(r.rating, float) AS rating
             \n FROM ratings r
@@ -384,11 +384,11 @@ class Model:
             \n ORDER BY RAND()
             \n LIMIT {1})r
             WHERE r.rating BETWEEN  (
-                    SELECT AVG(a.rating) - {2}*STDDEV(a.rating) 
+                SELECT AVG(a.rating) - {2}*STDDEV(a.rating)
                     FROM ratings a
                     WHERE movie_id = {0} 
                     ORDER BY RAND()
-                    LIMIT {1}) 
+                    LIMIT {1})
                  AND (
                     SELECT AVG(a.rating) + {2}*STDDEV(a.rating)
                     FROM ratings a
