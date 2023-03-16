@@ -51,8 +51,10 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
         print(tmdbData,file=sys.stderr)
+        genre = self.model.get_movie_genre(movieID)
         preview_rating = [self.predict(movieID,2)]
         preview_rating.append(tmdbData)
+        preview_rating.append(genre)
 
         return json.dumps(preview_rating)
     
