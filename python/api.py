@@ -92,6 +92,7 @@ def user_tag_analysis():
 @app.route('/genre_list',methods=['GET'])
 def genre_list():
     return controller.genre_list()
+
 @app.route('/tags_list',methods=['GET'])
 def tags_list():
     args = request.args
