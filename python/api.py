@@ -67,8 +67,15 @@ def get_genres():
 def get_reaction():
     args = request.args
     movieId = args.get("movie_id")
-    group  = args.get("group") # Type "high" for High Raters, "low" for Low Raters
-    return controller.get_reaction(movieId,group)
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_reaction(movieId, group)
+
+@app.route('/reaction_genre', method=['GET'])
+def get_reaction_genre():
+    args = request.args
+    movieId = args.get("movie_id")
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_reaction_genre(movieId, group)
 
 @app.route('/tag_rating', methods=['GET'])
 def get_tag_rating():
@@ -110,6 +117,12 @@ def personality():
     
     return controller.genre_personality_avg("high","Children")
 
+@app.route('/avg_rating_personality', methods=['GET'])
+def avg_rating_personality():
+    args = request.args
+    movieId = args.get("movie_id")
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_avg_rating_for_all_personality(movieId, group)
 
 @app.after_request
 def after_request(response):
