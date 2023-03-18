@@ -19,9 +19,7 @@ const LoadingMovieCard = () => {
     <div className="text-slate-100">
       <div className="text-lg font-bold text-center rounded-2xl m-4  h-full z-0">
         <Stack spacing={1} >
-        {/* For variant="text", adjust the height via font-size */}
-
-        {/* For other variants, adjust the size with `width` and `height` */}
+        
         
         <Skeleton variant="rounded" animation="wave" style={{ paddingTop: '150%'}}/>
         

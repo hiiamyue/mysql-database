@@ -2,11 +2,11 @@ import { useEffect, useState} from 'react'
 import {useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import MovieCard from "../components/MovieCard";
-import LoadingMovieCard from "../components/LoadingMovieCard"
-import Skeleton from '@mui/material/Skeleton';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import Fab from '@mui/material/Fab';
+import { WordCloud } from '@ant-design/plots';
+import DemoWordCloud from '../components/GenreTagsWordCloud';
+import NormalDistribRating from '../components/NormalDistribRating';
 
 const Genres = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -14,9 +14,14 @@ const Genres = () => {
     const [hasFetched, setFetched] = useState(false);
     let mybutton = document.getElementById("myBtn");
 
+    
+    
+      
+    
+
     useEffect(() => {
 
-        const url = `http://localhost:8000/search?query=${searchParams.get("query")}`;
+        const url = `http://localhost:8000/genre_tags?genre=Comedy`;
         try {
 
         setFetched(false)  
@@ -62,28 +67,14 @@ const Genres = () => {
                 <Navbar />
                 
                 <div className='max-w-[1240px] mx-auto text-white mt-4'>
-                    <h1 className='md:text-6xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 '>Genres results for {searchParams.get('query')} </h1>
-                    <div>
-                        <span className=' ml-6  md:text-2xl sm:text-xl text-slate-600 inline'>Found 
-                        <span className='inline-flex p-2'>{hasFetched ? movies.length : <Skeleton variant="rectangular"  animation="wave" width={50} height={16} />} </span>
-                    movies.</span>
-                    </div>
+                    <h1 className='md:text-6xl sm:text-6xl text-4xl font-bold md:py-6 sm:px-6 px-8 '>Genres</h1>
+                    <p className='sm:px-6 px-8 md:text-2xl sm:text-xl text-slate-600'>Analyse interesting trends correlated with movie genres.</p>
+
+                    
                 </div >
                 <div className='max-w-[1240px] mx-auto min-h-screen'>
-                    {
-                        hasFetched ?
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-0">
-                            {movies.map((movie) => (
-                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12} img_path={movie.imgPath !== "null" ? movie.imgPath : "samplemovie.jpg"}/>
-                            ))} 
-                        </div>
-                        :
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-4 xl:px-0 z-0">
-                        {Array.apply(null, { length: 15 }).map((e, i) => (
-                            <LoadingMovieCard/>
-                            ))}
-                        </div>
-                    }
+                {hasFetched ? <DemoWordCloud/> : <p>Test</p>}
+                <NormalDistribRating mean={2.5} stdDev={1}/>
                     
                 </div>    
                 
