@@ -50,7 +50,7 @@ def get_movie_data():
     args = request.args
     movie_id = args.get("movie_id")
     
-    return controller.get_tmdb_data(95)
+    return controller.get_tmdb_data(movie_id)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -98,6 +98,7 @@ def tags_list():
     args = request.args
     n_tags = args.get("n_tags")
     return controller.tags_list(n_tags)
+
 @app.route('/perc_w_tag',methods=['GET'])
 def perc_w_tag():
     args = request.args
