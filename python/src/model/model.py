@@ -45,6 +45,21 @@ class Model:
         cnx.close()
         return response
     
+    def __exec_query_params(self,query,params): # w params
+       cnx = mysql.connector.connect(pool_name = "mypool")
+       curs = cnx.cursor(dictionary=True)
+
+
+
+
+       curs.execute(query,params)
+       response = curs.fetchall()
+
+
+       curs.close()
+       cnx.close()
+       return response 
+    
     def __double_exec_query(self, q1, q2):
         cnx = mysql.connector.connect(pool_name = "mypool")
         curs = cnx.cursor(dictionary=True)
@@ -85,8 +100,6 @@ class Model:
 
 
     def __add_pagination(self, page_num):
-        
-        
         
         offset = (int(page_num) - 1) * self.__PAGE_SIZE 
 
@@ -174,17 +187,14 @@ class Model:
                 \n group by movie_id
                 )r on m.movie_id = r.movie_id
                 \n WHERE MATCH(m.title)
-                \n AGAINST('{}' IN NATURAL LANGUAGE MODE)
-                
-                """.format(keywords)
-        return self.__exec_query(query)
+                \n AGAINST(%s IN NATURAL LANGUAGE MODE)"""
+        return self.__exec_query_params(query,(keywords,))
     
     def get_tmdbID_from_movieID(self, movieID):
         # search by movie title return tmdb id
         query ="""SELECT DISTINCT m.tmdbId FROM movies m
-                \n WHERE m.movie_id = {}""".format(movieID)
-        self.cursor.execute(query)
-        id = self.cursor.fetchall()
+                \n WHERE m.movie_id = %s"""
+        id = self.__exec_query_params(query,(movieID,))
 
         tmdbID =int(id[0]["tmdbId"])
     
@@ -192,16 +202,15 @@ class Model:
     
     def get_imdbID_from_movieID(self, movieID):
         query ="""SELECT DISTINCT m.imdbId FROM movies m
-                \n WHERE m.movie_id = {}""".format(movieID)
-        self.cursor.execute(query)
-        id = self.cursor.fetchall()
+                \n WHERE m.movie_id = %s"""
+        id = self.__exec_query_params(query,(movieID,))
         imdbID = id[0]["imdbId"]
     
         return imdbID
     def get_movie_genre(self,movieID):
         query ='''SELECT DISTINCT g.genre FROM genres g
-            \n WHERE g.movie_id = {}'''.format(movieID)
-        data = self.__exec_query(query)
+            \n WHERE g.movie_id = %s'''
+        data = self.__exec_query_params(query,(movieID,))
         return data
     
     # Requirement 3:
@@ -212,6 +221,9 @@ class Model:
         elif lo_hi_raters=="low":   # get the low_raters' avg score for the movie 
             category = "low_raters_avg"
             filter = "<3.5"
+        else:
+            filter=""
+            category=""
 
         return filter,category
     
@@ -225,15 +237,13 @@ class Model:
                     \nFROM ratings GROUP BY user_id) u
                     \nINNER JOIN ratings r ON r.user_id = u.user_id
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
-                    \nWHERE m.movie_id = {0}
+                    \nWHERE m.movie_id = %s
                     \nGROUP BY u.user_id
-                    \nHAVING u.avg_rating{1})
-                    \nSELECT CONVERT(AVG(u_avg_for_movie),float) AS {2}
-                    \nFROM user_ratings""".format(movieId,filter,category)     
+                    \nHAVING u.avg_rating{0})
+                    \nSELECT CONVERT(AVG(u_avg_for_movie),float) AS {1}
+                    \nFROM user_ratings""".format(filter,category)     
 
-        self.cursor.execute(query)
-        u_avg_rating = self.cursor.fetchall()
-        return u_avg_rating
+        return self.__exec_query_params(query,(movieId,))
     
 
     def get_group_rating_genre(self, movieId, lo_hi_raters):
@@ -250,16 +260,15 @@ class Model:
                     \nGROUP BY user_id, genre) u
                     \nINNER JOIN ratings r ON r.user_id = u.user_id
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
-                    \nWHERE m.movie_id = {0}
-                    \nHAVING u.u_avg_for_genre{1})
-                    \nSELECT genre, CONVERT(AVG(u_avg_for_movie), float) AS {2}
+                    \nWHERE m.movie_id = %s
+                    \nHAVING u.u_avg_for_genre{0})
+                    \nSELECT genre, CONVERT(AVG(u_avg_for_movie), float) AS {1}
                     \nFROM user_ratings
                     \nGROUP BY genre
-                    \nORDER BY genre""".format(movieId, filter, category)
+                    \nORDER BY genre""".format(filter, category)
          
-        self.cursor.execute(query)
-        u_avg_rating = self.cursor.fetchall()
-        return u_avg_rating
+        return self.__exec_query_params(query,(movieId,))
+
     
     # Requirement 4:
 
@@ -271,15 +280,13 @@ class Model:
                    \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
                    \nFROM ratings r
                    \nJOIN tags t ON r.movie_id = t.movie_id
-                   \nWHERE t.tag = \'{0}\'   
+                   \nWHERE t.tag = %s   
                    \nGROUP BY r.movie_id) AS subq
                    \nJOIN tags t ON subq.movie_id = t.movie_id
-                   \nWHERE t.tag = \'{0}\' 
-                   \nGROUP BY t.tag""".format(tag,tag)    
+                   \nWHERE t.tag = %s
+                   \nGROUP BY t.tag"""  
 
-        self.cursor.execute(query)
-        tag_avg_rating = self.cursor.fetchall()
-        return tag_avg_rating
+        return self.__exec_query_params(query,(tag,tag))
     
     # Explore relationship between tag data and genres
     # Display all the tags associated with a genre
@@ -287,43 +294,33 @@ class Model:
         query="""SELECT t.tag, COUNT(t.tag) AS n_tags
                 \nFROM tags t
                 \nJOIN genres g ON g.movie_id = t.movie_id
-                \nWHERE g.genre = \'{}\'
-                \nGROUP BY t.tag""".format(genre)
+                \nWHERE g.genre = %s
+                \nGROUP BY t.tag"""
 
-        self.cursor.execute(query)
-        genre_tags = self.cursor.fetchall()
-        return genre_tags
+        return self.__exec_query_params(query,(genre,))
     
     # Do individual viewers apply the same tags to different films in the same genre?
 
     # get the genre list
     def get_genre_list(self):
         query="""SELECT DISTINCT g.genre FROM genres g"""
-        
-        self.cursor.execute(query)
-        genre_list = self.cursor.fetchall()
-        return genre_list
+        return self.__exec_query(query)
     
     # get the tag list
     def get_tag_list(self, n_tags):
-        query="""SELECT DISTINCT t.tag FROM tags t LIMIT {}""".format(n_tags)
+        query="""SELECT DISTINCT t.tag FROM tags t LIMIT %s"""
         
-        self.cursor.execute(query)
-        tag_list = self.cursor.fetchall()
-        return tag_list
+        return self.__exec_query_params(query,(int(n_tags),))
     
     #Get % of movies within the same genre that share this tag.
     def perc_w_tag(self,genre,tag):
         query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
-                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = \'{0}\') * 100,float) AS perc_w_tag
+                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = %s) * 100,float) AS perc_w_tag
                 \nFROM genres g
                 \nINNER JOIN tags t ON g.movie_id = t.movie_id
-                \nWHERE g.genre = \'{0}\' AND t.tag = \'{1}\' """.format(genre,tag)
+                \nWHERE g.genre = %s AND t.tag = %s """
                
-        
-        self.cursor.execute(query)
-        perc_with_tag = self.cursor.fetchall()
-        return perc_with_tag
+        return self.__exec_query_params(query,(genre,genre,tag))
         
   
     ## Requirement 5:
@@ -332,8 +329,7 @@ class Model:
         query =''' SELECT COUNT(DISTINCT(r.user_id)) As num_rater, CONVERT(AVG(rating),float) AS overall_average_rating
                 \n FROM ratings r
                 \n WHERE r.movie_id ={}
-                
-        '''.format(movieID)
+'''.format(movieID)
         data = self.__exec_query(query)
         try:
             num_Total_rater = data[0]['num_rater']
