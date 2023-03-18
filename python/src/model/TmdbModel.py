@@ -59,6 +59,7 @@ class TmdbModel():
         return results
     
     def get_rotten_tomatoes_rating(self, imdbId):
+        # Return the rotten tomatoes score for a movie (if available)
         imdbId = imdbId[1:-1]
         url = f"http://www.omdbapi.com/?apikey={self.OMDB_API_KEY}&i=tt{imdbId}"
         data = requests.get(url).json()

@@ -237,6 +237,8 @@ class Model:
     
 
     def get_group_rating_genre(self, movieId, lo_hi_raters):
+        # For each genre, return the average rating of a movie given by people who rate that genre highly or lowly.
+        # Example: People who rate comedy films highly give this movie an average rating of 4.0
         filter, category = self.get_catg_filter(lo_hi_raters)
         
         query = """\nWITH user_ratings AS (
@@ -382,7 +384,9 @@ class Model:
         print(data,file=sys.stderr)
         return  data
 
-    #Q6.1
+    # Q6.1
+    # For each personality trait, return the average rating of a movie given by people who have a high or low score in that personality trait.
+    # Example: People who are extrovert give this movie an average rating of 4.0
     def get_avg_rating_for_all_personality(self, movieId, lo_hi_raters):
         all_personality_avg_rating = []
         for personality in ['openness', 'agreeableness', 'emotional_stability', 'conscientiousness', 'extraversion']:

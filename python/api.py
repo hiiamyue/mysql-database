@@ -125,7 +125,7 @@ def personality():
     
     return controller.genre_personality_avg("high","Children")
 
-@app.route('/avg_rating_personality', methods=['GET'])
+@app.route('/q6_1_avg_rating_personality', methods=['GET'])
 def avg_rating_personality():
     args = request.args
     movieId = args.get("movie_id")
