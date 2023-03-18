@@ -60,11 +60,12 @@ class Model:
        cnx.close()
        return response 
     
-    def __double_exec_query(self, q1, q2):
+    def __double_exec_query(self, q1,q1_params, q2):
         cnx = mysql.connector.connect(pool_name = "mypool")
         curs = cnx.cursor(dictionary=True)
-
-        curs.execute(q1)
+        print(q1,file=sys.stderr)
+        print(q1_params,file=sys.stderr)
+        curs.execute(q1,q1_params)
         response = [curs.fetchall()]
         curs.execute(q2)
         response.append(curs.fetchall())
@@ -94,32 +95,34 @@ class Model:
             _type_: _description_
         """
         
-        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
+        q,q_params = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
         query_found_rows = "SELECT FOUND_ROWS()"
-        return self.__double_exec_query(q, query_found_rows)
+        return self.__double_exec_query(q,q_params, query_found_rows)
 
 
     def __add_pagination(self, page_num):
         
         offset = (int(page_num) - 1) * self.__PAGE_SIZE 
 
-        return "LIMIT {0}, {1};".format(str(offset), self.__PAGE_SIZE)
+        return "LIMIT %s, %s;",(offset, self.__PAGE_SIZE)
         
     
     def __create_date_filter(self, date_from, date_to):
         if date_from is not None and date_to is not None:
-            return 'AND release_date BETWEEN {0} AND {1}'.format(date_from,date_to)
-        return ""
+            return 'AND release_date BETWEEN %s AND %s',(date_from,date_to)
+        return "",()
         
     def __create_rating_filter(self, min_rating, max_rating):
         if min_rating is not None and max_rating is not None:
-            return 'AND r.avg_rating BETWEEN {0} AND {1}'.format(min_rating, max_rating)
-        return ""
+            return 'AND r.avg_rating BETWEEN %s AND %s',(min_rating, max_rating)
+        return "",()
         
     def __create_genre_filter(self, genres):
         if genres is not None:
-            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in {})'.format(genres)
-        return ""
+            genres = genres.replace('(\'','')
+            genres = genres.replace('\')','')
+            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in (%s))',(genres,)
+        return "",()
     def __create_sorting_query(self, sort_by, desc):
         
         if sort_by is not None:
@@ -137,17 +140,21 @@ class Model:
             else:
                 order = ""
 
-            return 'ORDER BY {} {}'.format(sort_by, order)
-        return ""
+            # print('ORDER BY {0} {1}'.format(sort_by,order),file=sys.stderr)
+            # print('ORDER BY %s %s'%(sort_by, order),file=sys.stderr)
+            return 'ORDER BY {0} {1}'.format(sort_by,order),()
+            return 'ORDER BY %s %s',(sort_by,order)
+            
+        return "",()
   
     def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page):
         #TODO add part for rating
 
-        date_filter = self.__create_date_filter(date_from, date_to)
-        genre_filter = self.__create_genre_filter(genres)
-        rating_filter = self.__create_rating_filter(min_rating, max_rating)
-        sorting = self.__create_sorting_query(sort_by, desc)
-        pagination = self.__add_pagination(page)
+        date_filter,params1 = self.__create_date_filter(date_from, date_to)
+        genre_filter,params2 = self.__create_genre_filter(genres)
+        rating_filter,params3 = self.__create_rating_filter(min_rating, max_rating)
+        sorting,params4 = self.__create_sorting_query(sort_by, desc)
+        pagination,params5 = self.__add_pagination(page)
 
         query = ("""SELECT DISTINCT SQL_CALC_FOUND_ROWS *
                     \n FROM movies m 
@@ -165,8 +172,10 @@ class Model:
                     \n{3}
                     \n{4}
                     \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
+        params = params1+params2+params3+params4+params5
         print(query, file=sys.stderr)
-        return query
+        print(params, file=sys.stderr)
+        return query,params
     
     def get_genre_type(self):
         """_summary_
