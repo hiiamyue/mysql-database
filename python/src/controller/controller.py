@@ -93,11 +93,6 @@ class Controller:
         data = self.model.genre_tags(genre)
         json_data = json.dumps(data)
         return json_data
-   
-    def user_tag_analysis(self,page,genre_filter):
-        data = self.model.user_tag_analysis(page,genre_filter)
-        json_data = json.dumps(data)
-        return json_data
     
     def genre_list(self):
         genres_data = self.model.get_genre_list()

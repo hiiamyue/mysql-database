@@ -281,7 +281,6 @@ class Model:
     
     # Explore relationship between tag data and genres
     # Display all the tags associated with a genre
-    # Maybe worth to add pagination here?
     def genre_tags(self,genre):
         query="""SELECT t.tag, COUNT(t.tag) AS n_tags
                 \nFROM tags t
@@ -324,28 +323,7 @@ class Model:
         perc_with_tag = self.cursor.fetchall()
         return perc_with_tag
         
-    # Do individual viewers apply the same tags to different films?
-    def user_tag_analysis(self,page,genre_filter=None):
-        filter=""
-        pagination = self.__add_pagination(page)
-        # Optional additional filter
-        # Do individual viewers apply the same tags to different films in the same genre?
-        if genre_filter:
-            filter = """\nJOIN genres g ON t.movie_id = g.movie_id
-                        \n JOIN genres g1 ON t1.movie_id = g1.movie_id AND g.genre = g1.genre"""
-        query="""SELECT DISTINCT t.user_id, t.movie_id, t.tag, t1.movie_id, t1.tag
-                    \nFROM tags t
-                    \nJOIN tags t1 ON 
-                    \nt.user_id = t1.user_id AND t.tag = t1.tag AND t.movie_id != t1.movie_id
-                    \n{0}
-                    \n{1}""".format(filter,pagination)
-
-      
-            
-        self.cursor.execute(query)
-        genre_tags = self.cursor.fetchall()
-        return genre_tags
-    
+  
     ## Requirement 5:
     # generate number of preview audience and Actual average rating
     def gen_num_audience(self,movieID):

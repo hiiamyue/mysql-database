@@ -63,43 +63,57 @@ def search():
 def get_genres():
     return controller.get_genre_type()
 
-@app.route('/reaction', methods=['GET'])
+# did people who tend to give high/low ratings give this film a
+# high/low rating too
+@app.route('/q3_1_reaction', methods=['GET'])
 def get_reaction():
     args = request.args
     movieId = args.get("movie_id")
-    group  = args.get("group") # Type "high" for High Raters, "low" for Low Raters
-    return controller.get_reaction(movieId,group)
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_reaction(movieId, group)
 
-@app.route('/tag_rating', methods=['GET'])
+
+@app.route('/q3_2_reaction_genre', methods=['GET'])
+def get_reaction_genre():
+    args = request.args
+    movieId = args.get("movie_id")
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_reaction_genre(movieId, group)
+
+# Get the average rating for movies with specified 'tag'
+# Explore relationship between tag data and rating
+# If tag is not in db, return empty list
+@app.route('/q4_1_tag_rating', methods=['GET'])
 def get_tag_rating():
     args = request.args
-    tag = args.get("tag") # average rating for movies with this tag
+    tag = args.get("tag") 
     return controller.get_tags_rating(tag)
 
-@app.route('/genre_tags', methods=['GET'])
+# Explore relationship between tag data and genres
+# Display all the tags associated with a specified 
+# 'genre' and how many there are in the genre
+@app.route('/q4_2_wordcloud', methods=['GET'])
 def get_genre_tags():
     args = request.args
     genre = args.get("genre") # all the tags associated with this genre
     return controller.get_genre_tags(genre)
 
-@app.route('/user_tags', methods=['GET'])
-def user_tag_analysis():
-    args = request.args
-    page = args.get("page")
-    genre_filter = args.get("genre_filter") # additional filter for genres, None by default,type anything to set
-    return controller.user_tag_analysis(page,genre_filter)
-
-@app.route('/genre_list',methods=['GET'])
+# Get the list of genres for the heatmap
+@app.route('/q4_heat_genre_list',methods=['GET'])
 def genre_list():
     return controller.genre_list()
 
-@app.route('/tags_list',methods=['GET'])
+# Get the list of tags for the heatmap
+# specify 'n_tags' to get as many tags as you need
+@app.route('/q4_heat_tags_list',methods=['GET'])
 def tags_list():
     args = request.args
     n_tags = args.get("n_tags")
     return controller.tags_list(n_tags)
 
-@app.route('/perc_w_tag',methods=['GET'])
+# Get the percentage of movies in the specified 'genre'
+# that share the specified 'tag' (for the heatmap)
+@app.route('/q4_heat_perc_w_tag',methods=['GET'])
 def perc_w_tag():
     args = request.args
     genre = args.get("genre")
@@ -111,6 +125,12 @@ def personality():
     
     return controller.genre_personality_avg("high","Children")
 
+@app.route('/avg_rating_personality', methods=['GET'])
+def avg_rating_personality():
+    args = request.args
+    movieId = args.get("movie_id")
+    group = args.get("group") # Type "high" for High Raters, "low" for Low Raters
+    return controller.get_avg_rating_for_all_personality(movieId, group)
 
 @app.after_request
 def after_request(response):
