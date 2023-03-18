@@ -48,8 +48,7 @@ CREATE TABLE personalityRating(
   userid VARCHAR(100),
   movie_id INT NOT NULL, 
   rating FLOAT,
-  ID INT,
-  PRIMARY KEY (userid,ID)
+  PRIMARY KEY (userid,movie_id,rating)
 );
 
 
