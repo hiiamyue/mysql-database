@@ -23,9 +23,11 @@ const Genre = () => {
                     
                 </div >
                 <div className='max-w-[1240px] mx-auto min-h-screen'>
-                
-                <GenreProfileRadar/>
-                    
+                    <h3 className=' pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Psychology</h3>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 content-center'>
+                        <GenreProfileRadar genre={searchParams.get('genre')} like="high"/>
+                        <GenreProfileRadar genre={searchParams.get('genre')} like="low"/>    
+                    </div>
                 </div>    
                 
 

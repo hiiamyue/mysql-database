@@ -12,7 +12,7 @@ class Model:
             try:
                 mydb = mysql.connector.connect(
                     pool_name = "mypool",
-                    pool_size = 10,
+                    pool_size = 15,
                     host="mysql",
                     user="root",
                     password=os.environ.get('DB_PASS',''),
@@ -49,22 +49,19 @@ class Model:
        cnx = mysql.connector.connect(pool_name = "mypool")
        curs = cnx.cursor(dictionary=True)
 
-
-
-
        curs.execute(query,params)
        response = curs.fetchall()
-
 
        curs.close()
        cnx.close()
        return response 
     
-    def __double_exec_query(self, q1, q2):
+    def __double_exec_query(self, q1,q1_params, q2):
         cnx = mysql.connector.connect(pool_name = "mypool")
         curs = cnx.cursor(dictionary=True)
-
-        curs.execute(q1)
+        print(q1,file=sys.stderr)
+        print(q1_params,file=sys.stderr)
+        curs.execute(q1,q1_params)
         response = [curs.fetchall()]
         curs.execute(q2)
         response.append(curs.fetchall())
@@ -94,32 +91,34 @@ class Model:
             _type_: _description_
         """
         
-        q = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
+        q,q_params = self.__gen_movies_query(genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page)
         query_found_rows = "SELECT FOUND_ROWS()"
-        return self.__double_exec_query(q, query_found_rows)
+        return self.__double_exec_query(q,q_params, query_found_rows)
 
 
     def __add_pagination(self, page_num):
         
         offset = (int(page_num) - 1) * self.__PAGE_SIZE 
 
-        return "LIMIT {0}, {1};".format(str(offset), self.__PAGE_SIZE)
+        return "LIMIT %s, %s;",(offset, self.__PAGE_SIZE)
         
     
     def __create_date_filter(self, date_from, date_to):
         if date_from is not None and date_to is not None:
-            return 'AND release_date BETWEEN {0} AND {1}'.format(date_from,date_to)
-        return ""
+            return 'AND release_date BETWEEN %s AND %s',(date_from,date_to)
+        return "",()
         
     def __create_rating_filter(self, min_rating, max_rating):
         if min_rating is not None and max_rating is not None:
-            return 'AND r.avg_rating BETWEEN {0} AND {1}'.format(min_rating, max_rating)
-        return ""
+            return 'AND r.avg_rating BETWEEN %s AND %s',(min_rating, max_rating)
+        return "",()
         
     def __create_genre_filter(self, genres):
         if genres is not None:
-            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in {})'.format(genres)
-        return ""
+            genres = genres.replace('(\'','')
+            genres = genres.replace('\')','')
+            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in (%s))',(genres,)
+        return "",()
     def __create_sorting_query(self, sort_by, desc):
         
         if sort_by is not None:
@@ -127,27 +126,31 @@ class Model:
             
             if sort_by == "rating":
                 sort_by = "r.avg_rating"
-            if sort_by == "date":
+            elif sort_by == "date":
                 sort_by = "release_date"
-            if sort_by =="title":
+            elif sort_by =="title":
                 sort_by = "title"
+            else:
+                sort_by=""
             
             if desc:
                 order = "DESC"
             else:
                 order = ""
 
-            return 'ORDER BY {} {}'.format(sort_by, order)
-        return ""
+            
+            return 'ORDER BY {0} {1}'.format(sort_by,order),()
+            
+        return "",()
   
     def __gen_movies_query(self, genres, date_from, date_to, min_rating, max_rating, sort_by, desc, page):
         #TODO add part for rating
 
-        date_filter = self.__create_date_filter(date_from, date_to)
-        genre_filter = self.__create_genre_filter(genres)
-        rating_filter = self.__create_rating_filter(min_rating, max_rating)
-        sorting = self.__create_sorting_query(sort_by, desc)
-        pagination = self.__add_pagination(page)
+        date_filter,params1 = self.__create_date_filter(date_from, date_to)
+        genre_filter,params2 = self.__create_genre_filter(genres)
+        rating_filter,params3 = self.__create_rating_filter(min_rating, max_rating)
+        sorting,params4 = self.__create_sorting_query(sort_by, desc)
+        pagination,params5 = self.__add_pagination(page)
 
         query = ("""SELECT DISTINCT SQL_CALC_FOUND_ROWS *
                     \n FROM movies m 
@@ -165,8 +168,10 @@ class Model:
                     \n{3}
                     \n{4}
                     \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
+        params = params1+params2+params3+params4+params5
         print(query, file=sys.stderr)
-        return query
+        print(params, file=sys.stderr)
+        return query,params
     
     def get_genre_type(self):
         """_summary_
@@ -207,6 +212,7 @@ class Model:
         imdbID = id[0]["imdbId"]
     
         return imdbID
+    
     def get_movie_genre(self,movieID):
         query ='''SELECT DISTINCT g.genre FROM genres g
             \n WHERE g.movie_id = %s'''
@@ -312,6 +318,7 @@ class Model:
         
         return self.__exec_query_params(query,(int(n_tags),))
     
+
     #Get % of movies within the same genre that share this tag.
     def perc_w_tag(self,genre,tag):
         query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
@@ -321,6 +328,34 @@ class Model:
                 \nWHERE g.genre = %s AND t.tag = %s """
                
         return self.__exec_query_params(query,(genre,genre,tag))
+    
+    # get the data for the heatmap
+    def get_most_occur(self,genre):
+        query ="""SELECT t.tag
+                    FROM genres g
+                    JOIN tags t ON g.movie_id = t.movie_id
+                    WHERE g.genre = %s
+                    GROUP BY t.tag
+                    ORDER BY COUNT(*) DESC
+                    LIMIT 25;
+                    """
+        res=[]
+        genres = self.get_genre_list()
+        genres.pop(len(genres)-1) # remove (no genres listed)  
+        print(genres,file=sys.stderr)
+        for g in genres:
+            genre=g['genre']
+            print(genre,file=sys.stderr)
+
+            tags = self.__exec_query_params(query,(genre,))
+            for tag in tags:
+                tag['genre']=genre
+                tag['percentage'] = (self.perc_w_tag(genre,tag['tag'])[0]['perc_w_tag'])
+            res=res+tags
+
+        return res
+    
+    
         
   
     ## Requirement 5:
@@ -346,8 +381,8 @@ class Model:
         num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
             prediction = ''
-            dic ={'Predicted Rating':prediction,'Actual Average Rating':True_average_rating}
-            return  dic
+            pred = [{'Predicted Rating':prediction},{'Actual Average Rating':True_average_rating}, {'nb_raters': num_Total_rater}]
+            return pred
         num_audience = num_Total_rater//4
         if threshold =='':
             threshold =2
@@ -375,7 +410,8 @@ class Model:
         '''.format(movieID,num_audience,threshold)
         data =self.__exec_query(query)
         data.append({'True_average_rating':True_average_rating})
-        data.append({'Number_of_preview_rater over total':f'{num_audience} over {num_Total_rater}'})
+        data.append({'nb_preview_raters': num_audience})
+        data.append({'nb_raters': num_Total_rater})
         data.append({'threshold':threshold })
         print(data,file=sys.stderr)
         return  data
@@ -395,20 +431,21 @@ class Model:
             filter = ">=4"
         if(lo_hi_raters == "low"):
             filter = "<=2"
-        query = f"""\nSELECT AVG(pr.rating) as avg_rating_for_{personality}
+
+        query = f"""\nSELECT AVG(pr.rating) as {personality}
                     \nFROM personality p, personalityRating pr
                     \nWHERE p.userid = pr.userid
                     \nAND pr.movie_id = {movieId}
                     \nAND p.{personality} {filter}
                 """
         
-        self.cursor.execute(query)
-        personality_avg_rating = self.cursor.fetchall()
+        
+        personality_avg_rating = self.__exec_query(query)
         return personality_avg_rating
 
     # Q6.2
     def gen_personality_genre_data(self,f,genre):
-        # FOR each genre type, Get average personality traits who rated this genre highly
+        # FOR each genre type, Get average personality traits who rated this genre highly/lowly
         filter = ''
         if (f == 'high'):
             filter = 'HAVING AVG_rating > 4'
@@ -426,7 +463,7 @@ class Model:
                 \n {1} AND count > 30)t
                 group by t.genre
                 '''.format(genre,filter)
-       
+        print(query, file=sys.stderr)
         data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film

@@ -120,14 +120,23 @@ def perc_w_tag():
     tag = args.get("tag")
     return controller.perc_w_tag(genre,tag)
 
+# Get the 25 most occurring tags for the genre
+# and the data for the heatmap
+@app.route('/q4_heatmap',methods=['GET'])
+def tags_occur():
+    args = request.args
+    genre = args.get("genre")
+    return controller.most_occurring_tags(genre)
+
+
+
+# Q6.2: Personnality radar plot of the average person that likes, dislikes a genre
 @app.route('/q6',methods=['GET'])
 def personality():
-    
-    return controller.genre_personality_avg("high","Children")
-@app.route('/q62',methods=['GET'])
-def personality2():
-    # heatmap
-    return controller.Fav_genre_per_personality()
+    args = request.args
+    low_high = args.get("type")
+    genre = args.get("genre")
+    return controller.genre_personality_avg(low_high,genre)
 
 @app.route('/q6_1_avg_rating_personality', methods=['GET'])
 def avg_rating_personality():

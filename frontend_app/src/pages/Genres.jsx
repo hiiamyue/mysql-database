@@ -1,16 +1,15 @@
 import { useEffect, useState} from 'react'
-import {useSearchParams} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import Fab from '@mui/material/Fab';
-import { WordCloud } from '@ant-design/plots';
-import DemoWordCloud from '../components/GenreTagsWordCloud';
-import NormalDistribRating from '../components/NormalDistribRating';
+
+
 
 const Genres = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [movies, setMovies] = useState([]);
+    const [genres, setGenres] = useState([]);
     const [hasFetched, setFetched] = useState(false);
     let mybutton = document.getElementById("myBtn");
 
@@ -21,7 +20,7 @@ const Genres = () => {
 
     useEffect(() => {
 
-        const url = `http://localhost:8000/genre_tags?genre=Comedy`;
+        const url = `http://localhost:8000/genres`;
         try {
 
         setFetched(false)  
@@ -31,7 +30,7 @@ const Genres = () => {
         .then((res) => res.json())
         .then((data) => {
             console.log("--render--")
-           setMovies(data);
+           setGenres(data);
            setFetched(true)
         })
         }
@@ -73,8 +72,19 @@ const Genres = () => {
                     
                 </div >
                 <div className='max-w-[1240px] mx-auto min-h-screen'>
-                {hasFetched ? <DemoWordCloud/> : <p>Test</p>}
-                <NormalDistribRating mean={2.5} stdDev={1}/>
+                
+                {
+                    hasFetched ?
+                    <div className="sm:ml-6 mt-1 inline-block mx-8">
+                    {genres.map((genre) => (
+                        <Link to={`/genre?genre=${genre.genre}`}>
+                            <span class="bg-fuchsia-300 text-pink-900 hover:text-fuchsia-300 hover:bg-pink-900 text-lg font-medium mr-2 px-3 py-0.5 rounded inline-block mt-2">{genre.genre}</span>
+                        </Link>
+                    ))} 
+                    </div>
+                    :
+                    <p>Loading genres...</p>
+                }
                     
                 </div>    
                 
