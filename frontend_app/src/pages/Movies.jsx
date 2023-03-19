@@ -8,6 +8,7 @@ import {Pagination} from "flowbite-react"
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
 import { getPage, pageParamsToAPIParams } from '../utils/QueryUtils';
+import ScrollUpButton from '../components/components/ScrollUpButton';
 
 // TODO: change to dark mode
 const Movies = () => {
@@ -67,7 +68,7 @@ const Movies = () => {
                     hasFetched ?
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  xl:grid-cols-7 gap-4 mt-40 px-4 xl:px-20">
                         {movies.map((movie) => (
-                                <MovieCard title={movie.title} release_date={movie.release_date} rating={movie.avg_rating} img_path={movie.imgPath}/>
+                                <MovieCard title={movie.title} release_date={movie.release_date} rating={movie.avg_rating} img_path={movie.imgPath !== "null" ? movie.imgPath : "samplemovie.jpg"} id={movie.movie_id}/>
                         ))} 
                     </div>
                     :
@@ -86,6 +87,8 @@ const Movies = () => {
                         onPageChange={onPageChange}
                     />
                 </div>
+                
+                <ScrollUpButton/>
 
                 <Footer/>
             </div>
