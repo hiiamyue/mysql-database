@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Rating from '@mui/material/Rating';
 import CastCard from '../components/CastCard';
 import ErrorPage from '../pages/ErrorPage'
-import NormalDistribRating from '../components/NormalDistribRating'
+import NormalDistribRating from '../components/viz/NormalDistribRating'
 import RatersBarChart from '../components/RatersBarChart';
 import GenreBarChart from '../components/GenreBarChart';
 import PersonalityBarChart from '../components/PersonalityBarChart';
