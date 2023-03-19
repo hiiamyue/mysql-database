@@ -137,6 +137,9 @@ def personality():
     low_high = args.get("type")
     genre = args.get("genre")
     return controller.genre_personality_avg(low_high,genre)
+@app.route('/q62',methods=['GET'])
+def personality2():
+    return controller.Fav_genre_per_personality()
 
 @app.route('/q6_1_avg_rating_personality', methods=['GET'])
 def avg_rating_personality():
