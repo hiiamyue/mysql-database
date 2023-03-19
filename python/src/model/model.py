@@ -430,44 +430,51 @@ class Model:
         data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
-    def gen_fav_for_all_personality(self,f):
+    def gen_fav_for_all_personality(self):
         Personality =['openness', 'agreeableness', 'emotional_stability', 'conscientiousness', 'extraversion']
         data =[]
         for p in Personality:
-            d =self.gen_fav_genre_by_peronslity(f,p)
-            data.append({p:d})
+            attribute ={'attribute':f'high {p}'}
+            d =self.gen_fav_genre_by_peronslity(p)
+            for x in d :
+                x |= attribute
+                data.append(x)
+        
         return data
-    def gen_fav_genre_by_peronslity(self,f,personality):
+    def gen_fav_genre_by_peronslity(self,personality):
 
-        filter2 =''
-        if (f == 'high'):
-            filter2 ='pr.rating >4'
-        if(f=='low'):
-            filter2 ='pr.rating <2'
     
+        # query3 ='''
+        #         SELECT z.genre,COUNT(z.genre) as count
+        #         FROM(
+        #         (SELECT MAX(m.num)as numRated,m.userid
+        #             FROM(
+        #             SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as num
+        #             FROM personality pt 
+        #             INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
+        #             INNER JOIN genres g on g.movie_id = pr.movie_id
+        #             GROUP BY genre, pt.userid)m
+        #         GROUP BY m.userid
+        #         ORDER BY numRated DESC)a
+
+        #         JOIN (SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as number
+        #             FROM personality pt 
+        #             INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
+        #             INNER JOIN genres g on g.movie_id = pr.movie_id
+        #             GROUP BY genre, pt.userid)z on z.userid = a.userid and z.number = a.numRated)
+
+        #         GROUP BY z.genre
+        #         ORDER BY count DESC
+
+        # '''.format(personality,'pr.rating >4') 
+        #
         query3 ='''
-                SELECT z.genre,COUNT(z.genre) as count
-                FROM(
-                (SELECT MAX(m.num)as numRated,m.userid
-                    FROM(
-                    SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as num
-                    FROM personality pt 
-                    INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
-                    INNER JOIN genres g on g.movie_id = pr.movie_id
-                    GROUP BY genre, pt.userid)m
-                GROUP BY m.userid
-                ORDER BY numRated DESC)a
-
-                JOIN (SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as number
-                    FROM personality pt 
-                    INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
-                    INNER JOIN genres g on g.movie_id = pr.movie_id
-                    GROUP BY genre, pt.userid)z on z.userid = a.userid and z.number = a.numRated)
-
-                GROUP BY z.genre
-                ORDER BY count DESC
-
-        '''.format(personality,filter2)                                        
+                SELECT g.genre as genre , AVG(pr.rating) as averageRating
+                FROM personalityRating pr 
+                INNER JOIN personality pt on pt.userid = pr.userid AND pt.{0}>5
+                INNER JOIN genres g on pr.movie_id = g.movie_id
+                GROUP BY g.genre
+        '''.format(personality)                                     
                     
         data = self.__exec_query(query3)
 

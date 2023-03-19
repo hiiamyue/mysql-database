@@ -126,11 +126,9 @@ class Controller:
         return json.dumps(data)
     
     # 6.2.1
-    def Fav_genre_per_personality(self,f):
-        # each personality type's favorate film
-        #  f =['high','low']
-        # TODO idk how to optimise yet
-        data =self.model.gen_fav_for_all_personality(f)
+    def Fav_genre_per_personality(self):
+        # each personality type's avg rating to all genre
+        data =self.model.gen_fav_for_all_personality()
         return json.dumps(data)
     
     def genre_personality_avg(self,f,genre):

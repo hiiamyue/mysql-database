@@ -124,6 +124,10 @@ def perc_w_tag():
 def personality():
     
     return controller.genre_personality_avg("high","Children")
+@app.route('/q62',methods=['GET'])
+def personality2():
+    # heatmap
+    return controller.Fav_genre_per_personality()
 
 @app.route('/q6_1_avg_rating_personality', methods=['GET'])
 def avg_rating_personality():
