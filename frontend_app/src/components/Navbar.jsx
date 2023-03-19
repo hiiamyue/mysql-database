@@ -24,7 +24,7 @@ const Navbar = () => {
                 {!nav ? <AiOutlineClose size={20}/> : <AiOutlineMenu size={20}/>}
             </div>
             <div className={!nav ? 'z-50 fixed left-0 top-0 w-[50%] h-full border-r border-r-slate-600 border-w-200 bg-slate-800 ease-in-out duration-500 md:hidden' : 'fixed left-[-100%]'}>
-                <Link to='/'><img src="logo.png" className="object-cover h-48 mt-[-48px]" alt="..." /></Link>
+                <Link to='/'><img src="logo.png" className="object-cover h-48 mt-[-48px] p-4" alt="..." /></Link>
                 <ul className='uppercase p-4 divide-y divide-slate-600'>
                     {pathname === '/' ? <li className='p-4 text-fuchsia-300'>Home</li> : <Link to='/'><li className='p-4 hover:text-pink-200'>Home</li></Link>}
                     {pathname === '/movies' ? <li className='p-4 text-fuchsia-300'>Movies</li> : <Link to='/movies'><li className='p-4 hover:text-pink-200'>Movies</li></Link>}

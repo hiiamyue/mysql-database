@@ -132,7 +132,12 @@ class Controller:
     # 6.1
     def get_avg_rating_for_all_personality(self, movieId, lo_hi_raters):
         data = self.model.get_avg_rating_for_all_personality(movieId, lo_hi_raters)
-        return json.dumps(data)
+        print(data, file=sys.stderr)
+        
+        bars = []
+        for trait in data:
+            bars.append({"trait":  lo_hi_raters + " " + list(trait.keys())[0], "rating": trait[list(trait.keys())[0]]})
+        return json.dumps(bars)
     
     # 6.2.1
     def Fav_genre_per_personality(self,f):
@@ -148,7 +153,8 @@ class Controller:
         # for each genre, the average personality score
         # TODO : rated more than 30 films
         data = self.model.gen_personality_genre_data(f,genre)[0]
-
+        
+        
         radar = []
         for personnality_trait in list(data.keys())[1:]:
             radar.append({"trait": personnality_trait, "stat": data[personnality_trait]})

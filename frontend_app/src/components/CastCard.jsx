@@ -5,7 +5,7 @@ import {Badge, Card} from "flowbite-react"
 const CastCard = ({ name, role }) => {
   
   return (
-    <div className="w-[13em]">
+    <div className="sm:w-[14em] w-[12em] mx-4 sm:mx-0">
         <Card
             imgAlt="Meaningful alt text for an image that is not purely decorative"
             imgSrc="character.jpg"
