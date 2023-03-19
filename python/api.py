@@ -120,10 +120,14 @@ def perc_w_tag():
     tag = args.get("tag")
     return controller.perc_w_tag(genre,tag)
 
+
+# Q6.2: Personnality radar plot of the average person that likes, dislikes a genre
 @app.route('/q6',methods=['GET'])
 def personality():
-    
-    return controller.genre_personality_avg("high","Children")
+    args = request.args
+    low_high = args.get("type")
+    genre = args.get("genre")
+    return controller.genre_personality_avg(low_high,genre)
 
 @app.route('/q6_1_avg_rating_personality', methods=['GET'])
 def avg_rating_personality():

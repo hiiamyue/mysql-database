@@ -48,11 +48,13 @@ class Controller:
     
 
     def get_tmdb_data(self,movieID):
+
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
+        rottenTomatoesRating = self.tmdbModel.get_rotten_tomatoes_rating(self.get_imdbID(movieID))
         print(tmdbData,file=sys.stderr)
         genre = self.model.get_movie_genre(movieID)
-        preview_rating = [self.predict(movieID,2)]
+        preview_rating = [self.predict(movieID,2), {"rottentomatoes_rating" : rottenTomatoesRating}]
         preview_rating.append(tmdbData)
         preview_rating.append(genre)
 
@@ -76,11 +78,13 @@ class Controller:
 
     def get_reaction(self,movieID, lo_hi_raters):
         data = self.model.get_group_rating(movieID, lo_hi_raters)
-        json_data = json.dumps(data)
+        payload = {"type": "{0} raters".format(lo_hi_raters), "rating": data[0][list(data[0].keys())[0]]}
+        json_data = json.dumps(payload)
         return json_data
     
     def get_reaction_genre(self, movieId, lo_hi_raters):
         data = self.model.get_group_rating_genre(movieId, lo_hi_raters)
+        
         json_data = json.dumps(data)
         return json_data
     
@@ -133,10 +137,16 @@ class Controller:
         data =self.model.gen_fav_for_all_personality(f)
         return json.dumps(data)
     
+    # 6.2.2
     def genre_personality_avg(self,f,genre):
         #   f =['high','low']
         # for each genre, the average personality score
         # TODO : rated more than 30 films
-        data = self.model.gen_personality_genre_data(f,genre)
-        return json.dumps(data)
+        data = self.model.gen_personality_genre_data(f,genre)[0]
+
+        radar = []
+        for personnality_trait in list(data.keys())[1:]:
+            radar.append({"trait": personnality_trait, "stat": data[personnality_trait]})
+
+        return json.dumps(radar)
     

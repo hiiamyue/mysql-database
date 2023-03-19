@@ -12,7 +12,7 @@ class Model:
             try:
                 mydb = mysql.connector.connect(
                     pool_name = "mypool",
-                    pool_size = 10,
+                    pool_size = 15,
                     host="mysql",
                     user="root",
                     password=os.environ.get('DB_PASS',''),
@@ -183,8 +183,8 @@ class Model:
         # search by movie title return tmdb id
         query ="""SELECT DISTINCT m.tmdbId FROM movies m
                 \n WHERE m.movie_id = {}""".format(movieID)
-        self.cursor.execute(query)
-        id = self.cursor.fetchall()
+        
+        id = self.__exec_query(query)
 
         tmdbID =int(id[0]["tmdbId"])
     
@@ -193,11 +193,12 @@ class Model:
     def get_imdbID_from_movieID(self, movieID):
         query ="""SELECT DISTINCT m.imdbId FROM movies m
                 \n WHERE m.movie_id = {}""".format(movieID)
-        self.cursor.execute(query)
-        id = self.cursor.fetchall()
+        
+        id = self.__exec_query(query)
         imdbID = id[0]["imdbId"]
     
         return imdbID
+    
     def get_movie_genre(self,movieID):
         query ='''SELECT DISTINCT g.genre FROM genres g
             \n WHERE g.movie_id = {}'''.format(movieID)
@@ -231,8 +232,7 @@ class Model:
                     \nSELECT CONVERT(AVG(u_avg_for_movie),float) AS {2}
                     \nFROM user_ratings""".format(movieId,filter,category)     
 
-        self.cursor.execute(query)
-        u_avg_rating = self.cursor.fetchall()
+        u_avg_rating = self.__exec_query(query)
         return u_avg_rating
     
 
@@ -350,8 +350,8 @@ class Model:
         num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
             prediction = ''
-            dic ={'Predicted Rating':prediction,'Actual Average Rating':True_average_rating}
-            return  dic
+            pred = [{'Predicted Rating':prediction},{'Actual Average Rating':True_average_rating}, {'nb_raters': num_Total_rater}]
+            return pred
         num_audience = num_Total_rater//4
         if threshold =='':
             threshold =2
@@ -379,7 +379,8 @@ class Model:
         '''.format(movieID,num_audience,threshold)
         data =self.__exec_query(query)
         data.append({'True_average_rating':True_average_rating})
-        data.append({'Number_of_preview_rater over total':f'{num_audience} over {num_Total_rater}'})
+        data.append({'nb_preview_raters': num_audience})
+        data.append({'nb_raters': num_Total_rater})
         data.append({'threshold':threshold })
         print(data,file=sys.stderr)
         return  data
@@ -412,7 +413,7 @@ class Model:
 
     # Q6.2
     def gen_personality_genre_data(self,f,genre):
-        # FOR each genre type, Get average personality traits who rated this genre highly
+        # FOR each genre type, Get average personality traits who rated this genre highly/lowly
         filter = ''
         if (f == 'high'):
             filter = 'HAVING AVG_rating > 4'
@@ -430,7 +431,7 @@ class Model:
                 \n {1} AND count > 30)t
                 group by t.genre
                 '''.format(genre,filter)
-       
+        print(query, file=sys.stderr)
         data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
