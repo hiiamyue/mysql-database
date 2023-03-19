@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { WordCloud } from '@ant-design/plots';
 
-const DemoWordCloud = () => {
+const GenreTagsWordCloud = ({genre}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -10,7 +10,7 @@ const DemoWordCloud = () => {
   }, []);
 
   const asyncFetch = () => {
-    fetch('http://localhost:8000/genre_tags?genre=Comedy')
+    fetch(`http://localhost:8000/q4_2_wordcloud?genre=${genre}`)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => {
@@ -34,7 +34,7 @@ const DemoWordCloud = () => {
     ],
     state: {
       active: {
-        // 这里可以设置 active 时的样式
+       
         style: {
           lineWidth: 3,
         },
@@ -44,10 +44,10 @@ const DemoWordCloud = () => {
 
   return (
   <div>
-    <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Most prominent tags</h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight  text-slate-300">Most prominent tags</h5>
     <WordCloud {...config} />
   </div>
   );
 };
 
-export default DemoWordCloud
+export default GenreTagsWordCloud
