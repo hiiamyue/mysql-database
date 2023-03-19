@@ -281,18 +281,29 @@ class Model:
     # Explore relationship between tag data and rating
     # Display average ratings for movies with different tags 
     # If tag is not in db, return empty list
-    def tags_rating(self,tag):
-        query = """SELECT t.tag, CONVERT(AVG(avg_rating),float) AS overall_average_rating
-                   \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
-                   \nFROM ratings r
-                   \nJOIN tags t ON r.movie_id = t.movie_id
-                   \nWHERE t.tag = %s   
-                   \nGROUP BY r.movie_id) AS subq
-                   \nJOIN tags t ON subq.movie_id = t.movie_id
-                   \nWHERE t.tag = %s
-                   \nGROUP BY t.tag"""  
+    def tags_rating(self,movie_id):
+        query_tags ="""SELECT DISTINCT tags.tag 
+                      \n FROM movies 
+                      \n JOIN tags ON movies.movie_id = tags.movie_id 
+                      \n WHERE movies.movie_id = %s"""
+        tags_movie =  self.__exec_query_params(query_tags,(movie_id,))
 
-        return self.__exec_query_params(query,(tag,tag))
+        query_rating = """SELECT t.tag, CONVERT(AVG(avg_rating),float) AS overall_average_rating
+                \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
+                \nFROM ratings r
+                \nJOIN tags t ON r.movie_id = t.movie_id
+                \nWHERE t.tag = %s   
+                \nGROUP BY r.movie_id) AS subq
+                \nJOIN tags t ON subq.movie_id = t.movie_id
+                \nWHERE t.tag = %s
+                \nGROUP BY t.tag""" 
+
+        for tag in tags_movie:
+            tag['rating']= self.__exec_query_params(query_rating,(tag['tag'],tag['tag']))[0]['overall_average_rating']
+        print(tags_movie,file=sys.stderr)
+       
+
+        return tags_movie
     
     # Explore relationship between tag data and genres
     # Display all the tags associated with a genre

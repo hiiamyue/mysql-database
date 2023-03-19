@@ -88,8 +88,8 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
-    def get_tags_rating(self,tag):
-        data = self.model.tags_rating(tag)
+    def get_tags_rating(self,movie_id):
+        data = self.model.tags_rating(movie_id)
         json_data = json.dumps(data)
         return json_data
     
