@@ -442,14 +442,14 @@ class Model:
         if(lo_hi_raters == "low"):
             filter = "<=2"
 
-        query = """\nSELECT AVG(pr.rating) as %s
+        query = """\nSELECT AVG(pr.rating) as {}
                     \nFROM personality p, personalityRating pr
                     \nWHERE p.userid = pr.userid
-                    \nAND pr.movie_id = %s
-                    \nAND p.%s %s"""
+                    \nAND pr.movie_id = {}
+                    \nAND p.{} {}""".format(personality,movieId,personality,filter)
         
         
-        personality_avg_rating = self.__exec_query_params(query,(personality,movieId,personality,filter))
+        personality_avg_rating = self.__exec_query(query)
         return personality_avg_rating
 
     # Q6.2
