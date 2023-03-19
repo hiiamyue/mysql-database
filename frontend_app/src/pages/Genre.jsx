@@ -6,7 +6,7 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 import Fab from '@mui/material/Fab';
 
 import GenreTagsWordCloud from '../components/viz/GenreTagsWordCloud';
-import GenreProfileRadar from '../components/GenreProfileRadar';
+import GenreProfileRadar from '../components/viz/GenreProfileRadar';
 
 const Genre = () => {
     const [searchParams, setSearchParams] = useSearchParams();
