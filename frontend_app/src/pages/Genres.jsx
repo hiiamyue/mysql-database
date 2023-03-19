@@ -1,9 +1,10 @@
 import { useEffect, useState} from 'react'
-import {Link, useSearchParams} from "react-router-dom";
+import {Link, ScrollRestoration, useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import NavigationIcon from '@mui/icons-material/Navigation';
-import Fab from '@mui/material/Fab';
+import GenreTagHeatMap from '../components/viz/GenreTagHeatMap';
+import GenrePersonalityHeatMap from '../components/viz/GenrePersonalityHeatMap';
+import ScrollUpButton from '../components/components/ScrollUpButton';
 
 
 
@@ -41,24 +42,6 @@ const Genres = () => {
         
     }, [searchParams]);
 
-    function topFunction() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    } 
-
-    window.onscroll = function () {
-        scrollFunction();
-      };
-
-    function scrollFunction() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-          mybutton.style.display = "inline-block";
-        } else {
-          mybutton.style.display = "none";
-        }
-    }
-
-    
 
     return (
         <div className='bg-[url("../public/8.png")]'>
@@ -85,14 +68,12 @@ const Genres = () => {
                     :
                     <p>Loading genres...</p>
                 }
-                    
+                <GenreTagHeatMap/>  
+                <h3 className='pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Genre, Personality, and Rating</h3>
+                <GenrePersonalityHeatMap/> 
                 </div>    
                 
-                <button className='fixed bottom-8 right-8 z-50 hidden' id="myBtn">
-                    <Fab color="secondary" aria-label="edit" onClick={topFunction} size='large'>
-                        <NavigationIcon />
-                    </Fab>
-                </button>
+                <ScrollUpButton/>
                 
                 <Footer/>
             </div>
