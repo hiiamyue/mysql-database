@@ -330,11 +330,10 @@ class Model:
         return self.__exec_query_params(query,(genre,genre,tag))
     
     # get the data for the heatmap
-    def get_most_occur(self,genre):
+    def get_most_occur(self):
         query ="""SELECT t.tag
                     FROM genres g
                     JOIN tags t ON g.movie_id = t.movie_id
-                    WHERE g.genre = %s
                     GROUP BY t.tag
                     ORDER BY COUNT(*) DESC
                     LIMIT 25;
@@ -342,12 +341,15 @@ class Model:
         res=[]
         genres = self.get_genre_list()
         genres.pop(len(genres)-1) # remove (no genres listed)  
-        print(genres,file=sys.stderr)
+        # print(genres,file=sys.stderr)
+        
         for g in genres:
             genre=g['genre']
-            print(genre,file=sys.stderr)
+            # print(genre,file=sys.stderr)
 
-            tags = self.__exec_query_params(query,(genre,))
+            tags = self.__exec_query(query)
+            # print(tags,file=sys.stderr)
+
             for tag in tags:
                 tag['genre']=genre
                 tag['percentage'] = (self.perc_w_tag(genre,tag['tag'])[0]['perc_w_tag'])

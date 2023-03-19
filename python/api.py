@@ -124,9 +124,7 @@ def perc_w_tag():
 # and the data for the heatmap
 @app.route('/q4_heatmap',methods=['GET'])
 def tags_occur():
-    args = request.args
-    genre = args.get("genre")
-    return controller.most_occurring_tags(genre)
+    return controller.most_occurring_tags()
 
 
 
