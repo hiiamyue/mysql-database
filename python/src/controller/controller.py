@@ -113,6 +113,11 @@ class Controller:
                 tags.append(entry["tag"])
         return tags
     
+    def most_occurring_tags(self,genre):
+        data = self.model.get_most_occur(genre)
+        json_data = json.dumps(data)
+        return json_data
+    
     def perc_w_tag(self,genre,tag):
         data = self.model.perc_w_tag(genre,tag)
         json_data = json.dumps(data)
