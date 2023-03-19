@@ -158,7 +158,7 @@ class Model:
                     \n from genres
                     \n GROUP BY movie_id
                     \n ) g on m.movie_id = g.movie_id
-                    \n INNER JOIN ( SELECT CONVERT(AVG(rating), float) AS avg_rating, movie_id
+                    \n INNER JOIN ( SELECT ROUND(CONVERT(AVG(rating), float), 2) AS avg_rating, movie_id
                     \n FROM ratings
                     \n group by movie_id
                     \n ) r on m.movie_id = r.movie_id
@@ -187,7 +187,7 @@ class Model:
     def search_movie(self,keywords):
         
         query =""" SELECT DISTINCT * FROM movies m 
-                 \n INNER JOIN ( SELECT CONVERT(AVG(rating), float) AS avg_rating, movie_id
+                 \n INNER JOIN ( SELECT ROUND(CONVERT(AVG(rating), float), 2) AS avg_rating, movie_id
                 \n FROM ratings 
                 \n group by movie_id
                 )r on m.movie_id = r.movie_id
@@ -246,7 +246,7 @@ class Model:
                     \nWHERE m.movie_id = %s
                     \nGROUP BY u.user_id
                     \nHAVING u.avg_rating{0})
-                    \nSELECT CONVERT(AVG(u_avg_for_movie),float) AS {1}
+                    \nSELECT ROUND(CONVERT(AVG(u_avg_for_movie),float), 2) AS {1}
                     \nFROM user_ratings""".format(filter,category)     
 
         return self.__exec_query_params(query,(movieId,))
@@ -268,7 +268,7 @@ class Model:
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
                     \nWHERE m.movie_id = %s
                     \nHAVING u.u_avg_for_genre{0})
-                    \nSELECT genre, CONVERT(AVG(u_avg_for_movie), float) AS {1}
+                    \nSELECT genre, ROUND(CONVERT(AVG(u_avg_for_movie), float), 2) AS {1}
                     \nFROM user_ratings
                     \nGROUP BY genre
                     \nORDER BY genre""".format(filter, category)
@@ -281,18 +281,29 @@ class Model:
     # Explore relationship between tag data and rating
     # Display average ratings for movies with different tags 
     # If tag is not in db, return empty list
-    def tags_rating(self,tag):
-        query = """SELECT t.tag, CONVERT(AVG(avg_rating),float) AS overall_average_rating
-                   \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
-                   \nFROM ratings r
-                   \nJOIN tags t ON r.movie_id = t.movie_id
-                   \nWHERE t.tag = %s   
-                   \nGROUP BY r.movie_id) AS subq
-                   \nJOIN tags t ON subq.movie_id = t.movie_id
-                   \nWHERE t.tag = %s
-                   \nGROUP BY t.tag"""  
+    def tags_rating(self,movie_id):
+        query_tags ="""SELECT DISTINCT tags.tag 
+                      \n FROM movies 
+                      \n JOIN tags ON movies.movie_id = tags.movie_id 
+                      \n WHERE movies.movie_id = %s"""
+        tags_movie =  self.__exec_query_params(query_tags,(movie_id,))
 
-        return self.__exec_query_params(query,(tag,tag))
+        query_rating = """SELECT t.tag, ROUND(CONVERT(AVG(avg_rating),float), 2) AS overall_average_rating
+                \n FROM(SELECT r.movie_id, CONVERT(AVG(r.rating),float) AS avg_rating
+                \nFROM ratings r
+                \nJOIN tags t ON r.movie_id = t.movie_id
+                \nWHERE t.tag = %s   
+                \nGROUP BY r.movie_id) AS subq
+                \nJOIN tags t ON subq.movie_id = t.movie_id
+                \nWHERE t.tag = %s
+                \nGROUP BY t.tag""" 
+
+        for tag in tags_movie:
+            tag['rating']= self.__exec_query_params(query_rating,(tag['tag'],tag['tag']))[0]['overall_average_rating']
+        # print(tags_movie,file=sys.stderr)
+       
+
+        return tags_movie
     
     # Explore relationship between tag data and genres
     # Display all the tags associated with a genre
@@ -330,11 +341,10 @@ class Model:
         return self.__exec_query_params(query,(genre,genre,tag))
     
     # get the data for the heatmap
-    def get_most_occur(self,genre):
+    def get_most_occur(self):
         query ="""SELECT t.tag
                     FROM genres g
                     JOIN tags t ON g.movie_id = t.movie_id
-                    WHERE g.genre = %s
                     GROUP BY t.tag
                     ORDER BY COUNT(*) DESC
                     LIMIT 25;
@@ -342,12 +352,15 @@ class Model:
         res=[]
         genres = self.get_genre_list()
         genres.pop(len(genres)-1) # remove (no genres listed)  
-        print(genres,file=sys.stderr)
+        # print(genres,file=sys.stderr)
+        
         for g in genres:
             genre=g['genre']
-            print(genre,file=sys.stderr)
+            # print(genre,file=sys.stderr)
 
-            tags = self.__exec_query_params(query,(genre,))
+            tags = self.__exec_query(query)
+            # print(tags,file=sys.stderr)
+
             for tag in tags:
                 tag['genre']=genre
                 tag['percentage'] = (self.perc_w_tag(genre,tag['tag'])[0]['perc_w_tag'])
@@ -361,11 +374,10 @@ class Model:
     ## Requirement 5:
     # generate number of preview audience and Actual average rating
     def gen_num_audience(self,movieID):
-        query =''' SELECT COUNT(DISTINCT(r.user_id)) As num_rater, CONVERT(AVG(rating),float) AS overall_average_rating
+        query =''' SELECT COUNT(DISTINCT(r.user_id)) As num_rater, ROUND(CONVERT(AVG(rating),float), 2) AS overall_average_rating
                 \n FROM ratings r
-                \n WHERE r.movie_id ={}
-'''.format(movieID)
-        data = self.__exec_query(query)
+                \n WHERE r.movie_id =%s'''
+        data = self.__exec_query_params(query,(movieID,))
         try:
             num_Total_rater = data[0]['num_rater']
             overall_average_rating =data[0]['overall_average_rating']
@@ -387,28 +399,26 @@ class Model:
         if threshold =='':
             threshold =2
         query ='''
-            SELECT AVG(r.rating) as predicted_rating,STDDEV(r.rating) as STD
+            SELECT ROUND(AVG(r.rating), 2) as predicted_rating,STDDEV(r.rating) as STD
             FROM
             (SELECT CONVERT(r.rating, float) AS rating
             \n FROM ratings r
-            \n WHERE r.movie_id ={0}
+            \n WHERE r.movie_id =%s
             \n ORDER BY RAND()
-            \n LIMIT {1})r
+            \n LIMIT %s)r
             WHERE r.rating BETWEEN  (
-                SELECT AVG(a.rating) - {2}*STDDEV(a.rating)
+                SELECT AVG(a.rating) - %s*STDDEV(a.rating)
                     FROM ratings a
-                    WHERE movie_id = {0} 
+                    WHERE movie_id = %s
                     ORDER BY RAND()
-                    LIMIT {1})
+                    LIMIT %s)
                  AND (
-                    SELECT AVG(a.rating) + {2}*STDDEV(a.rating)
+                    SELECT AVG(a.rating) + %s*STDDEV(a.rating)
                     FROM ratings a
-                    WHERE movie_id = {0}
+                    WHERE movie_id = %s
                     ORDER BY RAND()
-                    LIMIT {1}) 
-                
-        '''.format(movieID,num_audience,threshold)
-        data =self.__exec_query(query)
+                    LIMIT %s) '''        
+        data =self.__exec_query_params(query,(movieID,num_audience,threshold,movieID,num_audience,threshold,movieID,num_audience))
         data.append({'True_average_rating':True_average_rating})
         data.append({'nb_preview_raters': num_audience})
         data.append({'nb_raters': num_Total_rater})
@@ -432,12 +442,11 @@ class Model:
         if(lo_hi_raters == "low"):
             filter = "<=2"
 
-        query = f"""\nSELECT AVG(pr.rating) as {personality}
+        query = """\nSELECT ROUND(AVG(pr.rating), 2) as {}
                     \nFROM personality p, personalityRating pr
                     \nWHERE p.userid = pr.userid
-                    \nAND pr.movie_id = {movieId}
-                    \nAND p.{personality} {filter}
-                """
+                    \nAND pr.movie_id = {}
+                    \nAND p.{} {}""".format(personality,movieId,personality,filter)
         
         
         personality_avg_rating = self.__exec_query(query)
@@ -452,7 +461,7 @@ class Model:
         if(f=='low'):
             filter =' HAVING AVG_rating <2'
 
-        query ='''SELECT t.genre,AVG(t.openness) AS openness ,AVG(t.agreeableness) AS agreeableness ,AVG(t.emotional_stability) AS emotional_stability,AVG(t.conscientiousness) AS conscientiousness,AVG(t.extraversion) AS extraversion
+        query ='''SELECT t.genre, ROUND(AVG(t.openness), 2) AS openness, ROUND(AVG(t.agreeableness), 2) AS agreeableness, ROUND(AVG(t.emotional_stability), 2) AS emotional_stability, ROUND(AVG(t.conscientiousness), 2) AS conscientiousness, ROUND(AVG(t.extraversion), 2) AS extraversion
                 \n FROM(
                     SELECT DISTINCT p.userid,pt.openness,pt.agreeableness, pt.emotional_stability, pt.conscientiousness, pt.extraversion,g.genre,AVG(p.rating) AS AVG_rating, COUNT(p.rating) AS count
                 \n FROM personalityRating p 
@@ -461,8 +470,7 @@ class Model:
                 \n WHERE g.genre = '{0}' 
                 \n group by p.userid 
                 \n {1} AND count > 30)t
-                group by t.genre
-                '''.format(genre,filter)
+                group by t.genre'''.format(genre,filter)
         print(query, file=sys.stderr)
         data = self.__exec_query(query)
         return data
@@ -506,12 +514,11 @@ class Model:
         # '''.format(personality,'pr.rating >4') 
         #
         query3 ='''
-                SELECT g.genre as genre , AVG(pr.rating) as averageRating
+                SELECT g.genre as genre , ROUND(AVG(pr.rating), 2) as averageRating
                 FROM personalityRating pr 
-                INNER JOIN personality pt on pt.userid = pr.userid AND pt.{0}>5
+                INNER JOIN personality pt on pt.userid = pr.userid AND pt.{}>5
                 INNER JOIN genres g on pr.movie_id = g.movie_id
-                GROUP BY g.genre
-        '''.format(personality)                                     
+                GROUP BY g.genre'''.format(personality)                                  
                     
         data = self.__exec_query(query3)
 

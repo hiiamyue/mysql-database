@@ -86,8 +86,8 @@ def get_reaction_genre():
 @app.route('/q4_1_tag_rating', methods=['GET'])
 def get_tag_rating():
     args = request.args
-    tag = args.get("tag") 
-    return controller.get_tags_rating(tag)
+    movie_id = args.get("movie_id") 
+    return controller.get_tags_rating(movie_id)
 
 # Explore relationship between tag data and genres
 # Display all the tags associated with a specified 
@@ -124,9 +124,7 @@ def perc_w_tag():
 # and the data for the heatmap
 @app.route('/q4_heatmap',methods=['GET'])
 def tags_occur():
-    args = request.args
-    genre = args.get("genre")
-    return controller.most_occurring_tags(genre)
+    return controller.most_occurring_tags()
 
 
 

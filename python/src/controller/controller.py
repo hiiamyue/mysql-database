@@ -88,8 +88,8 @@ class Controller:
         json_data = json.dumps(data)
         return json_data
     
-    def get_tags_rating(self,tag):
-        data = self.model.tags_rating(tag)
+    def get_tags_rating(self,movie_id):
+        data = self.model.tags_rating(movie_id)
         json_data = json.dumps(data)
         return json_data
     
@@ -113,8 +113,8 @@ class Controller:
                 tags.append(entry["tag"])
         return tags
     
-    def most_occurring_tags(self,genre):
-        data = self.model.get_most_occur(genre)
+    def most_occurring_tags(self):
+        data = self.model.get_most_occur()
         json_data = json.dumps(data)
         return json_data
     
