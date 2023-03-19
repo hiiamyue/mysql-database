@@ -467,12 +467,12 @@ class Model:
                 \n FROM personalityRating p 
                 \n INNER JOIN genres g on g.movie_id = p.movie_id
                 \n INNER JOIN personality pt on pt.userid = p.userid
-                \n WHERE g.genre = '%s' 
+                \n WHERE g.genre = '{0}' 
                 \n group by p.userid 
-                \n %s AND count > 30)t
-                group by t.genre'''
+                \n {1} AND count > 30)t
+                group by t.genre'''.format(genre,filter)
         print(query, file=sys.stderr)
-        data = self.__exec_query_params(query,(genre,filter))
+        data = self.__exec_query(query)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
     def gen_fav_for_all_personality(self):
@@ -516,11 +516,11 @@ class Model:
         query3 ='''
                 SELECT g.genre as genre , AVG(pr.rating) as averageRating
                 FROM personalityRating pr 
-                INNER JOIN personality pt on pt.userid = pr.userid AND pt.%s>5
+                INNER JOIN personality pt on pt.userid = pr.userid AND pt.{}>5
                 INNER JOIN genres g on pr.movie_id = g.movie_id
-                GROUP BY g.genre'''                                  
+                GROUP BY g.genre'''.format(personality)                                  
                     
-        data = self.__exec_query_params(query3,(personality,))
+        data = self.__exec_query(query3)
 
         return data
 
