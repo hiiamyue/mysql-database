@@ -16,8 +16,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker-compose up --build --force-recreate
-      environment:
-      DB_PASS: ${{secrets.DB_PASS}}
-      API_KEY: ${{secrets.API_KEY}}
-      OMDB_API_KEY: ${{secrets.OMDB_API_KEY}}
-     
+      env:
+        DB_PASS: ${{secrets.DB_PASS}}
+        API_KEY: ${{secrets.API_KEY}}
+        OMDB_API_KEY: ${{secrets.OMDB_API_KEY}}
+      
