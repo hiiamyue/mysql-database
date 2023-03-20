@@ -20,9 +20,9 @@ services:
     ports:
       - 8000:5000
     environment:
-      DB_PASS: ${{secrets.DB_PASS}}
-      API_KEY: ${{scecrets.API_KEY}}
-      OMDB_API_KEY: ${{scecrets.OMDB_API_KEY}}
+      DB_PASS: ${secrets.DB_PASS}
+      API_KEY: ${scecrets.API_KEY}
+      OMDB_API_KEY: ${scecrets.OMDB_API_KEY}
      
 
   mysql:
@@ -30,6 +30,6 @@ services:
     restart: always
     environment: 
       MYSQL_DATABASE: 'db'
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASS}}
     ports:
       - '3306:3306'
