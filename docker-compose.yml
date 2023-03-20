@@ -9,7 +9,6 @@ services:
     ports:
       - 3000
     environment:
-        WATCHPACK_POLLING: true
         REACT_APP_NAME: front
   
   pythonapp:
@@ -23,12 +22,13 @@ services:
       DB_PASS: ${DB_PASS}
       API_KEY: ${API_KEY}
       OMDB_API_KEY: ${OMDB_API_KEY}
+     
 
   mysql:
     build: ./mysql/
     restart: always
     environment: 
       MYSQL_DATABASE: 'db'
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - '3306:3306'

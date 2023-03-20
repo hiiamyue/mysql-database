@@ -150,8 +150,11 @@ class Controller:
         #   f =['high','low']
         # for each genre, the average personality score
         # TODO : rated more than 30 films
-        data = self.model.gen_personality_genre_data(f,genre)[0]
-        
+        d = self.model.gen_personality_genre_data(f,genre)
+        if len(d)>0:
+            data = self.model.gen_personality_genre_data(f,genre)[0]
+        else:
+            data = {'genre': genre,'openness': 0.0, 'agreeableness': 0.0, 'emotional_stability': 0.0, 'conscientiousness': 0.0, 'extraversion': 0.0}
         
         radar = []
         for personnality_trait in list(data.keys())[1:]:

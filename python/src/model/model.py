@@ -115,9 +115,8 @@ class Model:
         
     def __create_genre_filter(self, genres):
         if genres is not None:
-            genres = genres.replace('(\'','')
-            genres = genres.replace('\')','')
-            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in (%s))',(genres,)
+         
+            return 'AND EXISTS (SELECT * FROM genres, movies WHERE m.movie_id = genres.movie_id and genres.genre in {})'.format(genres),()
         return "",()
     def __create_sorting_query(self, sort_by, desc):
         
@@ -442,14 +441,14 @@ class Model:
         if(lo_hi_raters == "low"):
             filter = "<=2"
 
-        query = """\nSELECT ROUND(AVG(pr.rating), 2) as {}
+        query = """\nSELECT ROUND(AVG(pr.rating), 2) as {0}
                     \nFROM personality p, personalityRating pr
                     \nWHERE p.userid = pr.userid
-                    \nAND pr.movie_id = {}
-                    \nAND p.{} {}""".format(personality,movieId,personality,filter)
+                    \nAND pr.movie_id = %s
+                    \nAND p.{0} {1}""".format(personality,filter)
         
         
-        personality_avg_rating = self.__exec_query(query)
+        personality_avg_rating = self.__exec_query_params(query,(movieId,))
         return personality_avg_rating
 
     # Q6.2
@@ -467,12 +466,13 @@ class Model:
                 \n FROM personalityRating p 
                 \n INNER JOIN genres g on g.movie_id = p.movie_id
                 \n INNER JOIN personality pt on pt.userid = p.userid
-                \n WHERE g.genre = '{0}' 
+                \n WHERE g.genre = %s 
                 \n group by p.userid 
-                \n {1} AND count > 30)t
-                group by t.genre'''.format(genre,filter)
-        print(query, file=sys.stderr)
-        data = self.__exec_query(query)
+                \n {} AND count > 30)t
+                group by t.genre'''.format(filter)
+        # print(query, file=sys.stderr)
+        data = self.__exec_query_params(query,(genre,))
+        print(data, file=sys.stderr)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
     def gen_fav_for_all_personality(self):
@@ -487,32 +487,6 @@ class Model:
         
         return data
     def gen_fav_genre_by_peronslity(self,personality):
-
-    
-        # query3 ='''
-        #         SELECT z.genre,COUNT(z.genre) as count
-        #         FROM(
-        #         (SELECT MAX(m.num)as numRated,m.userid
-        #             FROM(
-        #             SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as num
-        #             FROM personality pt 
-        #             INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
-        #             INNER JOIN genres g on g.movie_id = pr.movie_id
-        #             GROUP BY genre, pt.userid)m
-        #         GROUP BY m.userid
-        #         ORDER BY numRated DESC)a
-
-        #         JOIN (SELECT pt.userid,g.genre as genre,COUNT(pr.movie_id) as number
-        #             FROM personality pt 
-        #             INNER JOIN personalityRating pr on pt.userid = pr.userid AND pt.{0} >5 AND {1}
-        #             INNER JOIN genres g on g.movie_id = pr.movie_id
-        #             GROUP BY genre, pt.userid)z on z.userid = a.userid and z.number = a.numRated)
-
-        #         GROUP BY z.genre
-        #         ORDER BY count DESC
-
-        # '''.format(personality,'pr.rating >4') 
-        #
         query3 ='''
                 SELECT g.genre as genre , ROUND(AVG(pr.rating), 2) as averageRating
                 FROM personalityRating pr 
