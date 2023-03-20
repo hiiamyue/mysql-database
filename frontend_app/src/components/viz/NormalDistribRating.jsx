@@ -57,23 +57,12 @@ function tDistribution(x, xBar, s, n) {
 
 const NormalDistribRating = ({mean, stdDev}) => {
     
-    const normalY = (x, mean, stdDev) => Math.exp((-0.5) * Math.pow((x - mean) / stdDev, 2));
-    
     let errorMargin = 2.01 * (stdDev / Math.sqrt(50))  
     let upperBound = mean + errorMargin                                                                                                                     
     let lowerBound = mean - errorMargin
     let points = range(lowerBound - 0.5, upperBound + 0.5, 0.005);
     let y = points.map(x => ({ x, y: tDistribution(x, mean, stdDev, 50)}));
     var Highcharts = require('highcharts');
-
-    React.useEffect(() => {
-        console.log(upperBound)
-        console.log(lowerBound)
-        console.log(mean)
-        console.log(stdDev)
-        console.log(tDistribution(upperBound, mean, stdDev, 50))
-        console.log(tDistribution(lowerBound, mean, stdDev, 50))
-    })
 
     const options = {
         chart: {
