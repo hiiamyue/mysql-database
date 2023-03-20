@@ -27,8 +27,8 @@ services:
   mysql:
     build: ./mysql/
     restart: always
-    # environment: 
-      # MYSQL_DATABASE: 'db'
+    environment: 
+      MYSQL_DATABASE: 'db'
       # MYSQL_ROOT_PASSWORD: ${DB_PASS}
     ports:
       - '3306:3306'
