@@ -52,7 +52,7 @@ class Controller:
         tmdbID =self.get_tmdbID(movieID)
         tmdbData =self.tmdbModel.getTmdbMovieData(tmdbID)
         rottenTomatoesRating = self.tmdbModel.get_rotten_tomatoes_rating(self.get_imdbID(movieID))
-        print(tmdbData,file=sys.stderr)
+        
         genre = self.model.get_movie_genre(movieID)
         preview_rating = [self.predict(movieID,2), {"rottentomatoes_rating" : rottenTomatoesRating}]
         preview_rating.append(tmdbData)
@@ -126,13 +126,13 @@ class Controller:
       
     def predict(self,movieID,thresh):
         data =self.model.gen_prediction(movieID,thresh)
-        print(data, file=sys.stderr)
+        
         return data
     
     # 6.1
     def get_avg_rating_for_all_personality(self, movieId, lo_hi_raters):
         data = self.model.get_avg_rating_for_all_personality(movieId, lo_hi_raters)
-        print(data, file=sys.stderr)
+        
         
         bars = []
         for trait in data:

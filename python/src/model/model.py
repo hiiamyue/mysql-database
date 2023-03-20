@@ -59,13 +59,12 @@ class Model:
     def __double_exec_query(self, q1,q1_params, q2):
         cnx = mysql.connector.connect(pool_name = "mypool")
         curs = cnx.cursor(dictionary=True)
-        print(q1,file=sys.stderr)
-        print(q1_params,file=sys.stderr)
+      
         curs.execute(q1,q1_params)
         response = [curs.fetchall()]
         curs.execute(q2)
         response.append(curs.fetchall())
-        print(response, file=sys.stderr)
+        
         curs.close()
         cnx.close()
         return response
@@ -168,8 +167,7 @@ class Model:
                     \n{4}
                     \n""".format(date_filter, genre_filter, rating_filter, sorting, pagination))
         params = params1+params2+params3+params4+params5
-        print(query, file=sys.stderr)
-        print(params, file=sys.stderr)
+        
         return query,params
     
     def get_genre_type(self):
@@ -299,7 +297,7 @@ class Model:
 
         for tag in tags_movie:
             tag['rating']= self.__exec_query_params(query_rating,(tag['tag'],tag['tag']))[0]['overall_average_rating']
-        # print(tags_movie,file=sys.stderr)
+        
        
 
         return tags_movie
@@ -351,14 +349,14 @@ class Model:
         res=[]
         genres = self.get_genre_list()
         genres.pop(len(genres)-1) # remove (no genres listed)  
-        # print(genres,file=sys.stderr)
+        
         
         for g in genres:
             genre=g['genre']
-            # print(genre,file=sys.stderr)
+            
 
             tags = self.__exec_query(query)
-            # print(tags,file=sys.stderr)
+            
 
             for tag in tags:
                 tag['genre']=genre
@@ -383,7 +381,7 @@ class Model:
         except KeyError:
             num_Total_rater = ''
             overall_average_rating =''
-        print(num_Total_rater, file=sys.stderr)
+        
 
         return num_Total_rater,overall_average_rating
     
@@ -422,7 +420,7 @@ class Model:
         data.append({'nb_preview_raters': num_audience})
         data.append({'nb_raters': num_Total_rater})
         
-        print(data,file=sys.stderr)
+        
         return  data
 
     # Q6.1
@@ -470,9 +468,9 @@ class Model:
                 \n group by p.userid 
                 \n {} AND count > 30)t
                 group by t.genre'''.format(filter)
-        # print(query, file=sys.stderr)
+        
         data = self.__exec_query_params(query,(genre,))
-        print(data, file=sys.stderr)
+        
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
     def gen_fav_for_all_personality(self):

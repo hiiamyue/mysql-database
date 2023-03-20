@@ -56,7 +56,7 @@ def get_movie_data():
 def search():
     args = request.args
     query = args.get("query")
-    print(query, file=sys.stderr)
+    
     return controller.search_movie(query)
  
 @app.route('/genres', methods=['GET'])
