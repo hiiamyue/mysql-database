@@ -38,7 +38,7 @@ const GenrePersonalityHeatMap = () => {
   };
 
   return (
-    <div className='px-8 lg:px-0 pt-4'>
+    <div className='px-8 lg:px-0 pt-4 pb-10'>
     <Heatmap {...config} />
     </div>
     );

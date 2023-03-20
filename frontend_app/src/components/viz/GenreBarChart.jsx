@@ -58,6 +58,7 @@ const GenreBarChart = ({movieid, group}) => {
       },
     },
   };
+  
   return (
     <div className='pt-10 md:mx-0 mx-8'>
         {

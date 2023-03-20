@@ -20,7 +20,11 @@ const GenreTagHeatMap = () => {
   const config = {
     width: 1240,
     height: 1240,
-    autoFit: false,
+    autoFit: true,
+    legend: {
+      layout: 'vertical',
+      position: 'right'
+    },
     data,
     xField: 'tag',
     yField: 'genre',

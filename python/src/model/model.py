@@ -332,8 +332,8 @@ class Model:
 
     #Get % of movies within the same genre that share this tag.
     def perc_w_tag(self,genre,tag):
-        query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
-                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = %s) * 100,float) AS perc_w_tag
+        query="""SELECT  ROUND(CONVERT(COUNT(DISTINCT g.movie_id)/ 
+                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = %s) * 100,float),2) AS perc_w_tag
                 \nFROM genres g
                 \nINNER JOIN tags t ON g.movie_id = t.movie_id
                 \nWHERE g.genre = %s AND t.tag = %s """
@@ -393,7 +393,7 @@ class Model:
         num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
             prediction = ''
-            pred = [{'Predicted Rating':prediction},{'Actual Average Rating':True_average_rating}, {'nb_raters': num_Total_rater}]
+            pred = [{'predicted_rating':prediction},{'True_average_rating':True_average_rating}, {'nb_preview_raters': 0}, {'nb_raters': num_Total_rater}]
             return pred
         num_audience = num_Total_rater//4
         if threshold =='':
@@ -422,7 +422,7 @@ class Model:
         data.append({'True_average_rating':True_average_rating})
         data.append({'nb_preview_raters': num_audience})
         data.append({'nb_raters': num_Total_rater})
-        data.append({'threshold':threshold })
+        
         print(data,file=sys.stderr)
         return  data
 

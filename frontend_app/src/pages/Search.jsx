@@ -5,14 +5,14 @@ import Footer from '../components/Footer';
 import MovieCard from "../components/MovieCard";
 import LoadingMovieCard from "../components/LoadingMovieCard"
 import Skeleton from '@mui/material/Skeleton';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Fab from '@mui/material/Fab';
+import ScrollUpButton from '../components/components/ScrollUpButton';
+
 
 const Search = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [movies, setMovies] = useState([]);
     const [hasFetched, setFetched] = useState(false);
-    let mybutton = document.getElementById("myBtn");
+    
 
     useEffect(() => {
 
@@ -37,22 +37,7 @@ const Search = () => {
         
     }, [searchParams]);
 
-    function topFunction() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    } 
-
-    window.onscroll = function () {
-        scrollFunction();
-      };
-
-    function scrollFunction() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-          mybutton.style.display = "block";
-        } else {
-          mybutton.style.display = "none";
-        }
-    }
+    
 
     
 
@@ -74,7 +59,7 @@ const Search = () => {
                         hasFetched ?
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-4 mt-20 px-0">
                             {movies.map((movie) => (
-                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={12} img_path={movie.imgPath !== "null" ? movie.imgPath : "samplemovie.jpg"}  id={movie.movie_id}/>
+                                    <MovieCard title={movie.title} release_date={movie.release_date} rating={movie.avg_rating} img_path={movie.imgPath !== "null" ? movie.imgPath : "samplemovie.jpg"}  id={movie.movie_id}/>
                             ))} 
                         </div>
                         :
@@ -87,11 +72,7 @@ const Search = () => {
                     
                 </div>    
                 
-                <button className='fixed bottom-8 right-8 z-50 hidden' id="myBtn">
-                    <Fab color="secondary" aria-label="edit" onClick={topFunction} size='large'>
-                        <KeyboardArrowUpIcon />
-                    </Fab>
-                </button>
+                <ScrollUpButton/>
                 
                 <Footer/>
             </div>
