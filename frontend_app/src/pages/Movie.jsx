@@ -2,16 +2,15 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import * as React from 'react';
 import {Link, useSearchParams} from "react-router-dom";
-import Stack from '@mui/material/Stack';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Rating from '@mui/material/Rating';
-import CastCard from '../components/CastCard';
+import CastCard from '../components/components/CastCard';
 import ErrorPage from '../pages/ErrorPage'
 import NormalDistribRating from '../components/viz/NormalDistribRating'
-import RatersBarChart from '../components/RatersBarChart';
+import RatersBarChart from '../components/viz/RatersBarChart';
 import GenreBarChart from '../components/viz/GenreBarChart';
-import PersonalityBarChart from '../components/PersonalityBarChart';
+import PersonalityBarChart from '../components/viz/PersonalityBarChart';
 import TagsRating from '../components/viz/TagsRating';
 
 const darkTheme = createTheme({
@@ -69,7 +68,7 @@ const Movie = () => {
                 <CssBaseline />
                 <div className='max-w-[1240px] mx-auto mb-96'>
                     {/* Movie content inside*/}
-                    <div class="grid sm:grid-cols-4  grid-cols-1 gap-4 mt-10 xl:mx-0 mx-8">
+                    <div className="grid sm:grid-cols-4  grid-cols-1 gap-4 mt-10 xl:mx-0 mx-8">
                         <div className='xl:pt-4'>
                             <div className="text-lg font-bold text-center rounded-2xl my-4">
                                 <img
@@ -80,7 +79,7 @@ const Movie = () => {
                             </div>
                         </div>
                         
-                        <div class="col-span-3  md:py-6 sm:px-6 ">
+                        <div className="col-span-3  md:py-6 sm:px-6 ">
                             <div className='max-w-[1240px] mx-auto  mt-2'>
                                 <h1 className='md:text-5xl sm:text-4xl text-3xl font-bold text-white'>{hasFetchedDetails ? movieData['title'] : "Loading Title..."}</h1>
                                 <div className='sm:flex mt-[0.8em]'>
@@ -90,7 +89,7 @@ const Movie = () => {
                                         <div className="sm:ml-6 inline-block ">
                                         {movieGenres.map((genre) => (
                                             <Link to={`/genre?genre=${genre.genre}`}>
-                                                <span class="bg-fuchsia-300 text-pink-900 hover:text-fuchsia-300 hover:bg-pink-900 text-sm font-medium mr-2 px-3 py-0.5 rounded inline-block  mt-2 lg:mt-0">{genre.genre}</span>
+                                                <span className="bg-fuchsia-300 text-pink-900 hover:text-fuchsia-300 hover:bg-pink-900 text-sm font-medium mr-2 px-3 py-0.5 rounded inline-block  mt-2 lg:mt-0">{genre.genre}</span>
                                             </Link>
                                         ))} 
                                         </div>
@@ -136,7 +135,7 @@ const Movie = () => {
                 <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating prediction</h3>
                 {
                     hasFetchedDetails ?
-                    <a class="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <div className="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                         <div className='text-center w-full px-8 py-8'>
                             {ratingData[0]["predicted_rating"] === ""?
                             <h3 className='md:text-6xl sm:text-3xl text-2xl font-bold text-fuchsia-300'>N/A</h3>
@@ -154,39 +153,39 @@ const Movie = () => {
                         <div className='w-full px-8 pb-8 items-center'>
                             <NormalDistribRating mean={ratingData[0]["predicted_rating"]} stdDev={ratingData[0]["STD"]}/>
                         </div>
-                    </a>
+                    </div>
                     :
                     <p>Fetching rating prediction...</p>
                 }
                 <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating analysis</h3>
-                <section class="mx-8 xl:mx-0 mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                    <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
-                        <dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
-                            <div class="flex flex-col items-center justify-center">
-                                <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{actualRating.toFixed(2)}/5</dt>
-                                <dd class="font-light text-gray-500 dark:text-gray-400">Dataflix rating</dd>
+                <section className="mx-8 xl:mx-0 mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <div className="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+                        <dl className="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+                            <div className="flex flex-col items-center justify-center">
+                                <dt className="mb-2 text-3xl md:text-4xl font-extrabold">{actualRating.toFixed(2)}/5</dt>
+                                <dd className="font-light text-gray-500 dark:text-gray-400">Dataflix rating</dd>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{hasFetchedDetails ? ratingData[3]["nb_raters"] : 0}</dt>
-                                <dd class="font-light text-gray-500 dark:text-gray-400">Raters from our website</dd>
+                            <div className="flex flex-col items-center justify-center">
+                                <dt className="mb-2 text-3xl md:text-4xl font-extrabold">{hasFetchedDetails ? ratingData[3]["nb_raters"] : 0}</dt>
+                                <dd className="font-light text-gray-500 dark:text-gray-400">Raters from our website</dd>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{rtRating}</dt>
-                                <dd class="font-light text-gray-500 dark:text-gray-400">Rotten Tomatoes rating</dd>
+                            <div className="flex flex-col items-center justify-center">
+                                <dt className="mb-2 text-3xl md:text-4xl font-extrabold">{rtRating}</dt>
+                                <dd className="font-light text-gray-500 dark:text-gray-400">Rotten Tomatoes rating</dd>
                             </div>
                         </dl>
                     </div>
                 </section>
 
-                <h5 class=" mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8 ">From low/High raters</h5>
+                <h5 className=" mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8 ">From low/High raters</h5>
                 <RatersBarChart movieid={movieid}/>
-                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who like...</h5>
+                <h5 className="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who like...</h5>
                 <GenreBarChart movieid={movieid} group="high"/>
-                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who dislike...</h5>
+                <h5 className="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who dislike...</h5>
                 <GenreBarChart movieid={movieid} group="low"/>
-                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people with these personality traits...</h5>
+                <h5 className="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people with these personality traits...</h5>
                 <PersonalityBarChart movieid={movieid} group="high"/>
-                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people without these personality traits...</h5>
+                <h5 className="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people without these personality traits...</h5>
                 <PersonalityBarChart movieid={movieid} group="low"/>
 
                 <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Tags & rating</h3>

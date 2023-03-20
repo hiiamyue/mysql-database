@@ -2,7 +2,7 @@ import { useEffect, useState} from 'react'
 import {useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import SortByListbox from '../components/SortByListbox'
+import SortByListbox from '../components/components/SortByListbox'
 import Filters from "../components/Filters";
 import {Pagination} from "flowbite-react"
 import MovieCard from "../components/MovieCard";

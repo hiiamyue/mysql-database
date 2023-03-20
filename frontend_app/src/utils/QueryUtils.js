@@ -72,18 +72,7 @@ export function getGenreFilter(queryParams, genres) {
     }
   }
 
-export function genGenresFilter(genres, genresList){
 
-  if (genres.keys().length === 0){
-    return "any"
-  }
-
-  let genresString = `(`
-  genres.map((genre) => {
-    genresString = genresString + `'${genre.genre}',`;
-  });
-  return genresString.slice(0,-1) + ")"
-}
 
 export function pageParamsToAPIParams(params){
   

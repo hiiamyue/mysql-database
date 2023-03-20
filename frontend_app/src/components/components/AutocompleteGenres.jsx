@@ -17,7 +17,7 @@ export default function AutocompleteGenres({handleChangeGenre, initialValue, val
     query === ''
     ? values
     : values.filter((person) =>
-        values.genre
+        person.genre
             .toLowerCase()
             .replace(/\s+/g, '')
             .includes(query.toLowerCase().replace(/\s+/g, ''))

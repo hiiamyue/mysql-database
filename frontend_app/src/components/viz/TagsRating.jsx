@@ -8,7 +8,7 @@ const TagsRating = ({movieid}) => {
 
     useEffect(() => {
         asyncFetch();
-    })
+    }, [])
 
     const asyncFetch = () => {
     
@@ -56,28 +56,42 @@ const TagsRating = ({movieid}) => {
 
 
     return (
-        <a class="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <div class="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div className='text-center w-full px-8 py-8'>
             <h4 className='md:text-lg sm:text-6xl text-4xl font-bold text-white'>Tags</h4>
             <p className='pt-4 text-slate-400 pb-4'>What tags did this movie get? What is the average rating for movies with these tags?</p>
             {hasFetchedTags ?
-                <div className='inline-block'>
-                    {tagsRating.map((tag) => (
+                <div>
+                  {tagsRating.length > 0 ?
+                    <div className='inline-block'>
+                      {tagsRating.map((tag) => (
                         <span class="bg-fuchsia-300 text-pink-900 hover:text-fuchsia-300 hover:bg-pink-900 text-lg font-medium mr-2 px-3 py-0.5 rounded inline-block  mt-2 lg:mt-0">{tag.tag}</span>
-                    ))} 
-                </div>  
+                      ))}
+                    </div>
+                  :
+                  <p>Couldn't find any tags for that movie</p>
+                  }
+                </div> 
+                
             :
+                  
                 <p className='pt-4 text-center'>Fetching tags...</p>
             }
             </div>
             <div className='w-full p-8 items-center'>
             {hasFetchedTags ?
+              <div>
+                {tagsRating.length > 0 ?
                 <Column {...config} />
+                :
+                <p className='text-center'>...</p>
+                }
+              </div>
             :
                 <p className='pt-4 text-center'>...</p>
             }
             </div>
-        </a>
+        </div>
     );
 }
 

@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import {Badge, Card} from "flowbite-react"
+import React from 'react';
+import {Card} from "flowbite-react"
 
 const CastCard = ({ name, role }) => {
   

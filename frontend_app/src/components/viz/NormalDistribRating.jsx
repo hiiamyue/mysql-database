@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Highcharts from 'highcharts'
+import React from 'react';
+
 import HighchartsReact from 'highcharts-react-official'
 
 function range(start, stop, step) {

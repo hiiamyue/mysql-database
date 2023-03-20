@@ -1,9 +1,6 @@
-import { useEffect, useState} from 'react'
 import {useSearchParams} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import NavigationIcon from '@mui/icons-material/Navigation';
-import Fab from '@mui/material/Fab';
 
 import GenreTagsWordCloud from '../components/viz/GenreTagsWordCloud';
 import GenreProfileRadar from '../components/viz/GenreProfileRadar';
@@ -26,7 +23,7 @@ const Genre = () => {
                     <h3 className=' pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Tags</h3>
                     <GenreTagsWordCloud genre={searchParams.get('genre')}/>
                     <h3 className=' pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Psychology</h3>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 content-center'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 content-center pb-10'>
                         <GenreProfileRadar genre={searchParams.get('genre')} like="high"/>
                         <GenreProfileRadar genre={searchParams.get('genre')} like="low"/>    
                     </div>

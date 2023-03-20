@@ -2,12 +2,10 @@ import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import Slider from '@mui/material/Slider';
-import AutocompleteGenres from './AutocompleteGenres';
+import AutocompleteGenres from './components/AutocompleteGenres';
 import * as React from 'react';
-import {Link} from "react-router-dom";
 import { useSearchParams } from 'react-router-dom';
-import buildFiltersURL from '../utils/StringUtils';
-import { getRatingFilter, getGenreFilter, getDateFilter, genGenresFilter } from '../utils/QueryUtils';
+import { getRatingFilter, getGenreFilter, getDateFilter} from '../utils/QueryUtils';
 
 
 export default function Filters() {

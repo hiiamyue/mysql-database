@@ -4,7 +4,7 @@ import { Column } from '@ant-design/plots';
 const PersonalityBarChart = ({movieid, group}) => {
   const [ratings, setRatings] = useState([])
   const [fetchedRatings, setFetchedRatings] = useState(false)
-  const [field, setField] = useState("")
+  
   
   useEffect(() => {
   
