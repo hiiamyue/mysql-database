@@ -136,10 +136,18 @@ const Movie = () => {
                     hasFetchedDetails ?
                     <a class="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                         <div className='text-center w-full px-8 py-8'>
+                            {ratingData[0]["predicted_rating"] === ""?
+                            <h3 className='md:text-6xl sm:text-3xl text-2xl font-bold text-fuchsia-300'>N/A</h3>
+                            :
                             <h3 className='md:text-6xl sm:text-3xl text-2xl font-bold text-fuchsia-300'>{ratingData[0]["predicted_rating"].toFixed(2)} ± {(2.01 * (ratingData[0]["STD"] / Math.sqrt(50))).toFixed(2)}</h3>
+                            }
                             <h4 className='md:text-lg sm:text-3xl text-2xl font-bold text-white'>predicted rating</h4>
+                            {ratingData[0]["predicted_rating"] === ""?
+                            <p className='pt-8 text-slate-400'>We were not able to predict the rating this movie will get because there are not enough ratings for that movie.</p>
+                            :
                             <p className='pt-8 text-slate-400'>This rating is only a prediction of the final rating made from a random panel of {ratingData[2]["nb_preview_raters"]} people. The bell curve to the right shows the confidence level for the actual rating.
                             For example, there is a 95% chance that the actual rating is situated in the highlighted area.</p>
+                            }
                         </div>
                         <div className='w-full px-8 pb-8 items-center'>
                             <NormalDistribRating mean={ratingData[0]["predicted_rating"]} stdDev={ratingData[0]["STD"]}/>

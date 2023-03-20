@@ -393,7 +393,7 @@ class Model:
         num_Total_rater,True_average_rating = self.gen_num_audience(movieID)
         if  num_Total_rater< 30:
             prediction = ''
-            pred = [{'Predicted Rating':prediction},{'Actual Average Rating':True_average_rating}, {'nb_raters': num_Total_rater}]
+            pred = [{'predicted_rating':prediction},{'True_average_rating':True_average_rating}, {'nb_preview_raters': 0}, {'nb_raters': num_Total_rater}]
             return pred
         num_audience = num_Total_rater//4
         if threshold =='':
@@ -422,7 +422,7 @@ class Model:
         data.append({'True_average_rating':True_average_rating})
         data.append({'nb_preview_raters': num_audience})
         data.append({'nb_raters': num_Total_rater})
-        data.append({'threshold':threshold })
+        
         print(data,file=sys.stderr)
         return  data
 

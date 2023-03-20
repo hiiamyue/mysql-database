@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
@@ -142,7 +140,12 @@ const NormalDistribRating = ({mean, stdDev}) => {
 
     return (
         <div id="container">
+            {mean === ""?
+            <p className='text-6xl font-extrabold text-fuchsia-400 text-center'>?</p>
+            :
             <HighchartsReact highcharts={Highcharts}  options={options}/>
+            }
+            
         </div>
     );
 }
