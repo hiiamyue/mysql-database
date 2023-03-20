@@ -471,8 +471,9 @@ class Model:
                 \n group by p.userid 
                 \n {1} AND count > 30)t
                 group by t.genre'''.format(genre,filter)
-        print(query, file=sys.stderr)
+        # print(query, file=sys.stderr)
         data = self.__exec_query(query)
+        print(data, file=sys.stderr)
         return data
         # For each ppl who scored high in one personality traits , select their favorate film
     def gen_fav_for_all_personality(self):
