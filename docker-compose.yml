@@ -18,10 +18,10 @@ services:
       - mysql
     ports:
       - 8000:5000
-    # environment:
-    #   DB_PASS: ${DB_PASS}
-    #   API_KEY: ${API_KEY}
-    #   OMDB_API_KEY: ${OMDB_API_KEY}
+    environment:
+      DB_PASS: ${DB_PASS}
+      API_KEY: ${API_KEY}
+      OMDB_API_KEY: ${OMDB_API_KEY}
      
 
   mysql:
