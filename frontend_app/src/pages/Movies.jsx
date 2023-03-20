@@ -20,7 +20,13 @@ const Movies = () => {
     function onPageChange(page){
         searchParams.set("page", page)
         setSearchParams(searchParams)
+        topFunction()
     }
+
+    function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    } 
 
     useEffect(() => {
         
