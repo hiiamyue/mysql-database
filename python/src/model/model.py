@@ -332,8 +332,8 @@ class Model:
 
     #Get % of movies within the same genre that share this tag.
     def perc_w_tag(self,genre,tag):
-        query="""SELECT  CONVERT(COUNT(DISTINCT g.movie_id)/ 
-                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = %s) * 100,float) AS perc_w_tag
+        query="""SELECT  ROUND(CONVERT(COUNT(DISTINCT g.movie_id)/ 
+                \n( SELECT COUNT(DISTINCT genres.movie_id) FROM genres WHERE genre = %s) * 100,float),2) AS perc_w_tag
                 \nFROM genres g
                 \nINNER JOIN tags t ON g.movie_id = t.movie_id
                 \nWHERE g.genre = %s AND t.tag = %s """
