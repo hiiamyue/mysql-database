@@ -9,7 +9,6 @@ services:
     ports:
       - 3000
     environment:
-        WATCHPACK_POLLING: true
         REACT_APP_NAME: front
   
   pythonapp:
