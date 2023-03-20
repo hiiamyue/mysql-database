@@ -12,7 +12,7 @@ const RatersBarChart = ({movieid}) => {
   }, []);
 
   const asyncFetch = (type) => {
-    console.log(type)
+    
     fetch(`http://localhost:8000/q3_1_reaction?movie_id=${movieid}&group=${type}`)
       .then((response) => response.json())
       .then((json) => {
@@ -20,7 +20,7 @@ const RatersBarChart = ({movieid}) => {
         r.push(json)
         setRatings(r)
         config["data"] = json
-        console.log(ratings)
+        
       })
       .catch((error) => {
         console.log('fetch data failed', error);

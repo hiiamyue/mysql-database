@@ -23,13 +23,13 @@ const Genres = () => {
         fetch(url)
         .then((res) => res.json())
         .then((data) => {
-            console.log("--render--")
+            
            setGenres(data);
            setFetched(true)
         })
         }
         catch(e) {
-            console.error(e)
+            console.log(e)
             setFetched(false)
         }
         

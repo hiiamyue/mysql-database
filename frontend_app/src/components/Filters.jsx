@@ -23,19 +23,19 @@ export default function Filters() {
       const url = `http://localhost:8000/genres`;
       try {
           
-      console.log(url)
+      
       setFetchedGenres(false)
       
       fetch(url)
       .then((res) => res.json())
       .then((data) => {
-          console.log(data)
+          
           setGenres(data)
           setFetchedGenres(true)
       })
       }
       catch(e) {
-          console.error(e)
+          console.log(e)
       
       }
     }

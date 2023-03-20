@@ -16,7 +16,7 @@ const GenreProfileRadar = ({genre, like}) => {
       .then((json) => {
         setProfile(json)
         config["data"] = json
-        console.log(json)
+        
         setFetchedProfile(true)
       })
       .catch((error) => {

@@ -38,7 +38,7 @@ const Movie = () => {
         const url = `http://localhost:8000/movie?movie_id=${movieid}`;
         
             
-        console.log(url)
+        
         
         fetch(url)
         .then((res) => res.json())
@@ -51,7 +51,7 @@ const Movie = () => {
             setMovieGenres(data[3])
             setActualRating(data[0][1]["True_average_rating"])
             setFetchedDetails(true)
-            console.log(data[0][1]["True_average_rating"])
+            
         })
         .catch(err => setCouldFind(false));
         

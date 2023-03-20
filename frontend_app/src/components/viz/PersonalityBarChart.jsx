@@ -19,7 +19,6 @@ const PersonalityBarChart = ({movieid, group}) => {
       .then((json) => {
         setRatings(json)
         config["data"] = json
-        console.log(ratings)
       })
       .catch((error) => {
         console.log('fetch data failed', error);

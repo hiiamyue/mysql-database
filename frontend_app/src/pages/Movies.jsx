@@ -33,20 +33,20 @@ const Movies = () => {
         const url = `http://localhost:8000/movies${pageParamsToAPIParams(searchParams)}`;
         try {
         setFetched(false)    
-        console.log(url)
+        
         
         fetch(url)
         .then((res) => res.json())
         .then((data) => {
-            console.log("--render--")
+            
             setMaxPage(data["pagination"]["max_page"])
             setMovies(data["results"]);
             setFetched(true)
-            console.log(data["pagination"])
+            
         })
         }
         catch(e) {
-            console.error(e)
+            console.log(e)
             setFetched(false)
         }
         

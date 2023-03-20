@@ -20,9 +20,9 @@ const GenreBarChart = ({movieid, group}) => {
     fetch(`http://localhost:8000/q3_2_reaction_genre?movie_id=${movieid}&group=${group}`)
       .then((response) => response.json())
       .then((json) => {
-        setRatings(json)
+        
         config["data"] = json
-        console.log(ratings)
+        
       })
       .catch((error) => {
         console.log('fetch data failed', error);
