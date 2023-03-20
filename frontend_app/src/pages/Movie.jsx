@@ -10,8 +10,9 @@ import CastCard from '../components/CastCard';
 import ErrorPage from '../pages/ErrorPage'
 import NormalDistribRating from '../components/viz/NormalDistribRating'
 import RatersBarChart from '../components/RatersBarChart';
-import GenreBarChart from '../components/GenreBarChart';
+import GenreBarChart from '../components/viz/GenreBarChart';
 import PersonalityBarChart from '../components/PersonalityBarChart';
+import TagsRating from '../components/viz/TagsRating';
 
 const darkTheme = createTheme({
     palette: {
@@ -29,11 +30,12 @@ const Movie = () => {
     const [movieGenres, setMovieGenres] = React.useState([])
     const [rtRating, setRTRating] = React.useState(0)
     const [searchParams, setSearchParams] = useSearchParams();
-    const [hasFetchedDetails, setFetchedDetails] = React.useState(false)
+    const [hasFetchedDetails, setFetchedDetails] = React.useState(false);
     const [couldFind, setCouldFind] = React.useState(true);
+    const movieid = searchParams.get("movieid");
     
     React.useEffect(() => {
-        const movieid = searchParams.get("movieid")
+        
         const url = `http://localhost:8000/movie?movie_id=${movieid}`;
         
             
@@ -106,14 +108,14 @@ const Movie = () => {
                                 }
                                 
                                 <p className='mt-12 text-2xl font-semibold'>Synopsis </p>
-                                <p className=' mt-2 md:text-xl sm:text-xl text-slate-600'>{hasFetchedDetails ? movieData['overview'] : "Loading Overview..."}</p>
+                                <p className=' mt-2 md:text-xl sm:text-xl text-slate-400'>{hasFetchedDetails ? movieData['overview'] : "Loading Overview..."}</p>
                                 <p className='mt-12 text-xl font-semibold'>{hasFetchedDetails ? movieData['director'][0]['name'] : "..."}</p>
                                 <p className='md:text-xl sm:text-xl text-slate-300'>Director</p>
                             </div >
                         </div>
                     
                 </div>
-                <h3 className='pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Cast</h3>
+                <h3 className='pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Cast</h3>
                 {
                     hasFetchedDetails ?
                     <div className=' grid xl:grid-cols-5 gap-3 pt-4 grid-cols-2 md:grid-cols-3 content-center'>
@@ -131,7 +133,7 @@ const Movie = () => {
                     </div>
                 
                 }
-                <h3 className=' pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating prediction</h3>
+                <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating prediction</h3>
                 {
                     hasFetchedDetails ?
                     <a class="mx-8 xl:mx-0 mt-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
@@ -156,7 +158,7 @@ const Movie = () => {
                     :
                     <p>Fetching rating prediction...</p>
                 }
-                <h3 className=' pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating analysis</h3>
+                <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Rating analysis</h3>
                 <section class="mx-8 xl:mx-0 mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
                         <dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
@@ -175,20 +177,24 @@ const Movie = () => {
                         </dl>
                     </div>
                 </section>
-                <h5 class=" mx-8 sm:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8 ">From low/High raters</h5>
-                <RatersBarChart movieid={searchParams.get("movieid")}/>
-                <h5 class="mx-8 sm:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who like...</h5>
-                <GenreBarChart movieid={searchParams.get("movieid") } group="high"/>
-                <h5 class="mx-8 sm:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who dislike...</h5>
-                <GenreBarChart movieid={searchParams.get("movieid") } group="low"/>
-                <h5 class="mx-8 sm:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people with these personality traits...</h5>
-                <PersonalityBarChart movieid={searchParams.get("movieid") } group="high"/>
-                <h5 class="mx-8 sm:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people without these personality traits...</h5>
-                <PersonalityBarChart movieid={searchParams.get("movieid") } group="low"/>
+
+                <h5 class=" mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8 ">From low/High raters</h5>
+                <RatersBarChart movieid={movieid}/>
+                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who like...</h5>
+                <GenreBarChart movieid={movieid} group="high"/>
+                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people who dislike...</h5>
+                <GenreBarChart movieid={movieid} group="low"/>
+                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people with these personality traits...</h5>
+                <PersonalityBarChart movieid={movieid} group="high"/>
+                <h5 class="mx-8 xl:mx-0 mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white pt-8">From people without these personality traits...</h5>
+                <PersonalityBarChart movieid={movieid} group="low"/>
+
+                <h3 className=' pl-8 xl:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Tags & rating</h3>
+                <TagsRating movieid={movieid}/>
+
             </div>
             
             
-      
             </ThemeProvider>
         
             
