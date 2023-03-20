@@ -12,12 +12,6 @@ const Genres = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [genres, setGenres] = useState([]);
     const [hasFetched, setFetched] = useState(false);
-    let mybutton = document.getElementById("myBtn");
-
-    
-    
-      
-    
 
     useEffect(() => {
 
@@ -25,7 +19,6 @@ const Genres = () => {
         try {
 
         setFetched(false)  
-        console.log(url)
         
         fetch(url)
         .then((res) => res.json())
@@ -68,8 +61,12 @@ const Genres = () => {
                     :
                     <p>Loading genres...</p>
                 }
+                <h3 className='pl-8  sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Genres and tags</h3>
+                <p className='sm:px-0 px-8 sm:text-xl text-slate-600 pb-4'>How much does a specific tag appear in movies from a certain genre?</p>
+
                 <GenreTagHeatMap/>  
                 <h3 className='pl-8 sm:pl-0 md:text-4xl sm:text-3xl text-2xl font-bold pt-20'>Genre, Personality, and Rating</h3>
+                <p className='sm:px-0 px-8 sm:text-xl text-slate-600 pb-4'>What ratings do users with certain personality traits give to movies with these genres?</p>
                 <GenrePersonalityHeatMap/> 
                 </div>    
                 
