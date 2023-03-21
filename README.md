@@ -48,7 +48,7 @@ Add additional notes about how to deploy this on a live system.
 
 - [@chriszhang1 ](https://github.com/kylelobo) - ....
 - [@zcabiva](https://github.com/kylelobo) - Database & Back-end
-- [@hiiamyue](https://github.com/hiiamyue) - DB Architecture & Data Pre-processing
+- [@hiiamyue](https://github.com/hiiamyue) - DB & Back-end
 - [@V1ncenttt](https://github.com/V1ncenttt) - Front-end & Back-end
 
 See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
