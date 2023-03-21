@@ -7,7 +7,7 @@ services:
       - ./src:/frontend_app/app/src
       - /frontend_app/node_modules
     ports:
-      - 3000
+      - 59381:3000
     environment:
         WATCHPACK_POLLING: true
         REACT_APP_NAME: front
@@ -23,7 +23,7 @@ services:
       DB_PASS: ${DB_PASS}
       API_KEY: ${API_KEY}
       OMDB_API_KEY: ${OMDB_API_KEY}
-     
+
 
   mysql:
     build: ./mysql/

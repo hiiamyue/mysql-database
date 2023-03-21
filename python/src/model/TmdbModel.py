@@ -38,7 +38,6 @@ class TmdbModel():
                         dic2['director'].append(director)
                         break
         dic |= dic2
-        print(dic, file=sys.stderr)
         return dic
     
     def getTmdbUrls(self, results):
