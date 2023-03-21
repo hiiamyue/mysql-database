@@ -235,7 +235,7 @@ class Model:
         filter,category = self.get_catg_filter(lo_hi_raters)
    
         query = """\nWITH user_ratings AS (
-                    \nSELECT u.user_id, u.avg_rating, rating AS u_avg_for_movie
+                    \nSELECT u.user_id, u.avg_rating, rating AS u_rating_for_movie
                     \nFROM (SELECT user_id, CONVERT(AVG(rating), float) AS avg_rating
                     \nFROM ratings GROUP BY user_id) u
                     \nINNER JOIN ratings r ON r.user_id = u.user_id
@@ -243,7 +243,7 @@ class Model:
                     \nWHERE m.movie_id = %s
                     \nGROUP BY u.user_id
                     \nHAVING u.avg_rating{0})
-                    \nSELECT ROUND(CONVERT(AVG(u_avg_for_movie),float), 2) AS {1}
+                    \nSELECT ROUND(CONVERT(AVG(u_rating_for_movie),float), 2) AS {1}
                     \nFROM user_ratings""".format(filter,category)     
 
         return self.__exec_query_params(query,(movieId,))
@@ -255,7 +255,7 @@ class Model:
         filter, category = self.get_catg_filter(lo_hi_raters)
         
         query = """\nWITH user_ratings AS (
-                    \nSELECT u.user_id, u.u_avg_for_genre, genre, rating AS u_avg_for_movie
+                    \nSELECT u.user_id, u.u_avg_for_genre, genre, rating AS u_rating_for_movie
                     \nFROM (
                     \nSELECT user_id, CONVERT(AVG(rating), float) AS u_avg_for_genre, genre
                     \nFROM ratings, genres
@@ -265,7 +265,7 @@ class Model:
                     \nINNER JOIN movies m ON r.movie_id = m.movie_id
                     \nWHERE m.movie_id = %s
                     \nHAVING u.u_avg_for_genre{0})
-                    \nSELECT genre, ROUND(CONVERT(AVG(u_avg_for_movie), float), 2) AS {1}
+                    \nSELECT genre, ROUND(CONVERT(AVG(u_rating_for_movie), float), 2) AS {1}
                     \nFROM user_ratings
                     \nGROUP BY genre
                     \nORDER BY genre""".format(filter, category)
