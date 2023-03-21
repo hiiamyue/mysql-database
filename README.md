@@ -6,10 +6,6 @@
 <h3 align="center">Project Title</h3>
 
 <div align="center">
-
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
@@ -33,8 +29,7 @@
 - [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
-
-Write about 1-2 paragraphs describing the purpose of your project.
+This is a course work for UCL computer science...
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -42,7 +37,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 To run, type:
 ```
-docker-compose up (--build)
+1.Create a .env file at your local directory and write passwords. Passwords are specified in our individual reports.
+
+2.run 'sh launch.sh' at terminal
+3.Access front end by localhost:59381
 ```
 
 ### Prerequisites
