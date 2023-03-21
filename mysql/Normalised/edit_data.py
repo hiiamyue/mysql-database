@@ -12,18 +12,18 @@ def create_genres(source,dest):
                     writer.writerow([r[0], genre])
 
 
-def add_index(source,dest):
-     with open(dest,'w',newline='') as file:
-        writer =csv.writer(file)
-        with open(source) as f:
-            reader = csv.reader(f,delimiter=',')
-            row1 = next(reader)
-            row1.append('idx')
-            writer.writerow(row1)
-            index =0
-            for r in reader:
-                writer.writerow(r+[index])
-                index +=1
+# def add_index(source,dest):
+#      with open(dest,'w',newline='') as file:
+#         writer =csv.writer(file)
+#         with open(source) as f:
+#             reader = csv.reader(f,delimiter=',')
+#             row1 = next(reader)
+#             row1.append('idx')
+#             writer.writerow(row1)
+#             index =0
+#             for r in reader:
+#                 writer.writerow(r+[index])
+#                 index +=1
 
 
 # def fix_genres(source, dest):
